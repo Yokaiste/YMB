@@ -1,0 +1,166 @@
+Yokaiste's Mod Builder (YMB)
+Custom Source-Available License
+Version 1.2
+
+Copyright 2026 Yokaiste
+
+1. Scope
+
+This license applies to the YMB project located in this directory, including its
+source code, scripts, configuration files, documentation, build logic, and
+bundled original assets, unless a different license file is included in a
+subdirectory.
+
+This license does not grant rights in third-party property that may be
+referenced by YMB, including WARNO, Eugen Systems content, store pages,
+platform services, or other third-party intellectual property. Those materials
+remain governed by their own terms.
+
+2. Definitions
+
+"YMB" means the project covered by this license.
+
+"Use" means running, studying, testing, validating, previewing, internally
+copying, and otherwise using YMB only as reasonably necessary for its normal
+intended purpose.
+
+"Distribute" means to publish, share, upload, host, transmit, sublicense, sell,
+bundle, mirror, or otherwise make YMB available to any other person or entity,
+whether in source form, compiled form, modified form, or as part of another
+package, repository, installer, toolkit, image, template, or service.
+
+"Commercialize YMB" means to sell, resell, license for a fee, monetize access
+to, gate behind paid membership, include in paid support or service offerings,
+or otherwise derive commercial advantage from YMB itself.
+
+"Working source link" means a functioning URL or other public source location
+that reasonably identifies the canonical source for YMB and allows the source
+to be found without unusual effort.
+
+3. Limited Permission To Use
+
+You may Use YMB for its normal intended purpose without asking for permission.
+Allowed Use includes creating, building, validating, previewing, syncing, and
+recovering mods, including mods used in commercial projects.
+
+This license is source-available, not open source. No right is granted to
+Distribute YMB or to create or share derivative versions of YMB except as
+expressly stated in this license or required by applicable law.
+
+4. Attribution For Mods Built Using YMB
+
+If you publish, distribute, or otherwise make available a mod that was built
+using YMB during development, you must provide clear and reasonably visible
+attribution to YMB together with a working source link to YMB.
+
+The attribution must appear in a place normally seen by users, downloaders, or
+reviewers of that mod, such as a workshop page, repository page, release page,
+installer page, project page, README, credits section, or similar public-facing
+location.
+
+No exact wording is required. Any truthful attribution that visibly identifies
+YMB and includes a working source link is sufficient.
+
+This attribution requirement applies only to public or shared releases of the
+built mod and does not apply to purely private or internal use.
+
+5. Prohibited Without Explicit Written Permission
+
+Unless Yokaiste gives explicit prior written permission, you may not:
+
+- Distribute YMB
+- redistribute YMB as part of another package, installer, repository, mod, toolkit, template, container, or hosted service
+- publish, mirror, fork for public access, or repost YMB source code or modified versions of it
+- edit, adapt, translate, decompile, reverse engineer, disassemble, or create derivative works of YMB for distribution or sharing
+- remove, obscure, or falsify copyright, notice, attribution, branding, or license information attached to YMB in any copy you Distribute or present to others
+- Commercialize YMB
+- sublicense, transfer, or assign any rights under this license
+- represent YMB or any modified version as official, endorsed, certified, or maintained by Yokaiste
+
+6. Ownership And Reservation Of Rights
+
+YMB is licensed, not sold. All rights not expressly granted by this license are
+reserved by Yokaiste.
+
+7. Contributor Submissions
+
+Unless Yokaiste agrees otherwise in writing, any contribution, patch, pull
+request, issue attachment, documentation update, test, asset, or other
+submission intentionally provided for inclusion in YMB is submitted on the
+basis that:
+
+- you represent that you have sufficient rights to submit it
+- you grant Yokaiste the right to use, reproduce, modify, adapt, distribute, and relicense that submission as part of YMB and related project maintenance
+- you intend the submission to be governed for users and downstream recipients under the same license and project terms that apply to the version of YMB into which it is accepted
+
+Yokaiste is not required to accept, publish, credit, or continue maintaining
+any submission.
+
+8. No Trademark Or Branding License
+
+This license does not grant any right to use the author's name, project name,
+branding, logos, or community identity except for truthful factual attribution
+required by this license. You may not imply endorsement, sponsorship, or
+affiliation without explicit prior written permission.
+
+9. Patent License
+
+To the extent Yokaiste can grant it, you receive a limited patent license for
+patent claims necessarily infringed by your permitted Use of the unmodified YMB
+project as provided under this license. No patent license is granted for
+modified versions, combinations with other software or assets, or any use
+beyond the permissions expressly granted by this license.
+
+10. Patent Defense
+
+If you make or direct a written patent claim alleging that YMB infringes or
+contributes to infringement of a patent, any patent license granted to you
+under this license ends immediately as of the date of that claim.
+
+11. Compliance With Other Terms
+
+You are responsible for complying with applicable law and with the terms that
+govern any game, modding platform, storefront, repository, hosting provider, or
+third-party material used with YMB.
+
+12. Termination And Cure
+
+Any use of YMB that violates this license automatically and immediately
+terminates the rights granted under it.
+
+If the violation is your first violation of this license, is capable of cure,
+and you receive written notice describing it, your rights may continue only if
+you come into full compliance within 30 days after receiving that notice and
+take practical steps to correct past non-compliance.
+
+Otherwise, or in the case of repeated, uncured, intentional, or commercially
+exploitative violations, rights may be restored only by explicit written
+permission from Yokaiste.
+
+Upon termination, you must stop using YMB and destroy or remove all
+unauthorized copies in your possession or control unless continued retention is
+required by law.
+
+13. Enforcement
+
+You acknowledge that breach of this license may cause irreparable harm for
+which monetary damages may be inadequate, and that Yokaiste may seek injunctive
+or other equitable relief to the maximum extent permitted by law.
+
+14. Disclaimer
+
+YMB is provided "as is", without warranties or conditions of any kind, express
+or implied, including merchantability, fitness for a particular purpose, title,
+and non-infringement.
+
+15. Limitation Of Liability
+
+To the maximum extent permitted by law, Yokaiste is not liable for any claim,
+damages, losses, or other liability arising from or related to YMB or use of
+YMB.
+
+16. Severability And No Waiver
+
+If any provision of this license is held unenforceable, the remaining
+provisions remain in effect to the maximum extent permitted by law. Failure to
+enforce any provision is not a waiver of future enforcement.

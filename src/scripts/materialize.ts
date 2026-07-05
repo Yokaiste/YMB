@@ -1,0 +1,281 @@
+import path from 'node:path';
+import { createCooperativeYieldController } from '../async.ts';
+import { abbreviateProgressPath, reportProgress } from '../engine/progress.ts';
+import { ensure } from '../errors.ts';
+import { tryMergeGeneratedBlocks } from '../generated-block-merge.ts';
+import { assertGameRelativePath, normalizeRelativePath } from '../path-utils.ts';
+import type { TextMergeContributor } from '../text-merge.ts';
+import { formatLineEditRange, tryMergeTextContributions } from '../text-merge.ts';
+import type { BuildPlan, WrittenBuildFile } from '../types.ts';
+import {
+  createScriptOutputId,
+  dedupeScriptContributors,
+  describeFileOwner,
+  describeScriptOwner,
+  toContributor,
+} from './contributors.ts';
+import { runScript } from './runtime.ts';
+import { runScriptTests } from './test-runtime.ts';
+import type { ExecutedScriptTestResult } from './testing.ts';
+import { ensureTextState, resolveScriptBaseText, type ScriptTextState } from './text-state.ts';
+
+export type ScriptTestReporter = (result: ExecutedScriptTestResult) => void | Promise<void>;
+
+export async function materializeScriptOutputs(
+  plan: BuildPlan,
+  existingFiles: WrittenBuildFile[],
+  reportScriptTest?: ScriptTestReporter,
+): Promise<WrittenBuildFile[]> {
+  const yieldController = createCooperativeYieldController();
+  const outputMap = new Map(
+    existingFiles.map((file) => [normalizeRelativePath(file.targetRelativePath), file] as const),
+  );
+  const reservedReplaceTargets = new Set(
+    plan.selectedReplaceFiles.map((file) => normalizeRelativePath(file.targetRelativePath)),
+  );
+  const generatedFiles: WrittenBuildFile[] = [];
+  const existingGeneratedTextByTarget = new Map<string, string>(
+    existingFiles.flatMap((file) =>
+      typeof file.content === 'string' ? [[file.targetRelativePath, file.content] as const] : [],
+    ),
+  );
+  const baseTextCache = new Map<string, string>();
+  const textStates = new Map<string, ScriptTextState>();
+  const totalScripts = plan.selectedScripts.length;
+
+  for (const [scriptIndex, script] of plan.selectedScripts.entries()) {
+    await yieldController.maybeYield();
+    const ownerPath = normalizeRelativePath(
+      path.relative(plan.context.ymbRoot, script.absolutePath),
+    );
+    const progressDetail = abbreviateProgressPath(ownerPath);
+    const progressCounts = {
+      current: scriptIndex + 1,
+      total: totalScripts,
+    };
+    if (script.testAbsolutePaths.length > 0) {
+      reportProgress('Running generation script tests', progressDetail, progressCounts);
+      const scriptTestRuns = await runScriptWithHeartbeat(
+        'Running generation script tests',
+        progressDetail,
+        progressCounts,
+        () => runScriptTests(plan, script, outputMap),
+      );
+      for (const scriptTestRun of scriptTestRuns) {
+        for (const result of scriptTestRun.results) {
+          await reportScriptTest?.({
+            script,
+            testAbsolutePath: scriptTestRun.testAbsolutePath,
+            result,
+          });
+        }
+      }
+    }
+    reportProgress('Running generation scripts', progressDetail, progressCounts);
+    const scriptOutputs = await runScriptWithHeartbeat(
+      'Running generation scripts',
+      progressDetail,
+      progressCounts,
+      () => runScript(plan, script, outputMap),
+    );
+    for (const [outputIndex, output] of scriptOutputs.entries()) {
+      await yieldController.maybeYield();
+      const targetRelativePath = assertGameRelativePath(
+        output.targetRelativePath,
+        plan.context.modRoot,
+      );
+      const scriptOutputId = createScriptOutputId(scriptIndex, outputIndex);
+      const scriptOwner = describeScriptOwner(script);
+      const scriptContributor = toContributor(script);
+      const existing = outputMap.get(targetRelativePath);
+      ensure(!reservedReplaceTargets.has(targetRelativePath), 'ConflictError', {
+        absolutePath: targetRelativePath,
+        modId: script.mod.config.id,
+        modName: script.mod.config.name,
+        patchId: script.patch?.config.id,
+        reason: `Script output collides with a replace target \`${targetRelativePath}\`.`,
+        suggestion:
+          'Generate a different target path, stop replacing the same file, or move the script output into a separate build.',
+        details: [script.absolutePath],
+      });
+
+      if (existing) {
+        const state = await ensureTextState(
+          plan,
+          existing,
+          targetRelativePath,
+          textStates,
+          existingGeneratedTextByTarget,
+          baseTextCache,
+        );
+        ensure(
+          state &&
+            typeof output.content === 'string' &&
+            !state.contributors.some((contributor) => contributor.id === scriptOutputId),
+          'ConflictError',
+          {
+            absolutePath: targetRelativePath,
+            modId: script.mod.config.id,
+            modName: script.mod.config.name,
+            patchId: script.patch?.config.id,
+            reason:
+              typeof output.content !== 'string'
+                ? `Script output collides with an existing generated target \`${targetRelativePath}\`.`
+                : `Script output overlaps an existing generated target \`${targetRelativePath}\`.`,
+            suggestion:
+              typeof output.content !== 'string'
+                ? 'Binary outputs must keep unique target paths. Generate a different file path instead.'
+                : 'Keep same-target script edits disjoint, or merge them into one script owner.',
+            details: [describeFileOwner(existing), script.absolutePath],
+          },
+        );
+
+        const contributor: TextMergeContributor = {
+          id: scriptOutputId,
+          label: scriptOwner,
+          content: output.content,
+        };
+        const blockMerge = tryMergeGeneratedBlocks(
+          String(state.writtenFile.content),
+          output.content,
+          ownerPath,
+        );
+        if (blockMerge.kind === 'conflict') {
+          ensure(false, 'ConflictError', {
+            absolutePath: targetRelativePath,
+            modId: script.mod.config.id,
+            modName: script.mod.config.name,
+            patchId: script.patch?.config.id,
+            reason: `Script output overlaps with another generated script contribution in \`${targetRelativePath}\`.`,
+            suggestion:
+              'Keep same-target script edits inside blocks owned by the current script, or merge the contributors into one script owner.',
+            details: [...blockMerge.details, script.absolutePath],
+          });
+        }
+        if (blockMerge.kind === 'applied') {
+          state.contributors.push(contributor);
+          state.writtenFile.content = blockMerge.content;
+          state.writtenFile.contributors = dedupeScriptContributors([
+            ...state.writtenFile.contributors,
+            scriptContributor,
+          ]);
+          outputMap.set(targetRelativePath, state.writtenFile);
+          continue;
+        }
+        const merged = tryMergeTextContributions(state.baseText, [
+          ...state.contributors,
+          contributor,
+        ]);
+        if (!merged.ok) {
+          ensure(false, 'ConflictError', {
+            absolutePath: targetRelativePath,
+            modId: script.mod.config.id,
+            modName: script.mod.config.name,
+            patchId: script.patch?.config.id,
+            reason:
+              merged.reason === 'budget_exceeded'
+                ? `Script output exceeded YMB's protected merge budget for \`${targetRelativePath}\`.`
+                : `Script output overlaps with another generated script contribution in \`${targetRelativePath}\`.`,
+            suggestion:
+              merged.reason === 'budget_exceeded'
+                ? 'Reduce the size of same-target edits, keep generated blocks stable, or merge the contributors into one script owner.'
+                : 'Keep same-target script edits disjoint, or merge them into one script owner.',
+            details:
+              merged.reason === 'budget_exceeded'
+                ? [
+                    `${merged.budget.contributorLabel} -> changed base lines: ${merged.budget.changedBaseLines}`,
+                    `${merged.budget.contributorLabel} -> changed next lines: ${merged.budget.changedNextLines}`,
+                    `Estimated diff work: ${merged.budget.estimatedWork}`,
+                    script.absolutePath,
+                  ]
+                : [
+                    `${merged.conflict.existing.contributorLabel} -> ${formatLineEditRange(merged.conflict.existing)}`,
+                    `${merged.conflict.incoming.contributorLabel} -> ${formatLineEditRange(merged.conflict.incoming)}`,
+                    script.absolutePath,
+                  ],
+          });
+        }
+
+        state.contributors.push(contributor);
+        state.writtenFile.content = merged.content;
+        state.writtenFile.contributors = dedupeScriptContributors([
+          ...state.writtenFile.contributors,
+          scriptContributor,
+        ]);
+        outputMap.set(targetRelativePath, state.writtenFile);
+        continue;
+      }
+
+      const writtenFile: WrittenBuildFile = {
+        targetRelativePath,
+        sourceType: 'script',
+        content: output.content,
+        contributors: [scriptContributor],
+      };
+
+      generatedFiles.push(writtenFile);
+      outputMap.set(targetRelativePath, writtenFile);
+      if (typeof output.content === 'string') {
+        textStates.set(targetRelativePath, {
+          baseText: await resolveScriptBaseText(
+            plan,
+            targetRelativePath,
+            existingGeneratedTextByTarget,
+            writtenFile,
+            baseTextCache,
+          ),
+          contributors: [
+            {
+              id: scriptOutputId,
+              label: scriptOwner,
+              content: output.content,
+            },
+          ],
+          writtenFile,
+        });
+      }
+    }
+  }
+
+  return generatedFiles;
+}
+
+async function runScriptWithHeartbeat<T>(
+  progressLabel: string,
+  progressDetail: string | undefined,
+  progressCounts: { current?: number | undefined; total?: number | undefined },
+  work: () => Promise<T>,
+): Promise<T> {
+  const startedAt = performance.now();
+  const timer = setInterval(() => {
+    reportProgress(
+      progressLabel,
+      formatTimedScriptDetail(progressDetail, performance.now() - startedAt),
+      progressCounts,
+    );
+  }, 1000);
+  timer.unref?.();
+
+  try {
+    return await work();
+  } finally {
+    clearInterval(timer);
+  }
+}
+
+function formatTimedScriptDetail(progressDetail: string | undefined, durationMs: number): string {
+  const duration = formatHeartbeatDuration(durationMs);
+  if (!progressDetail) {
+    return `script (${duration})`;
+  }
+
+  return `${progressDetail} (${duration})`;
+}
+
+function formatHeartbeatDuration(durationMs: number): string {
+  if (durationMs >= 1000) {
+    return `${Math.floor(durationMs / 1000)}s`;
+  }
+
+  return `${Math.max(1, Math.round(durationMs))}ms`;
+}
