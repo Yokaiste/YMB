@@ -1,0 +1,25 @@
+export const BUILDER_CONFIG = {
+  name: 'YMB',
+  rootDirectoryName: 'YMB',
+  modsDirectoryName: 'mods',
+  configDirectoryName: 'config',
+  patchDirectoryName: 'patch',
+  replaceDirectoryName: 'replace',
+  buildDirectoryName: '.ymb-build',
+  buildOutputDirectoryName: 'output',
+  stateDirectoryName: '.ymb-state',
+  recoveryOriginalsDirectoryName: 'originals',
+  cacheDirectoryName: 'cache',
+  patchCacheDirectoryName: 'patches',
+  modConfigFileName: 'ymb.mod.yaml',
+  patchConfigFileName: 'ymb.patch.yaml',
+  recoveryManifestFileName: 'manifest.json',
+  tempPrefix: '.ymb',
+  runtimeTempPrefix: '.ymb-runtime',
+  generatedBlockLabel: 'YMB',
+  cacheMaxEntries: 512,
+  cacheMaxAgeDays: 14,
+  scriptTimeoutSeconds: 120,
+} as const;
+
+export const BUILDER_TEMP_PREFIXES = [BUILDER_CONFIG.tempPrefix] as const;

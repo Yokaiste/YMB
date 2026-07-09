@@ -1,0 +1,54 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run lint
+      - run: bun test
+
+  release:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Release on version bump
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION="$(jq -r .version package.json)"
+          TAG="v${VERSION}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists — version not bumped, nothing to release."
+            exit 0
+          fi
+
+          # Ready-to-run bundle: source + runtime-only deps (commander/yaml/zod are pure JS, so a Linux-built
+          # node_modules runs on any OS), so the toolkit unzips and runs `bun run index.ts` with no install.
+          bun install --production --frozen-lockfile
+          rm -rf pkg && mkdir -p pkg/ymb
+          cp -r index.ts src package.json bun.lock tsconfig.json LICENSE NOTICE README.md node_modules pkg/ymb/
+          ( cd pkg && zip -rq "../ymb-${VERSION}.zip" ymb )
+
+          gh release create "$TAG" "ymb-${VERSION}.zip" --title "$TAG"
