@@ -3,6 +3,7 @@ import path from 'node:path';
 import type { CooperativeYieldController } from '../async.ts';
 import { BUILDER_CONFIG } from '../builder-config.ts';
 import { hashBytes, hashText } from '../engine/shared.ts';
+import { writeFileAtomic } from '../path-utils.ts';
 import type {
   ScriptApplication,
   ScriptRuntimePlan,
@@ -126,7 +127,7 @@ export async function saveCachedScriptTestRun(
     await yieldController?.maybeYield();
     const cachePath = resolveScriptTestCachePath(plan, cacheKey);
     await mkdir(path.dirname(cachePath), { recursive: true });
-    await Bun.write(cachePath, JSON.stringify(run));
+    await writeFileAtomic(cachePath, JSON.stringify(run));
   } catch {
     // Script-test cache failures should never block a build.
   }

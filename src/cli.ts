@@ -123,7 +123,17 @@ export async function runCli(argv: string[]): Promise<void> {
       .command(spec.name)
       .description(spec.description)
       .addHelpText('after', buildCommandHelpText(spec.name));
-    addCommonOptions(command);
+    addSelectionOptions(command);
+    if (spec.name === 'validate' || spec.name === 'build' || spec.name === 'sync') {
+      addCacheOption(command);
+    }
+    if (spec.name === 'build' || spec.name === 'sync' || spec.name === 'recover') {
+      addDryRunOption(command);
+    }
+    if (spec.requiresYes) {
+      addConfirmationOption(command);
+    }
+    command.option('--verbose', 'Print more diagnostic information');
     command.action(async (options: CommonOptions) => {
       let progressDisplay: ReturnType<typeof createProgressDisplay> | undefined;
       renderCliTitleOnce();
@@ -153,7 +163,10 @@ export async function runCli(argv: string[]): Promise<void> {
     .command('cleanup')
     .description(getCommandGuide('cleanup').description)
     .addHelpText('after', buildCommandHelpText('cleanup'));
-  addCommonOptions(cleanupCommand);
+  addSelectionOptions(cleanupCommand);
+  addDryRunOption(cleanupCommand);
+  addConfirmationOption(cleanupCommand);
+  cleanupCommand.option('--verbose', 'Print more diagnostic information');
   cleanupCommand.option(
     '--all',
     `Remove all ${BUILDER_CONFIG.name} temp artifacts, including \`${BUILDER_CONFIG.stateDirectoryName}\` recovery data and configured all-only temp files`,
@@ -233,7 +246,7 @@ function renderCliTitle(): void {
   }
 }
 
-function addCommonOptions(command: Command): void {
+function addSelectionOptions(command: Command): void {
   command
     .option('--ymb-path <path>', `Path to the ${BUILDER_CONFIG.name} builder directory`)
     .addOption(
@@ -247,11 +260,22 @@ function addCommonOptions(command: Command): void {
       collectRepeatable,
       [],
     )
-    .option('--patch <id>', 'Exact patch id to include', collectRepeatable, [])
-    .option('--no-cache', 'Bypass build caches and force fresh materialization')
-    .option('--dry-run', 'Show the plan without writing files')
-    .option('--verbose', 'Print more diagnostic information')
-    .option('--yes', 'Confirm commands that write to the live mod root');
+    .option('--patch <id>', 'Exact patch id to include', collectRepeatable, []);
+}
+
+function addCacheOption(command: Command): void {
+  command.option('--no-cache', 'Bypass patch and script-test caches');
+}
+
+function addDryRunOption(command: Command): void {
+  command.option(
+    '--dry-run',
+    'Skip normal preview/live/recovery writes (trusted scripts and caches may still write)',
+  );
+}
+
+function addConfirmationOption(command: Command): void {
+  command.option('--yes', 'Confirm live-file or destructive state changes');
 }
 
 function toSelection(options: CommonOptions): SelectionInput {

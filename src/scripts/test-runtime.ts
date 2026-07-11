@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { ensure, YmbError } from '../errors.ts';
 import type {
@@ -14,7 +13,7 @@ import type {
 } from '../types.ts';
 import { createScriptTestExecutionContext } from './runtime-context.ts';
 import { importScriptTestModule } from './runtime-loader.ts';
-import { awaitChildExitWithTimeout, formatUnknownRuntimeError } from './runtime-shared.ts';
+import { awaitIpcChildResult, formatUnknownRuntimeError } from './runtime-shared.ts';
 import { assertScriptTestResultsPassed, normalizeScriptTestReport } from './testing.ts';
 
 const scriptTestRuntimeChildPath = fileURLToPath(
@@ -208,18 +207,17 @@ async function runScriptTestInSubprocess(
     outputEntries: [...outputMap.entries()],
   } satisfies ScriptTestRuntimeRequest);
 
-  const exitCode = await awaitChildExitWithTimeout(child, {
+  const {
+    exitCode,
+    response: resolvedResponse,
+    stderrText,
+  } = await awaitIpcChildResult(child, responsePromise, {
     absolutePath: testAbsolutePath,
     modId: script.mod.config.id,
     modName: script.mod.config.name,
     patchId: script.patch?.config.id,
     subjectLabel: `Script test \`${describeScriptTestPath(script, testAbsolutePath)}\``,
   });
-  const resolvedResponse = await Promise.race([
-    responsePromise,
-    delay(exitCode === 0 ? 250 : 50).then(() => undefined),
-  ]);
-  const stderrText = child.stderr ? (await new Response(child.stderr).text()).trim() : '';
 
   if (!resolvedResponse) {
     throw new YmbError('ScriptError', {

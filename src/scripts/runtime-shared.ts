@@ -47,6 +47,28 @@ export async function awaitChildExitWithTimeout(
   return typeof exitCode === 'number' ? exitCode : child.exited;
 }
 
+export async function awaitIpcChildResult<T>(
+  child: {
+    exited: Promise<number>;
+    kill(): void;
+    stderr: ReadableStream<Uint8Array> | null;
+  },
+  responsePromise: Promise<T>,
+  errorContext: Parameters<typeof awaitChildExitWithTimeout>[1],
+): Promise<{ exitCode: number; response: T | undefined; stderrText: string }> {
+  // Drain stderr immediately. Waiting until after exit can deadlock a verbose
+  // child once the OS pipe buffer fills.
+  const stderrPromise = child.stderr
+    ? new Response(child.stderr).text().then((text) => text.trim())
+    : Promise.resolve('');
+  const exitCode = await awaitChildExitWithTimeout(child, errorContext);
+  const response = await Promise.race([
+    responsePromise,
+    delay(exitCode === 0 ? 250 : 50).then(() => undefined),
+  ]);
+  return { exitCode, response, stderrText: await stderrPromise };
+}
+
 export async function sendIpcResponse(message: unknown): Promise<void> {
   if (!process.send) {
     return;

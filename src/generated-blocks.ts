@@ -69,7 +69,10 @@ function buildGeneratedBlockMarkers(
 
 function buildGeneratedBlockPattern(ownerId: string, label: string): RegExp {
   const markers = buildGeneratedBlockMarkers(ownerId, label);
-  return new RegExp(`${escapeRegExp(markers.start)}[\\s\\S]*?${escapeRegExp(markers.end)}\\r?\\n?`);
+  return new RegExp(
+    `^[ \\t]*${escapeRegExp(markers.start)}[\\s\\S]*?^[ \\t]*${escapeRegExp(markers.end)}\\r?\\n?`,
+    'm',
+  );
 }
 
 const GENERATED_BLOCK_SCAN_PATTERN =

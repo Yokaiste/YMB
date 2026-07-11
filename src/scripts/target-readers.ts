@@ -1,6 +1,6 @@
 import { hashBytes, hashText } from '../engine/shared.ts';
 import { ensure } from '../errors.ts';
-import { normalizeRelativePath, resolveModTargetPath } from '../path-utils.ts';
+import { normalizeRelativePath, resolveModTargetPath, toPathKey } from '../path-utils.ts';
 import { resolveTemplateValue } from '../templates.ts';
 import { readTrackedText } from '../tracked-targets.ts';
 import type {
@@ -31,7 +31,7 @@ export async function readTargetText(
   relativePath: string,
 ): Promise<string> {
   const normalizedPath = normalizeRelativePath(relativePath);
-  const generated = outputMap.get(normalizedPath);
+  const generated = outputMap.get(toPathKey(normalizedPath));
   if (generated) {
     const content =
       typeof generated.content === 'string'
@@ -62,7 +62,7 @@ export async function readTargetBinary(
   relativePath: string,
 ): Promise<Uint8Array> {
   const normalizedPath = normalizeRelativePath(relativePath);
-  const generated = outputMap.get(normalizedPath);
+  const generated = outputMap.get(toPathKey(normalizedPath));
   if (generated) {
     const content =
       typeof generated.content === 'string'
@@ -89,13 +89,13 @@ function findReplaceFile(
   replaceFilesByTarget: Map<string, ReplaceFile>,
   relativePath: string,
 ): ReplaceFile | undefined {
-  return replaceFilesByTarget.get(normalizeRelativePath(relativePath));
+  return replaceFilesByTarget.get(toPathKey(relativePath));
 }
 
 export function createTargetReaderState(replaceFiles: ReplaceFile[]): TargetReaderState {
   return {
     replaceFilesByTarget: new Map(
-      replaceFiles.map((file) => [normalizeRelativePath(file.targetRelativePath), file] as const),
+      replaceFiles.map((file) => [toPathKey(file.targetRelativePath), file] as const),
     ),
     observedReads: new Map(),
   };
@@ -116,7 +116,7 @@ function recordObservedRead(
   readKind: ObservedTargetRead['readKind'],
   contentHash: string,
 ): void {
-  state.observedReads.set(`${readKind}:${targetRelativePath}`, {
+  state.observedReads.set(`${readKind}:${toPathKey(targetRelativePath)}`, {
     targetRelativePath,
     readKind,
     contentHash,

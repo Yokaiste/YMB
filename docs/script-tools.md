@@ -16,6 +16,34 @@ Why it exists:
 
 Today, the first built-in namespace is `context.tools.ndf`.
 
+## Script Context
+
+Every generation script receives a `context` object. Its fields are:
+
+| Field or helper                       | Purpose                                                                           |
+| ------------------------------------- | --------------------------------------------------------------------------------- |
+| `builder`                             | Resolved YMB, mod, preview, and recovery paths                                    |
+| `selection`                           | Current scope, filters, cache mode, and dry-run state                             |
+| `mod` / `patch`                       | Discovered source-mod owner and optional patch owner                              |
+| `variables`                           | Fully resolved mod and patch template variables                                   |
+| `tools`                               | Builder-owned reusable APIs described below                                       |
+| `resolvePath(path)`                   | Resolve a path inside the script owner's config/patch root                        |
+| `resolveModPath(path)`                | Resolve a path inside the source mod's `config` root                              |
+| `readOwnedTextIfExists(path)`         | Read owner-local UTF-8 text, returning `''` when missing                          |
+| `writeOwnedTextIfChanged(path, text)` | Atomically update owner-local source text only when changed                       |
+| `readModTextIfExists(path)`           | Read source-mod UTF-8 text, returning `''` when missing                           |
+| `writeModTextIfChanged(path, text)`   | Atomically update source-mod text only when changed                               |
+| `readTarget(path)`                    | Read a text target from generated output, replace input, or the tracked game file |
+| `readTargets(paths)`                  | Read multiple text targets concurrently                                           |
+| `readBinaryTarget(path)`              | Read a target as `Uint8Array`                                                     |
+
+Target reads use this precedence: already generated output, selected replace input, then the tracked live file/original backup. Game targets must remain under `GameData` or `CommonData`; owner-local paths are checked lexically and physically to prevent escaping through `..`, symlinks, or junctions.
+
+> [!WARNING]
+> Generation scripts are trusted code. `validate` and `--dry-run` prevent normal preview/live/recovery writes, but they still execute scripts. The two `write*TextIfChanged` helpers can intentionally update authored source files, caches may be refreshed, and scripts can import normal runtime APIs. Review scripts before running them.
+
+Companion script tests receive the same fields plus `script` and `testAbsolutePath`. Their source-text writes are virtualized so tests do not modify authored files.
+
 ## NDF Tools
 
 `context.tools.ndf` exposes helpers for scanning, reading, validating, and formatting NDF text, plus one deliberately narrow mutation helper for appending collection entries.

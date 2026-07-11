@@ -359,6 +359,7 @@ export interface SyncManifestEntry {
   targetRelativePath: string;
   backupFileName: string;
   originalExists: boolean;
+  syncedContentHash?: string;
   contributors: BuildContributor[];
 }
 

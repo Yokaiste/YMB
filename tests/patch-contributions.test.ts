@@ -27,18 +27,18 @@ describe('patch contribution helpers', () => {
 
     const grouped = groupPatchContributions(plan);
 
-    expect([...grouped.keys()]).toEqual(['CommonData/Text/A.ndf', 'GameData/Generated/B.ndf']);
-    expect(grouped.get('GameData/Generated/B.ndf')?.map((item) => item.patchOrder)).toEqual([0, 1]);
+    expect([...grouped.keys()]).toEqual(['commondata/text/a.ndf', 'gamedata/generated/b.ndf']);
+    expect(grouped.get('gamedata/generated/b.ndf')?.map((item) => item.patchOrder)).toEqual([0, 1]);
   });
 
-  test('orders contributions so script-backed patches run first and prioritized mods run last', () => {
+  test('keeps dependency order authoritative while prioritized mods still run last', () => {
     const prioritized = createResolvedContribution('mod_b', 'patch.prioritized', true, 1);
     const regular = createResolvedContribution('mod_a', 'patch.regular', false, 0);
     const regularScript = createResolvedContribution('mod_a', 'patch.regular-script', true, 0);
     const sameModEarlier = createResolvedContribution('mod_a', 'patch.earlier', true, 0);
     const sameModLater = createResolvedContribution('mod_a', 'patch.later', true, 2);
 
-    expect(comparePatchContributions(prioritized, regular, undefined)).toBeLessThan(0);
+    expect(comparePatchContributions(prioritized, regular, undefined)).toBeGreaterThan(0);
     expect(comparePatchContributions(regularScript, prioritized, 'mod_b')).toBeLessThan(0);
     expect(comparePatchContributions(sameModEarlier, sameModLater, undefined)).toBeLessThan(0);
   });

@@ -3,7 +3,12 @@ import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import type { CooperativeYieldController } from './async.ts';
 import { BUILDER_CONFIG } from './builder-config.ts';
-import { assertOwnedRelativePath, pathExists, removePathDirectly } from './path-utils.ts';
+import {
+  assertOwnedRelativePath,
+  assertRealPathWithinRoot,
+  pathExists,
+  removePathDirectly,
+} from './path-utils.ts';
 import { createTemplateVariables, resolveTemplateValue } from './templates.ts';
 import type {
   BuilderContext,
@@ -15,6 +20,8 @@ import type {
 
 export interface CleanupTarget {
   absolutePath: string;
+  ownerRoot: string;
+  ownerLabel: string;
   unsafeToRemove: boolean;
 }
 
@@ -57,6 +64,7 @@ export async function removeCleanupTargets(
     const { absolutePath } = target;
     const existed = await pathExists(absolutePath);
     try {
+      await assertRealPathWithinRoot(absolutePath, target.ownerRoot, target.ownerLabel);
       await removePathDirectly(absolutePath, { recursive: true });
       results.push({ absolutePath, removed: true, existed });
     } catch {
@@ -111,6 +119,8 @@ async function findYmbArtifactsInRoot(ownerRoot: string): Promise<CleanupTarget[
       if (entry.name.startsWith(BUILDER_CONFIG.tempPrefix)) {
         results.push({
           absolutePath: absoluteEntryPath,
+          ownerRoot,
+          ownerLabel: 'builder root',
           unsafeToRemove: entry.name === BUILDER_CONFIG.stateDirectoryName,
         });
         continue;
@@ -141,6 +151,8 @@ function collectConfiguredOwnedTempPaths<TOwner>(
         resolvedConfig.ownerLabel,
         String(resolveTemplateValue(tempPath.path, resolvedConfig.templateVariables)),
       ),
+      ownerRoot: resolvedConfig.ownerRoot,
+      ownerLabel: resolvedConfig.ownerLabel,
       unsafeToRemove: tempPath.unsafeToRemove,
     }));
   });

@@ -1,6 +1,7 @@
 import { createCooperativeYieldController } from '../async.ts';
 import { ensure } from '../errors.ts';
 import { resolvePrioritizedModId } from '../patch-priority.ts';
+import { toPathKey } from '../path-utils.ts';
 import { materializeScriptOutputs, type ScriptTestReporter } from '../scripts/materialize.ts';
 import { tryMergeTextContributionsCooperative } from '../text-merge.ts';
 import type {
@@ -75,7 +76,7 @@ export async function materializeBuild(
     reportProgress('Materializing patch outputs');
     const patchFiles = await materializePatchOutputs(bucketPlan, metrics, outputMap);
     const bucketOutputMap = new Map<string, WrittenBuildFile>(
-      patchFiles.map((file) => [file.targetRelativePath, file] as const),
+      patchFiles.map((file) => [toPathKey(file.targetRelativePath), file] as const),
     );
 
     for (const mod of bucketMods) {
@@ -106,14 +107,14 @@ export async function materializeBuild(
         reportScriptTest,
       );
       for (const scriptFile of scriptFiles) {
-        bucketOutputMap.set(scriptFile.targetRelativePath, scriptFile);
+        bucketOutputMap.set(toPathKey(scriptFile.targetRelativePath), scriptFile);
       }
     }
 
     reportProgress('Materializing replace outputs');
     const replaceFiles = await materializeReplaceOutputs(bucketPlan, yieldController);
     for (const writtenFile of [...bucketOutputMap.values(), ...replaceFiles]) {
-      outputMap.set(writtenFile.targetRelativePath, writtenFile);
+      outputMap.set(toPathKey(writtenFile.targetRelativePath), writtenFile);
     }
   }
 
@@ -171,7 +172,8 @@ export async function materializePatchOutputs(
       content: `${updatedText}${updatedText.endsWith('\n') ? '' : '\n'}`,
       contributors: dedupeBuildContributors([
         ...(firstContribution.application.mod.config.allowWriteToModifiedFiles
-          ? (previousOutputs.get(firstContribution.targetRelativePath)?.contributors ?? [])
+          ? (previousOutputs.get(toPathKey(firstContribution.targetRelativePath))?.contributors ??
+            [])
           : []),
         ...dedupeContributors(orderedContributions),
       ]),

@@ -3,7 +3,7 @@ import type { CooperativeYieldController } from '../async.ts';
 import { BUILDER_TEMP_PREFIXES } from '../builder-config.ts';
 import { isScopeIncluded, listFilesRecursive } from '../config.ts';
 import { ensure } from '../errors.ts';
-import { assertOwnedRelativePath, normalizeRelativePath } from '../path-utils.ts';
+import { assertOwnedRelativePath, normalizeRelativePath, toPathKey } from '../path-utils.ts';
 import { createTemplateVariables, resolveTemplateValue } from '../templates.ts';
 import type {
   BuilderContext,
@@ -260,7 +260,7 @@ export async function collectTargetFilesCooperative(
   selectedReplaceFiles: ReplaceFile[],
   yieldController?: CooperativeYieldController,
 ): Promise<string[]> {
-  const targetFiles = new Set<string>();
+  const targetFiles = new Map<string, string>();
 
   for (const selectedPatch of selectedPatches) {
     await yieldController?.maybeYield();
@@ -271,16 +271,17 @@ export async function collectTargetFilesCooperative(
     );
     for (const target of selectedPatch.patch.config.targets) {
       await yieldController?.maybeYield();
-      targetFiles.add(resolveTargetRelativePath(target.file, templateVariables));
+      const targetRelativePath = resolveTargetRelativePath(target.file, templateVariables);
+      targetFiles.set(toPathKey(targetRelativePath), targetRelativePath);
     }
   }
 
   for (const replaceFile of selectedReplaceFiles) {
     await yieldController?.maybeYield();
-    targetFiles.add(replaceFile.targetRelativePath);
+    targetFiles.set(toPathKey(replaceFile.targetRelativePath), replaceFile.targetRelativePath);
   }
 
-  return [...targetFiles].sort((left, right) => left.localeCompare(right));
+  return [...targetFiles.values()].sort((left, right) => left.localeCompare(right));
 }
 
 export function resolveSelectedTargetRelativePath(

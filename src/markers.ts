@@ -5,7 +5,7 @@ import { z } from 'zod';
 import type { CooperativeYieldController } from './async.ts';
 import { BUILDER_CONFIG } from './builder-config.ts';
 import { YmbError } from './errors.ts';
-import { writeFileAtomic } from './path-utils.ts';
+import { toPathKey, writeFileAtomic } from './path-utils.ts';
 import {
   describeTextChanges,
   describeTextChangesCooperative,
@@ -45,24 +45,49 @@ const contributorSchema = z.object({
 });
 
 const markerPayloadSchema = z.object({
-  markerId: z.string(),
-  markerHash: z.string(),
-  builderId: z.string(),
+  markerId: z.string().regex(/^[a-f0-9]{64}$/),
+  markerHash: z.string().regex(/^[a-f0-9]{64}$/),
+  builderId: z.string().regex(/^[a-f0-9]{16}$/),
   contributors: z.array(contributorSchema),
 });
 
-const manifestSchema = z.object({
-  entries: z
-    .array(
-      z.object({
-        targetRelativePath: z.string(),
-        backupFileName: z.string(),
-        originalExists: z.boolean().optional().default(true),
-        contributors: z.array(contributorSchema),
-      }),
-    )
-    .default([]),
+const manifestEntrySchema = z.object({
+  targetRelativePath: z
+    .string()
+    .refine(
+      (value) =>
+        (value.startsWith('GameData/') || value.startsWith('CommonData/')) &&
+        !value.includes('\\') &&
+        !value.split('/').includes('..'),
+      'Target must be a normalized game-relative path under GameData or CommonData.',
+    ),
+  backupFileName: z.string().regex(/^[a-f0-9]{64}\.(?:ndf|bin)$/),
+  originalExists: z.boolean().optional().default(true),
+  syncedContentHash: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/)
+    .optional(),
+  contributors: z.array(contributorSchema),
 });
+
+const manifestSchema = z
+  .object({
+    entries: z.array(manifestEntrySchema).default([]),
+  })
+  .superRefine((manifest, context) => {
+    const seenTargets = new Set<string>();
+    for (const [index, entry] of manifest.entries.entries()) {
+      const targetKey = toPathKey(entry.targetRelativePath);
+      if (seenTargets.has(targetKey)) {
+        context.addIssue({
+          code: 'custom',
+          path: ['entries', index, 'targetRelativePath'],
+          message: 'Recovery manifest contains duplicate case-insensitive target paths.',
+        });
+      }
+      seenTargets.add(targetKey);
+    }
+  });
 
 const markerCommentStyles: MarkerCommentStyle[] = [
   {
@@ -264,6 +289,31 @@ export function unwrapMarkedContent(content: string): {
   }
 
   return { innerContent: content };
+}
+
+export function isMarkedContentIntact(
+  marked: ReturnType<typeof unwrapMarkedContent>,
+  targetRelativePath: string,
+): boolean {
+  if (!marked.payload) {
+    return false;
+  }
+  // The envelope delimiter owns its separating newline, so an original that
+  // already ended in a newline and one that did not unwrap to the same slice.
+  // Accept only the two exact encodings the writer can produce.
+  const possibleHashes = [
+    createHash('sha256').update(marked.innerContent).digest('hex'),
+    createHash('sha256').update(`${marked.innerContent}\n`).digest('hex'),
+  ];
+  return possibleHashes.some(
+    (actualHash) =>
+      marked.payload?.markerHash === actualHash &&
+      marked.payload.markerId === hashMarkerId(targetRelativePath, actualHash),
+  );
+}
+
+function hashMarkerId(targetRelativePath: string, markerHash: string): string {
+  return createHash('sha256').update(`${targetRelativePath}:${markerHash}`).digest('hex');
 }
 
 function isSameMarkerPayload(left: MarkerPayload, right: MarkerPayload): boolean {
@@ -523,7 +573,10 @@ export async function saveManifest(stateRoot: string, manifest: SyncManifest): P
   const manifestPath = path.join(stateRoot, manifestFileName);
   const currentFile = Bun.file(manifestPath);
   if (await currentFile.exists()) {
-    await Bun.write(path.join(stateRoot, `${manifestFileName}.bak`), await currentFile.text());
+    await writeFileAtomic(
+      path.join(stateRoot, `${manifestFileName}.bak`),
+      await currentFile.text(),
+    );
   }
   await writeFileAtomic(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 }

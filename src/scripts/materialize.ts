@@ -3,7 +3,7 @@ import { createCooperativeYieldController } from '../async.ts';
 import { abbreviateProgressPath, reportProgress } from '../engine/progress.ts';
 import { ensure } from '../errors.ts';
 import { tryMergeGeneratedBlocks } from '../generated-block-merge.ts';
-import { assertGameRelativePath, normalizeRelativePath } from '../path-utils.ts';
+import { assertGameRelativePath, normalizeRelativePath, toPathKey } from '../path-utils.ts';
 import type { TextMergeContributor } from '../text-merge.ts';
 import { formatLineEditRange, tryMergeTextContributionsCooperative } from '../text-merge.ts';
 import type { BuildPlan, WrittenBuildFile } from '../types.ts';
@@ -34,15 +34,17 @@ export async function materializeScriptOutputs(
 ): Promise<WrittenBuildFile[]> {
   const yieldController = createCooperativeYieldController();
   const outputMap = new Map(
-    existingFiles.map((file) => [normalizeRelativePath(file.targetRelativePath), file] as const),
+    existingFiles.map((file) => [toPathKey(file.targetRelativePath), file] as const),
   );
   const reservedReplaceTargets = new Set(
-    plan.selectedReplaceFiles.map((file) => normalizeRelativePath(file.targetRelativePath)),
+    plan.selectedReplaceFiles.map((file) => toPathKey(file.targetRelativePath)),
   );
   const generatedFiles: WrittenBuildFile[] = [];
   const existingGeneratedTextByTarget = new Map<string, string>(
     existingFiles.flatMap((file) =>
-      typeof file.content === 'string' ? [[file.targetRelativePath, file.content] as const] : [],
+      typeof file.content === 'string'
+        ? [[toPathKey(file.targetRelativePath), file.content] as const]
+        : [],
     ),
   );
   const baseTextCache = new Map<string, string>();
@@ -144,11 +146,12 @@ export async function materializeScriptOutputs(
         output.targetRelativePath,
         plan.context.modRoot,
       );
+      const targetKey = toPathKey(targetRelativePath);
       const scriptOutputId = createScriptOutputId(scriptIndex, outputIndex);
       const scriptOwner = describeScriptOwner(script);
       const scriptContributor = toContributor(script);
-      const existing = outputMap.get(targetRelativePath);
-      ensure(!reservedReplaceTargets.has(targetRelativePath), 'ConflictError', {
+      const existing = outputMap.get(targetKey);
+      ensure(!reservedReplaceTargets.has(targetKey), 'ConflictError', {
         absolutePath: targetRelativePath,
         modId: script.mod.config.id,
         modName: script.mod.config.name,
@@ -219,7 +222,7 @@ export async function materializeScriptOutputs(
             ...state.writtenFile.contributors,
             scriptContributor,
           ]);
-          outputMap.set(targetRelativePath, state.writtenFile);
+          outputMap.set(targetKey, state.writtenFile);
           continue;
         }
         const merged = await tryMergeTextContributionsCooperative(
@@ -263,7 +266,7 @@ export async function materializeScriptOutputs(
           ...state.writtenFile.contributors,
           scriptContributor,
         ]);
-        outputMap.set(targetRelativePath, state.writtenFile);
+        outputMap.set(targetKey, state.writtenFile);
         continue;
       }
 
@@ -275,9 +278,9 @@ export async function materializeScriptOutputs(
       };
 
       generatedFiles.push(writtenFile);
-      outputMap.set(targetRelativePath, writtenFile);
+      outputMap.set(targetKey, writtenFile);
       if (typeof output.content === 'string') {
-        textStates.set(targetRelativePath, {
+        textStates.set(targetKey, {
           baseText: await resolveScriptBaseText(
             plan,
             targetRelativePath,

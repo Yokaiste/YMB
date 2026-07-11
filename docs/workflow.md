@@ -77,7 +77,7 @@ Use it when:
 bun run ymb validate
 ```
 
-`validate` checks the current selection without writing files.
+`validate` checks the current selection without writing preview or live game files. It may update caches, and trusted generation scripts can deliberately update source-owned files through context write helpers.
 
 It catches things like:
 
@@ -112,7 +112,7 @@ Use it when:
 - you want to inspect the materialized result
 - you want to test logic before merging into the live game
 
-Use `build --dry-run` when you want the plan without writing generated files.
+Use `build --dry-run` when you want the plan without writing generated preview files. It still executes trusted scripts and may update caches or source-owned files.
 
 ### 4. `sync`
 
@@ -185,15 +185,17 @@ Use `cleanup --all --yes` only when you intentionally want to remove recovery st
 
 ## 🎛 Filters and Switches
 
-| Option | Meaning |
-| -------------------- | ----------------------------------------------- | -------------------------------- |
-| `--ymb-path <path>` | Run against a specific `YMB` directory |
-| `--scope <prod       | dev>` | Choose which scopes are eligible |
+| Option               | Meaning                                         |
+| -------------------- | ----------------------------------------------- |
+| `--ymb-path <path>`  | Run against a specific `YMB` directory          |
+| `--scope <prod       | dev>`                                           | Choose which scopes are eligible |
 | `--mod <id-or-name>` | Select an exact source mod id or exact mod name |
-| `--patch <id>` | Select an exact patch id |
-| `--dry-run` | Show the plan without doing normal writes |
-| `--no-cache` | Bypass patch materialization cache |
-| `--verbose` | Print more detail |
+| `--patch <id>`       | Select an exact patch id                        |
+| `--dry-run`          | Skip normal preview/live/recovery writes        |
+| `--no-cache`         | Bypass patch-output and script-test caches      |
+| `--verbose`          | Print more detail                               |
+
+Only relevant commands expose each option. `--dry-run` is not a sandbox: trusted scripts still run as normal code and can write through the source-text helpers.
 
 ## 🎯 Selection Rules
 

@@ -37,8 +37,8 @@ export const COMMAND_GUIDES: CommandGuide[] = [
   {
     name: 'validate',
     description:
-      'Check configs, patch targets, script outputs, tests, and conflicts without writing files.',
-    purpose: 'Catches mistakes before preview or publish touches anything.',
+      'Check configs, patch targets, script outputs, tests, and conflicts without writing preview or live files.',
+    purpose: 'Catches mistakes before preview or publish touches live game data.',
     workflowStep: 2,
     nextSteps: [
       'Run `build` to write a preview if validation is clean.',

@@ -1,4 +1,3 @@
-import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { ensure, YmbError } from '../errors.ts';
 import type {
@@ -12,7 +11,7 @@ import type {
 import { createScriptContext } from './runtime-context.ts';
 import { importScriptModule } from './runtime-loader.ts';
 import { normalizeScriptOutput } from './runtime-output.ts';
-import { awaitChildExitWithTimeout, formatUnknownRuntimeError } from './runtime-shared.ts';
+import { awaitIpcChildResult, formatUnknownRuntimeError } from './runtime-shared.ts';
 
 const scriptRuntimeChildPath = fileURLToPath(new URL('./runtime-child.ts', import.meta.url));
 const missingScriptSuggestion = 'Fix the relative script path or add the missing script file.';
@@ -152,18 +151,17 @@ async function runScriptInSubprocess(
     outputEntries: [...outputMap.entries()],
   } satisfies ScriptRuntimeRequest);
 
-  const exitCode = await awaitChildExitWithTimeout(child, {
+  const {
+    exitCode,
+    response: resolvedResponse,
+    stderrText,
+  } = await awaitIpcChildResult(child, responsePromise, {
     absolutePath: script.absolutePath,
     modId: script.mod.config.id,
     modName: script.mod.config.name,
     patchId: script.patch?.config.id,
     subjectLabel: `Generation script \`${script.config.path}\``,
   });
-  const resolvedResponse = await Promise.race([
-    responsePromise,
-    delay(exitCode === 0 ? 250 : 50).then(() => undefined),
-  ]);
-  const stderrText = child.stderr ? (await new Response(child.stderr).text()).trim() : '';
 
   if (!resolvedResponse) {
     throw new YmbError('ScriptError', {

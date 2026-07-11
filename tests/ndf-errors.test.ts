@@ -80,6 +80,28 @@ describe('ndf patching failures and edge cases', () => {
     expect(output).toContain('// YMB-ADD-START');
   });
 
+  test('rejects copying unnamed blocks instead of globally replacing empty word boundaries', () => {
+    const source = `unnamed TAnonymousDescriptor
+(
+    Value = 1
+)
+`;
+    const target: PatchTarget = {
+      file: 'GameData/Generated/Gameplay/Anonymous.ndf',
+      operations: [
+        {
+          op: 'copy',
+          selector: { kind: 'object', by: 'index', value: 0 },
+          destination: { kind: 'sibling', name: 'NamedCopy' },
+        },
+      ],
+    };
+
+    expect(() => applyPatchTarget(source, target, application, 'C:/fixture/Anonymous.ndf')).toThrow(
+      '`copy` cannot rename an unnamed top-level block',
+    );
+  });
+
   test('skips collection inserts when the same raw entry already exists', () => {
     const source = `DeckList is
 [

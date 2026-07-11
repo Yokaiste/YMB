@@ -8,6 +8,7 @@ import {
   createBuilderId,
   decorateTextWithExactMarkers,
   decorateTextWithExactMarkersCooperative,
+  isMarkedContentIntact,
   loadManifest,
   saveManifest,
   supportsMarkerComments,
@@ -18,9 +19,13 @@ import { isNdfPath } from '../patch/ndf.ts';
 import {
   assertGameRelativePath,
   assertRealPathWithinRoot,
+  createTemporarySiblingPath,
   pathExists,
   removePathDirectly,
+  replaceDirectoryAtomic,
   resolveModTargetPath,
+  resolveOwnedFilePath,
+  toPathKey,
   writeFileAtomic,
 } from '../path-utils.ts';
 import { materializeScriptOutputs } from '../scripts/materialize.ts';
@@ -318,48 +323,57 @@ export async function runBuild(
   const outputCounts = countWrittenFiles(writtenFiles);
   const builderId = createBuilderId(plan.context.ymbRoot);
 
-  if (!selection.dryRun) {
+  const stagedBuildOutputRoot = selection.dryRun
+    ? undefined
+    : createTemporarySiblingPath(buildOutputRoot);
+  if (stagedBuildOutputRoot) {
     reportProgress('Writing preview output files');
-    if (await pathExists(buildOutputRoot)) {
-      await removePathDirectly(buildOutputRoot, { recursive: true });
-    }
-    await mkdir(buildOutputRoot, { recursive: true });
+    await mkdir(stagedBuildOutputRoot, { recursive: true });
   }
 
   const writeStartedAt = performance.now();
-  for (const [writtenIndex, writtenFile] of writtenFiles.entries()) {
-    await yieldController.maybeYield();
-    assertGameRelativePath(writtenFile.targetRelativePath, plan.context.modRoot);
-    reportProgress(
-      selection.dryRun ? 'Preparing preview output files' : 'Writing preview output files',
-      abbreviateProgressPath(writtenFile.targetRelativePath),
-      {
-        current: writtenIndex + 1,
-        total: writtenFiles.length,
-      },
-    );
-    const absoluteOutputPath = path.join(
-      buildOutputRoot,
-      ...writtenFile.targetRelativePath.split('/'),
-    );
-    const preparedOutput = selection.dryRun
-      ? undefined
-      : await prepareMarkedOutput(plan.context, writtenFile, builderId, yieldController);
-    const previewWarning = preparedOutput
-      ? preparedOutput.warning
-      : resolveDryRunPreviewWarning(writtenFile);
-    if (previewWarning) {
-      logs.push(
-        formatUnmarkedTargetWarning('preview', writtenFile.targetRelativePath, previewWarning),
+  try {
+    for (const [writtenIndex, writtenFile] of writtenFiles.entries()) {
+      await yieldController.maybeYield();
+      assertGameRelativePath(writtenFile.targetRelativePath, plan.context.modRoot);
+      reportProgress(
+        selection.dryRun ? 'Preparing preview output files' : 'Writing preview output files',
+        abbreviateProgressPath(writtenFile.targetRelativePath),
+        {
+          current: writtenIndex + 1,
+          total: writtenFiles.length,
+        },
       );
-      warningCount += 1;
-    }
-    logs.push(`${writtenFile.sourceType} -> ${writtenFile.targetRelativePath}`);
+      const absoluteOutputPath = stagedBuildOutputRoot
+        ? path.join(stagedBuildOutputRoot, ...writtenFile.targetRelativePath.split('/'))
+        : undefined;
+      const preparedOutput = selection.dryRun
+        ? undefined
+        : await prepareMarkedOutput(plan.context, writtenFile, builderId, yieldController);
+      const previewWarning = preparedOutput
+        ? preparedOutput.warning
+        : resolveDryRunPreviewWarning(writtenFile);
+      if (previewWarning) {
+        logs.push(
+          formatUnmarkedTargetWarning('preview', writtenFile.targetRelativePath, previewWarning),
+        );
+        warningCount += 1;
+      }
+      logs.push(`${writtenFile.sourceType} -> ${writtenFile.targetRelativePath}`);
 
-    if (preparedOutput) {
-      await mkdir(path.dirname(absoluteOutputPath), { recursive: true });
-      await Bun.write(absoluteOutputPath, preparedOutput.content);
+      if (preparedOutput && absoluteOutputPath) {
+        await mkdir(path.dirname(absoluteOutputPath), { recursive: true });
+        await Bun.write(absoluteOutputPath, preparedOutput.content);
+      }
     }
+    if (stagedBuildOutputRoot) {
+      await replaceDirectoryAtomic(stagedBuildOutputRoot, buildOutputRoot);
+    }
+  } catch (error) {
+    if (stagedBuildOutputRoot) {
+      await removePathDirectly(stagedBuildOutputRoot, { recursive: true }).catch(() => undefined);
+    }
+    throw error;
   }
 
   await pruneCacheDirectory(path.join(plan.context.buildRoot, BUILDER_CONFIG.cacheDirectoryName));
@@ -468,7 +482,21 @@ export async function runSync(
     const existingHash = targetExists ? hashBytes(existingBytes) : undefined;
     const existingText =
       isTextOutput && targetExists ? Buffer.from(existingBytes).toString('utf8') : '';
-    const existing = isTextOutput ? unwrapMarkedContent(existingText) : { payload: undefined };
+    const existing = isTextOutput
+      ? unwrapMarkedContent(existingText)
+      : { payload: undefined, innerContent: '' };
+    const targetKey = toPathKey(writtenFile.targetRelativePath);
+    const existingEntry = manifestEntriesByTarget.get(targetKey);
+
+    if (existing.payload?.builderId === builderId) {
+      ensure(isMarkedContentIntact(existing, writtenFile.targetRelativePath), 'RecoveryError', {
+        absolutePath: targetAbsolutePath,
+        reason: `Tracked output \`${writtenFile.targetRelativePath}\` was changed after ${BUILDER_CONFIG.name} wrote it.`,
+        suggestion:
+          'Preserve your manual edits elsewhere, then recover or restore the file before syncing again.',
+      });
+    }
+    assertSyncedTargetIsUnchanged(existingEntry, targetExists, existingHash, targetAbsolutePath);
 
     if (preparedOutput.warning) {
       logs.push(
@@ -491,7 +519,6 @@ export async function runSync(
       continue;
     }
 
-    const existingEntry = manifestEntriesByTarget.get(writtenFile.targetRelativePath);
     const originalContent = await loadOriginalBackupBytes(
       plan.context,
       targetAbsolutePath,
@@ -509,10 +536,11 @@ export async function runSync(
     await assertRealPathWithinRoot(targetAbsolutePath, plan.context.modRoot, 'mod root');
     await mkdir(path.dirname(targetAbsolutePath), { recursive: true });
     await Bun.write(path.join(originalsRoot, backupFileName), originalContent);
-    manifestEntriesByTarget.set(writtenFile.targetRelativePath, {
+    manifestEntriesByTarget.set(targetKey, {
       targetRelativePath: writtenFile.targetRelativePath,
       backupFileName,
       originalExists: targetExists,
+      syncedContentHash: hashBytes(toBytes(outputContent)),
       contributors: writtenFile.contributors,
     });
     await saveManifest(plan.context.stateRoot, createSortedManifest(manifestEntriesByTarget));
@@ -707,10 +735,12 @@ async function cleanupObsoleteTrackedTargets(args: {
   logs: string[];
   yieldController?: CooperativeYieldController | undefined;
 }): Promise<number> {
-  const liveTargetPaths = new Set(args.writtenFiles.map((file) => file.targetRelativePath));
+  const liveTargetPaths = new Set(
+    args.writtenFiles.map((file) => toPathKey(file.targetRelativePath)),
+  );
   const obsoleteEntries = [...args.manifestEntriesByTarget.values()].filter((entry) => {
     return (
-      !liveTargetPaths.has(entry.targetRelativePath) &&
+      !liveTargetPaths.has(toPathKey(entry.targetRelativePath)) &&
       entry.contributors.some((item) => matchesSelection(item, args.selection))
     );
   });
@@ -749,7 +779,7 @@ async function cleanupObsoleteTrackedTargets(args: {
         'Restore the missing backup from YMB state, or recover the file before syncing again.',
       requireBackup: entry.originalExists,
     });
-    args.manifestEntriesByTarget.delete(entry.targetRelativePath);
+    args.manifestEntriesByTarget.delete(toPathKey(entry.targetRelativePath));
   }
 
   return obsoleteCount;
@@ -764,10 +794,11 @@ async function restoreOrDeleteTrackedTarget(args: {
 }): Promise<void> {
   const { context, entry, missingBackupReason, missingBackupSuggestion, requireBackup } = args;
   const targetAbsolutePath = resolveModTargetPath(context.modRoot, entry.targetRelativePath);
-  const backupAbsolutePath = path.join(
-    context.stateRoot,
-    BUILDER_CONFIG.recoveryOriginalsDirectoryName,
+  const originalsRoot = path.join(context.stateRoot, BUILDER_CONFIG.recoveryOriginalsDirectoryName);
+  const backupAbsolutePath = resolveOwnedFilePath(
+    originalsRoot,
     entry.backupFileName,
+    'recovery backup',
   );
   const backupFile = Bun.file(backupAbsolutePath);
   if (requireBackup) {
@@ -777,7 +808,13 @@ async function restoreOrDeleteTrackedTarget(args: {
       suggestion: missingBackupSuggestion,
     });
   }
+  await assertRealPathWithinRoot(backupAbsolutePath, originalsRoot, 'recovery originals root');
   await assertRealPathWithinRoot(targetAbsolutePath, context.modRoot, 'mod root');
+  const targetExists = await pathExists(targetAbsolutePath);
+  const currentHash = targetExists
+    ? hashBytes(new Uint8Array(await Bun.file(targetAbsolutePath).arrayBuffer()))
+    : undefined;
+  assertSyncedTargetIsUnchanged(entry, targetExists, currentHash, targetAbsolutePath);
   if (entry.originalExists) {
     await mkdir(path.dirname(targetAbsolutePath), { recursive: true });
     await writeFileAtomic(targetAbsolutePath, new Uint8Array(await backupFile.arrayBuffer()));
@@ -827,7 +864,7 @@ export async function runRecover(
         missingBackupSuggestion: `Restore the missing file in \`${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.stateDirectoryName}/${BUILDER_CONFIG.recoveryOriginalsDirectoryName}\` before running recover again.`,
         requireBackup: true,
       });
-      remainingEntriesByTarget.delete(entry.targetRelativePath);
+      remainingEntriesByTarget.delete(toPathKey(entry.targetRelativePath));
     }
     reportProgress('Recovering tracked files', abbreviateProgressPath(entry.targetRelativePath), {
       current: entryIndex + 1,
@@ -871,7 +908,29 @@ export async function runRecover(
 function createManifestEntryMap(
   manifest: SyncManifest,
 ): Map<SyncManifestEntry['targetRelativePath'], SyncManifestEntry> {
-  return new Map(manifest.entries.map((entry) => [entry.targetRelativePath, entry] as const));
+  return new Map(
+    manifest.entries.map((entry) => [toPathKey(entry.targetRelativePath), entry] as const),
+  );
+}
+
+function assertSyncedTargetIsUnchanged(
+  entry: SyncManifestEntry | undefined,
+  targetExists: boolean,
+  currentHash: string | undefined,
+  targetAbsolutePath: string,
+): void {
+  if (!entry?.syncedContentHash) {
+    return;
+  }
+  if (!targetExists && !entry.originalExists) {
+    return;
+  }
+  ensure(targetExists && currentHash === entry.syncedContentHash, 'RecoveryError', {
+    absolutePath: targetAbsolutePath,
+    reason: 'A tracked live file was changed or removed after YMB synced it.',
+    suggestion:
+      'Preserve manual edits elsewhere, then restore the last synced file or recover it before continuing.',
+  });
 }
 
 async function sweepOrphanedBackups(

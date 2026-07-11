@@ -1991,6 +1991,37 @@ scripts:
     );
   });
 
+  test('resync fails closed when marked content was edited without updating its envelope', async () => {
+    const builderPath = await createTempBuilder();
+    const targetPath = path.join(
+      path.dirname(builderPath),
+      'CommonData',
+      'Text',
+      'sample_pack-generated-by-mod.ndf',
+    );
+    const selection = {
+      scope: 'prod' as const,
+      modFilters: [],
+      patchFilters: [],
+      dryRun: false,
+      verbose: false,
+      yes: false,
+    };
+
+    await runSync(builderPath, selection);
+    const trackedContent = await Bun.file(targetPath).text();
+    const editedContent = trackedContent.replace(
+      'GeneratedModSummary is TGeneratedSummary',
+      'EditedModSummary is TGeneratedSummary',
+    );
+    expect(editedContent).not.toBe(trackedContent);
+    await Bun.write(targetPath, editedContent);
+
+    await expect(runSync(builderPath, selection)).rejects.toThrow(
+      'The live tracked file was changed after YMB wrote it',
+    );
+  });
+
   test('resync fails fast when a tracked live NDF file becomes corrupted', async () => {
     const builderPath = await createTempBuilder();
     const targetPath = path.join(

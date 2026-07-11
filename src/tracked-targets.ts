@@ -3,9 +3,14 @@ import type { CooperativeYieldController } from './async.ts';
 import { BUILDER_CONFIG } from './builder-config.ts';
 import { validateNdfMemoized, validateNdfMemoizedCooperative } from './engine/validation-memo.ts';
 import { ensure } from './errors.ts';
-import { createBuilderId, unwrapMarkedContent } from './markers.ts';
+import { createBuilderId, isMarkedContentIntact, unwrapMarkedContent } from './markers.ts';
 import { isNdfPath } from './patch/ndf.ts';
-import { pathExists } from './path-utils.ts';
+import {
+  assertRealPathWithinRoot,
+  normalizeRelativePath,
+  pathExists,
+  resolveOwnedFilePath,
+} from './path-utils.ts';
 import type { BuilderContext } from './types.ts';
 
 export async function readTrackedText(
@@ -31,14 +36,14 @@ async function readTrackedTextInternal(
   validateContent: (content: string, absolutePath: string) => void | Promise<void>,
 ): Promise<string> {
   const rawContent = await Bun.file(absolutePath).text();
+  if (containsBuilderEnvelope(rawContent)) {
+    await validateContent(rawContent, absolutePath);
+  }
   const originalBackupPath = await resolveTrackedOriginalTextPath(
     context,
     absolutePath,
     rawContent,
   );
-  if (originalBackupPath) {
-    await validateContent(rawContent, absolutePath);
-  }
   const content = originalBackupPath ? await Bun.file(originalBackupPath).text() : rawContent;
   await validateContent(content, originalBackupPath ?? absolutePath);
   return content;
@@ -62,11 +67,21 @@ async function resolveTrackedOriginalTextPath(
     return undefined;
   }
 
-  const backupPath = path.join(
-    context.stateRoot,
-    BUILDER_CONFIG.recoveryOriginalsDirectoryName,
+  const targetRelativePath = normalizeRelativePath(path.relative(context.modRoot, absolutePath));
+  ensure(isMarkedContentIntact(marked, targetRelativePath), 'RecoveryError', {
+    absolutePath,
+    reason: `The live tracked file was changed after ${BUILDER_CONFIG.name} wrote it.`,
+    suggestion:
+      'Preserve your manual edits elsewhere, then recover or restore the file before building again.',
+  });
+
+  const originalsRoot = path.join(context.stateRoot, BUILDER_CONFIG.recoveryOriginalsDirectoryName);
+  const backupPath = resolveOwnedFilePath(
+    originalsRoot,
     `${marked.payload.markerId}.ndf`,
+    'recovery backup',
   );
+  await assertRealPathWithinRoot(backupPath, originalsRoot, 'recovery originals root');
   ensure(await pathExists(backupPath), 'RecoveryError', {
     absolutePath: backupPath,
     reason: `Missing tracked original backup for \`${path.relative(context.modRoot, absolutePath).replaceAll('\\', '/')}\`.`,

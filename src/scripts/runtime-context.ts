@@ -1,6 +1,10 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { assertOwnedRelativePath, assertRealPathWithinRoot } from '../path-utils.ts';
+import {
+  assertOwnedRelativePath,
+  assertRealPathWithinRoot,
+  writeFileAtomic,
+} from '../path-utils.ts';
 import { createTemplateVariables } from '../templates.ts';
 import type {
   BuildScriptContext,
@@ -126,7 +130,7 @@ function createTextHelpers(
     writeTextIfChanged: async (relativePath: string, content: string) => {
       const absolutePath = resolveScopedPath(relativePath);
       if (virtualStore) {
-        if ((virtualStore.get(absolutePath) ?? '') === content) {
+        if (virtualStore.has(absolutePath) && virtualStore.get(absolutePath) === content) {
           return false;
         }
         virtualStore.set(absolutePath, content);
@@ -138,7 +142,7 @@ function createTextHelpers(
       }
       await assertRealPathWithinRoot(absolutePath, scopeRoot, 'owner root');
       await mkdir(path.dirname(absolutePath), { recursive: true });
-      await Bun.write(absolutePath, content);
+      await writeFileAtomic(absolutePath, content);
       return true;
     },
   };

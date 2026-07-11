@@ -1,4 +1,4 @@
-import { resolveModTargetPath } from '../path-utils.ts';
+import { resolveModTargetPath, toPathKey } from '../path-utils.ts';
 import type { TextMergeContributor } from '../text-merge.ts';
 import { readTrackedText } from '../tracked-targets.ts';
 import type { BuildPlan, WrittenBuildFile } from '../types.ts';
@@ -18,7 +18,8 @@ export async function ensureTextState(
   existingGeneratedTextByTarget: Map<string, string>,
   baseTextCache: Map<string, string>,
 ): Promise<ScriptTextState | undefined> {
-  const existingState = states.get(targetRelativePath);
+  const targetKey = toPathKey(targetRelativePath);
+  const existingState = states.get(targetKey) ?? states.get(targetRelativePath);
   if (existingState) {
     return existingState;
   }
@@ -44,7 +45,7 @@ export async function ensureTextState(
     ],
     writtenFile: existing,
   };
-  states.set(targetRelativePath, state);
+  states.set(targetKey, state);
   return state;
 }
 
@@ -55,27 +56,30 @@ export async function resolveScriptBaseText(
   currentFile: WrittenBuildFile,
   baseTextCache: Map<string, string>,
 ): Promise<string> {
-  const cachedBaseText = baseTextCache.get(targetRelativePath);
+  const targetKey = toPathKey(targetRelativePath);
+  const cachedBaseText = baseTextCache.get(targetKey) ?? baseTextCache.get(targetRelativePath);
   if (cachedBaseText !== undefined) {
     return cachedBaseText;
   }
-  const existingGenerated = existingGeneratedTextByTarget.get(targetRelativePath);
+  const existingGenerated =
+    existingGeneratedTextByTarget.get(targetKey) ??
+    existingGeneratedTextByTarget.get(targetRelativePath);
   if (existingGenerated !== undefined) {
-    baseTextCache.set(targetRelativePath, existingGenerated);
+    baseTextCache.set(targetKey, existingGenerated);
     return existingGenerated;
   }
   if (currentFile.sourceType !== 'script' && typeof currentFile.content === 'string') {
-    baseTextCache.set(targetRelativePath, currentFile.content);
+    baseTextCache.set(targetKey, currentFile.content);
     return currentFile.content;
   }
 
   const absolutePath = resolveModTargetPath(plan.context.modRoot, targetRelativePath);
   const file = Bun.file(absolutePath);
   if (!(await file.exists())) {
-    baseTextCache.set(targetRelativePath, '');
+    baseTextCache.set(targetKey, '');
     return '';
   }
   const baseText = await readTrackedText(plan.context, absolutePath);
-  baseTextCache.set(targetRelativePath, baseText);
+  baseTextCache.set(targetKey, baseText);
   return baseText;
 }

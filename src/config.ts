@@ -21,8 +21,8 @@ export const SUPPORTED_CONFIG_VERSION = 1;
 const nonEmptyId = z
   .string()
   .min(1)
-  .refine((value) => !/\s/.test(value), {
-    message: 'must be a non-empty string without spaces',
+  .regex(/^[A-Za-z0-9._-]+$/, {
+    message: 'must use only letters, numbers, dots, underscores, and hyphens',
   });
 
 const configVersionSchema = z

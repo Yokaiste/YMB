@@ -1,8 +1,9 @@
 import type { Dirent } from 'node:fs';
-import { mkdir, readdir, rename, rm, stat, utimes } from 'node:fs/promises';
+import { mkdir, readdir, rm, stat, utimes } from 'node:fs/promises';
 import path from 'node:path';
 import packageDefinition from '../../package.json' with { type: 'json' };
 import { BUILDER_CONFIG } from '../builder-config.ts';
+import { writeFileAtomic } from '../path-utils.ts';
 import { hashText } from './shared.ts';
 
 export const CACHE_SCHEMA_VERSION = 2;
@@ -63,12 +64,7 @@ export async function writeCacheEntryAtomic(
       ...(extra ? { extra } : {}),
     };
     await mkdir(path.dirname(cachePath), { recursive: true });
-    const tempPath = path.join(
-      path.dirname(cachePath),
-      `${BUILDER_CONFIG.tempPrefix}-${path.basename(cachePath)}.tmp`,
-    );
-    await Bun.write(tempPath, `${JSON.stringify(meta)}\n${content}`);
-    await rename(tempPath, cachePath);
+    await writeFileAtomic(cachePath, `${JSON.stringify(meta)}\n${content}`);
   } catch {
     // Cache failures should never block a build.
   }

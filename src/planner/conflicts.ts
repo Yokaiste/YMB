@@ -1,5 +1,6 @@
 import type { CooperativeYieldController } from '../async.ts';
 import { YmbError } from '../errors.ts';
+import { toPathKey } from '../path-utils.ts';
 import { createTemplateVariables } from '../templates.ts';
 import type { BuilderContext, DiscoveredMod, PatchApplication, ReplaceFile } from '../types.ts';
 import { resolveSelectedTargetRelativePath } from './selection.ts';
@@ -26,20 +27,22 @@ export async function detectTargetConflictsCooperative(
         templateVariables,
       );
       const owner = `${application.mod.config.id}:${application.patch.config.id}`;
-      const owners = patchOwners.get(normalizedPath) ?? [];
+      const targetKey = toPathKey(normalizedPath);
+      const owners = patchOwners.get(targetKey) ?? [];
       if (!owners.includes(owner)) {
         owners.push(owner);
       }
-      patchOwners.set(normalizedPath, owners);
+      patchOwners.set(targetKey, owners);
     }
   }
 
   const replaceOwners = new Map<string, string>();
   for (const replaceFile of replaceFiles) {
     await yieldController?.maybeYield();
-    const existingReplace = replaceOwners.get(replaceFile.targetRelativePath);
+    const targetKey = toPathKey(replaceFile.targetRelativePath);
+    const existingReplace = replaceOwners.get(targetKey);
     if (!existingReplace) {
-      replaceOwners.set(replaceFile.targetRelativePath, replaceFile.modId);
+      replaceOwners.set(targetKey, replaceFile.modId);
     } else if (
       existingReplace === replaceFile.modId ||
       hasDisallowedOrderedCollision(
@@ -61,7 +64,7 @@ export async function detectTargetConflictsCooperative(
       });
     }
 
-    const patchOwnersForTarget = patchOwners.get(replaceFile.targetRelativePath);
+    const patchOwnersForTarget = patchOwners.get(targetKey);
     if (
       patchOwnersForTarget?.some((patchOwner) => {
         const [patchOwnerModId] = patchOwner.split(':');

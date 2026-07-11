@@ -28,6 +28,15 @@ export async function resolveSelectedModsCooperative(
         reason: `Missing mod dependency \`${dependencyModId}\`.`,
         suggestion: 'Fix the mod `dependsOn` list or add the missing source mod.',
       });
+      ensure(dependency.config.enabled, 'ConfigError', {
+        absolutePath: current.absoluteConfigPath,
+        modId: current.config.id,
+        modName: current.config.name,
+        reason: `Mod dependency \`${dependencyModId}\` is disabled.`,
+        suggestion:
+          'Enable the dependency mod or remove it from `dependsOn`; YMB will not partially run a disabled source mod.',
+        details: [dependency.absoluteConfigPath],
+      });
       ensure(current.config.priority >= dependency.config.priority, 'ConfigError', {
         absolutePath: current.absoluteConfigPath,
         modId: current.config.id,
@@ -91,6 +100,7 @@ export async function resolvePatchDependenciesCooperative(
           indexByPatchId,
         );
         const dependencyKey = getPatchKey(dependency.mod.config.id, dependency.patch.config.id);
+        ensureDependencyEnabled(application, dependency, dependencyReference);
         validateDependencyModPriority(application, dependency);
         if (selectedKeys.has(dependencyKey)) {
           continue;
@@ -199,6 +209,23 @@ export async function resolvePatchDependenciesCooperative(
         'Ensure the owning mod is selected directly or through a mod/patch dependency chain.',
     });
   }
+}
+
+function ensureDependencyEnabled(
+  owner: PatchApplication,
+  dependency: PatchApplication,
+  dependencyReference: string,
+): void {
+  ensure(dependency.mod.config.enabled && dependency.patch.config.enabled, 'ConfigError', {
+    absolutePath: owner.patch.absoluteConfigPath,
+    modId: owner.mod.config.id,
+    modName: owner.mod.config.name,
+    patchId: owner.patch.config.id,
+    reason: `Patch dependency \`${dependencyReference}\` is disabled.`,
+    suggestion:
+      'Enable both the dependency source mod and patch, or remove the dependency reference.',
+    details: [dependency.patch.absoluteConfigPath],
+  });
 }
 
 function topologicallyOrderMods(selectedMods: DiscoveredMod[]): DiscoveredMod[] {

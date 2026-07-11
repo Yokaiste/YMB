@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { BUILDER_CONFIG } from '../builder-config.ts';
 import { ensure } from '../errors.ts';
-import { pathExists } from '../path-utils.ts';
+import { assertRealPathWithinRoot, pathExists, resolveOwnedFilePath } from '../path-utils.ts';
 import { resolveTemplateValue } from '../templates.ts';
 import { readTrackedText } from '../tracked-targets.ts';
 import type {
@@ -65,12 +65,14 @@ export async function loadOriginalBackupBytes(
   targetAbsolutePath: string,
   backupFileName: string | undefined,
 ): Promise<Uint8Array> {
+  const originalsRoot = path.join(context.stateRoot, BUILDER_CONFIG.recoveryOriginalsDirectoryName);
   const backupPath =
     backupFileName === undefined
       ? undefined
-      : path.join(context.stateRoot, BUILDER_CONFIG.recoveryOriginalsDirectoryName, backupFileName);
+      : resolveOwnedFilePath(originalsRoot, backupFileName, 'recovery backup');
 
   if (backupPath) {
+    await assertRealPathWithinRoot(backupPath, originalsRoot, 'recovery originals root');
     ensure(await pathExists(backupPath), 'RecoveryError', {
       absolutePath: backupPath,
       reason: `Missing original backup for tracked target \`${path.relative(context.modRoot, targetAbsolutePath).replaceAll('\\', '/')}\`.`,

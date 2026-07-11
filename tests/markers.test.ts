@@ -14,8 +14,8 @@ import {
 } from '../src/markers.ts';
 
 const payload = {
-  markerId: 'marker-1',
-  markerHash: 'hash-1',
+  markerId: 'a'.repeat(64),
+  markerHash: 'b'.repeat(64),
   builderId: createBuilderId('C:/fixture/YMB'),
   contributors: [{ modId: 'sample_pack', patchId: 'balance.armor' }],
 };
@@ -51,7 +51,7 @@ describe('marker parsing', () => {
   test('ignores mismatched marker payload pairs', () => {
     const wrapped = `// YMB-START ${JSON.stringify(payload)}
 FrontArmor = 7
-// YMB-END ${JSON.stringify({ ...payload, markerId: 'marker-2' })}
+// YMB-END ${JSON.stringify({ ...payload, markerId: 'c'.repeat(64) })}
 `;
     const result = unwrapMarkedContent(wrapped);
 
@@ -109,7 +109,7 @@ describe('sync manifest persistence', () => {
     entries: [
       {
         targetRelativePath: 'GameData/Generated/Gameplay/Units.ndf',
-        backupFileName: 'abc.ndf',
+        backupFileName: `${'d'.repeat(64)}.ndf`,
         originalExists: true,
         contributors: [],
       },
@@ -125,7 +125,7 @@ describe('sync manifest persistence', () => {
       await writeFile(path.join(stateRoot, 'manifest.json'), '{ torn json');
       const recovered = await loadManifest(stateRoot);
       expect(recovered.entries).toHaveLength(1);
-      expect(recovered.entries[0]?.backupFileName).toBe('abc.ndf');
+      expect(recovered.entries[0]?.backupFileName).toBe(`${'d'.repeat(64)}.ndf`);
 
       const leftovers = (await readdir(stateRoot)).filter((name) => name.endsWith('.tmp'));
       expect(leftovers).toEqual([]);
@@ -140,6 +140,30 @@ describe('sync manifest persistence', () => {
       await writeFile(path.join(stateRoot, 'manifest.json'), '{ torn json');
       await writeFile(path.join(stateRoot, 'manifest.json.bak'), 'also broken');
 
+      await expect(loadManifest(stateRoot)).rejects.toThrow(
+        'Failed to read the YMB recovery manifest',
+      );
+    } finally {
+      await rm(stateRoot, { recursive: true, force: true });
+    }
+  });
+
+  test('rejects recovery backup paths that escape the originals directory', async () => {
+    const stateRoot = await mkdtemp(path.join(tmpdir(), 'ymb-manifest-'));
+    try {
+      await writeFile(
+        path.join(stateRoot, 'manifest.json'),
+        JSON.stringify({
+          entries: [
+            {
+              targetRelativePath: 'GameData/Generated/Gameplay/Units.ndf',
+              backupFileName: '../outside.ndf',
+              originalExists: true,
+              contributors: [],
+            },
+          ],
+        }),
+      );
       await expect(loadManifest(stateRoot)).rejects.toThrow(
         'Failed to read the YMB recovery manifest',
       );

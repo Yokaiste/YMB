@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { realpath, rename, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { BUILDER_CONFIG } from './builder-config.ts';
@@ -5,6 +6,16 @@ import { ensure } from './errors.ts';
 
 export function normalizeRelativePath(value: string): string {
   return value.replaceAll('\\', '/');
+}
+
+/**
+ * Returns a stable comparison key for WARNO paths.
+ *
+ * WARNO is a Windows game, so two paths that differ only by case address the
+ * same file even when YMB happens to run on a case-sensitive CI filesystem.
+ */
+export function toPathKey(value: string): string {
+  return normalizeRelativePath(value).toLowerCase();
 }
 
 export function assertOwnedRelativePath(
@@ -51,6 +62,20 @@ export function resolveModTargetPath(modRoot: string, targetRelativePath: string
   return path.join(modRoot, ...assertGameRelativePath(targetRelativePath, modRoot).split('/'));
 }
 
+export function resolveOwnedFilePath(
+  ownerRoot: string,
+  fileName: string,
+  ownerLabel: string,
+): string {
+  const normalized = assertOwnedRelativePath(fileName, ownerRoot, ownerLabel);
+  ensure(!normalized.includes('/'), 'LayoutError', {
+    absolutePath: path.join(ownerRoot, ...normalized.split('/')),
+    reason: `${ownerLabel} must be a file name, received \`${fileName}\`.`,
+    suggestion: 'Remove all directory separators and use a single file name.',
+  });
+  return path.join(ownerRoot, normalized);
+}
+
 export async function assertRealPathWithinRoot(
   absolutePath: string,
   rootAbsolutePath: string,
@@ -95,21 +120,72 @@ export async function writeFileAtomic(
   absolutePath: string,
   content: string | Uint8Array,
 ): Promise<void> {
-  const tempPath = path.join(
+  const tempPath = createTemporarySiblingPath(absolutePath);
+  try {
+    await Bun.write(tempPath, content);
+    await rename(tempPath, absolutePath);
+  } catch (error) {
+    await rm(tempPath, { force: true }).catch(() => undefined);
+    throw error;
+  }
+}
+
+export function createTemporarySiblingPath(absolutePath: string): string {
+  return path.join(
     path.dirname(absolutePath),
-    `${BUILDER_CONFIG.tempPrefix}-${path.basename(absolutePath)}.${process.pid}.tmp`,
+    `${BUILDER_CONFIG.tempPrefix}-${path.basename(absolutePath)}.${process.pid}.${randomUUID()}.tmp`,
   );
-  await Bun.write(tempPath, content);
-  await rename(tempPath, absolutePath);
+}
+
+export async function replaceDirectoryAtomic(
+  stagedDirectory: string,
+  destinationDirectory: string,
+): Promise<void> {
+  const previousDirectory = createTemporarySiblingPath(destinationDirectory);
+  const destinationExisted = await pathExists(destinationDirectory);
+  if (destinationExisted) {
+    await rename(destinationDirectory, previousDirectory);
+  }
+
+  try {
+    await rename(stagedDirectory, destinationDirectory);
+  } catch (error) {
+    if (destinationExisted) {
+      try {
+        await rename(previousDirectory, destinationDirectory);
+      } catch (restoreError) {
+        throw new AggregateError(
+          [error, restoreError],
+          `Failed to publish the staged directory and restore ${destinationDirectory}.`,
+        );
+      }
+    }
+    throw error;
+  }
+
+  if (destinationExisted) {
+    await rm(previousDirectory, { recursive: true, force: true }).catch(() => undefined);
+  }
 }
 
 export async function pathExists(filePath: string): Promise<boolean> {
   try {
     await stat(filePath);
     return true;
-  } catch {
-    return false;
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      return false;
+    }
+    throw error;
   }
+}
+
+export function isMissingPathError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    'code' in error &&
+    (error.code === 'ENOENT' || error.code === 'ENOTDIR')
+  );
 }
 
 export async function removePathDirectly(

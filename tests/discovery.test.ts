@@ -650,7 +650,7 @@ targets:
     ).rejects.toThrow('Dependency `balance.armor` matches multiple patches across source mods');
   });
 
-  test('rejects replace file collisions across selected source mods', async () => {
+  test('rejects case-insensitive replace collisions across selected source mods', async () => {
     const tempBuilderPath = await createTempBuilder();
     const collisionFileName = `${path.basename(path.dirname(tempBuilderPath))}-replaced.ndf`;
     const modConfigRoot = path.join(tempBuilderPath, 'mods', 'second-pack', 'config');
@@ -686,7 +686,10 @@ targets:
         value: 9
 `,
     );
-    await Bun.write(path.join(replaceRoot, collisionFileName), 'conflicting replace file\n');
+    await Bun.write(
+      path.join(replaceRoot, collisionFileName.toUpperCase()),
+      'conflicting replace file\n',
+    );
 
     await expect(
       preparePlan(tempBuilderPath, {
@@ -770,6 +773,52 @@ targets:
     expect(
       plan.selectedPatches.map((patch) => `${patch.mod.config.id}:${patch.patch.config.id}`),
     ).toEqual(['support_pack:support.base', 'sample_pack:balance.armor']);
+  });
+
+  test('rejects disabled mod dependencies instead of partially selecting their scripts and replaces', async () => {
+    const tempBuilderPath = await createTempBuilder();
+    const sampleConfigPath = path.join(
+      tempBuilderPath,
+      'mods',
+      'sample-pack',
+      'config',
+      'ymb.mod.yaml',
+    );
+    const supportConfigRoot = path.join(tempBuilderPath, 'mods', 'support-pack', 'config');
+    await mkdir(supportConfigRoot, { recursive: true });
+    await Bun.write(
+      sampleConfigPath,
+      `version: 1
+id: sample_pack
+name: Sample Pack
+dependsOn: [support_pack]
+priority: 1
+enabled: true
+scripts: []
+`,
+    );
+    await Bun.write(
+      path.join(supportConfigRoot, 'ymb.mod.yaml'),
+      `version: 1
+id: support_pack
+name: Support Pack
+priority: 0
+enabled: false
+scripts:
+  - path: should-not-run.ts
+`,
+    );
+
+    await expect(
+      preparePlan(tempBuilderPath, {
+        scope: 'prod',
+        modFilters: ['sample_pack'],
+        patchFilters: [],
+        dryRun: true,
+        verbose: false,
+        yes: false,
+      }),
+    ).rejects.toThrow('Mod dependency `support_pack` is disabled');
   });
 
   test('rejects mod dependencies that point to a higher-priority dependency', async () => {

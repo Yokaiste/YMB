@@ -73,9 +73,9 @@ When a script writes a target that already exists in generated output:
 
 In practice, same-target script edits work best when each script owns a stable generated block or a clearly separate text range.
 
-## ⚡ Patch Cache
+## ⚡ Build Caches
 
-YMB keeps a cache for the expensive patch materialization step under `YMB/.ymb-build/cache`. Three kinds of results are cached per content state:
+YMB keeps patch-output and script-test caches under `YMB/.ymb-build/cache`. Three patch result kinds are cached per content state:
 
 - single-mod patch application sequences
 - per-mod previews used for cross-mod merge decisions
@@ -90,7 +90,7 @@ Use `--no-cache` when:
 - you want a fully fresh timing comparison
 - you want to re-answer a previously remembered patch priority choice for the same content state
 
-`--no-cache` does not disable discovery, replace handling, or script execution. It only bypasses the patch-output cache.
+`--no-cache` bypasses patch-output and script-test cache reads and writes. It does not disable discovery, replace handling, or script execution.
 
 Generation scripts and script tests are killed after 120 seconds if they hang. A script that needs longer usually contains an unbounded wait that should be fixed in the script itself.
 

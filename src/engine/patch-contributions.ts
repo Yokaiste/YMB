@@ -1,7 +1,7 @@
 import { createCooperativeYieldController } from '../async.ts';
 import { ensure } from '../errors.ts';
 import { applyPatchTargetCooperative } from '../patch/ndf.ts';
-import { assertGameRelativePath, resolveModTargetPath } from '../path-utils.ts';
+import { assertGameRelativePath, resolveModTargetPath, toPathKey } from '../path-utils.ts';
 import { createTemplateVariables } from '../templates.ts';
 import type { BuildContributor, BuildPlan, WrittenBuildFile } from '../types.ts';
 import type { MaterializationMetrics } from './materialize.ts';
@@ -28,21 +28,27 @@ interface ApplyContributionSequenceOptions {
 
 export function groupPatchContributions(plan: BuildPlan): Map<string, ResolvedPatchContribution[]> {
   const groupedTargets = new Map<string, ResolvedPatchContribution[]>();
+  const activeScriptPatchPaths = new Set(
+    plan.selectedScripts.flatMap((script) =>
+      script.patch ? [script.patch.absoluteConfigPath] : [],
+    ),
+  );
 
   for (const [patchOrder, selected] of plan.selectedPatches.entries()) {
     const templateVariables = createTemplateVariables(plan.context, selected.mod, selected.patch);
     for (const rawTarget of selected.patch.config.targets) {
       const target = resolveVariablesInTarget(rawTarget, templateVariables);
       const targetRelativePath = assertGameRelativePath(target.file, plan.context.modRoot);
-      const entries = groupedTargets.get(targetRelativePath) ?? [];
+      const targetKey = toPathKey(targetRelativePath);
+      const entries = groupedTargets.get(targetKey) ?? [];
       entries.push({
         application: selected,
         target,
         targetRelativePath,
-        hasScripts: selected.patch.config.scripts.length > 0,
+        hasScripts: activeScriptPatchPaths.has(selected.patch.absoluteConfigPath),
         patchOrder,
       });
-      groupedTargets.set(targetRelativePath, entries);
+      groupedTargets.set(targetKey, entries);
     }
   }
 
@@ -56,22 +62,17 @@ export function comparePatchContributions(
   right: ResolvedPatchContribution,
   prioritizedModId: string | undefined,
 ): number {
-  if (left.hasScripts !== right.hasScripts) {
-    return left.hasScripts ? -1 : 1;
-  }
-
   const leftRank = left.application.mod.config.id === prioritizedModId ? 1 : 0;
   const rightRank = right.application.mod.config.id === prioritizedModId ? 1 : 0;
   if (leftRank !== rightRank) {
     return leftRank - rightRank;
   }
 
-  const modDiff = left.application.mod.config.id.localeCompare(right.application.mod.config.id);
-  if (modDiff !== 0) {
-    return modDiff;
+  if (left.patchOrder !== right.patchOrder) {
+    return left.patchOrder - right.patchOrder;
   }
 
-  return left.patchOrder - right.patchOrder;
+  return left.application.mod.config.id.localeCompare(right.application.mod.config.id);
 }
 
 export async function applyContributionSequence(
@@ -247,7 +248,7 @@ export async function loadBasePatchText(
   firstContribution: ResolvedPatchContribution,
   previousOutputs = new Map<string, WrittenBuildFile>(),
 ): Promise<string> {
-  const inheritedOutput = previousOutputs.get(firstContribution.targetRelativePath);
+  const inheritedOutput = previousOutputs.get(toPathKey(firstContribution.targetRelativePath));
   if (
     firstContribution.application.mod.config.allowWriteToModifiedFiles &&
     inheritedOutput &&

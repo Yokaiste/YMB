@@ -14,7 +14,7 @@ It is built for:
 - modders who want their mods to survive game updates without spending hours resolving merge conflicts
 - creators who want to use generation scripts, template expressions, and programmatic tools for advanced modifications
 - teams who want to build modular projects using safe merges, strict dependency resolution, and conflict safety
-- modders who want to delegate work to AI agents, utilizing strict validators and structured logic to ensure error-free development
+- modders who use AI agents and want strict schemas, validators, and reviewable generated output to reduce mistakes
 
 ## Table of Contents
 
@@ -40,8 +40,8 @@ YMB solves this by giving your work a resilient, modular shape:
 - **Safe mod combinations** allow you to break large projects into smaller feature packs with explicit dependencies and safe merges.
 - **Generation scripts** and **template expressions** programmatically assemble complex data and resolve cross-mod logic.
 - **Source isolation** keeps your authored mods safely isolated under `YMB/mods`.
-- **Clean merges** ensure updates to the base game combine flawlessly with your structural patches.
-- **AI-Ready structure** forces LLM coding agents to work predictably within strict YAML schemas and validators, allowing you to relax and fully delegate development.
+- **Clean merges** help compatible base-game updates combine predictably with structural patches.
+- **AI-ready structure** gives coding agents strict YAML schemas and validators, while keeping the generated result reviewable by a human.
 
 This separation saves you from the nightmare of broken merge scripts and allows you to push the boundaries of what is possible in WARNO modding.
 
@@ -49,6 +49,9 @@ This separation saves you from the nightmare of broken merge scripts and allows 
 
 > [!IMPORTANT]
 > YMB requires **Bun**. Install it first from [bun.com](https://bun.com/).
+
+> [!WARNING]
+> Source mods can contain generation scripts, which run as regular code even during `validate` and `--dry-run`. Only run source mods you trust, review script changes (including AI-generated changes), and inspect preview output before syncing.
 
 If this is your first run, do these in order:
 
@@ -160,19 +163,19 @@ YMB is not just one patch format. It combines multiple authoring styles cleanly:
 
 ## Command Map
 
-| Command         | Use it for                                         | Writes files?     |
-| --------------- | -------------------------------------------------- | ----------------- |
-| `doctor`        | Confirm the builder and live mod paths             | No                |
-| `validate`      | Catch config, patch, script, and conflict problems | No                |
-| `list`          | See discovered source mods and patches             | No                |
-| `explain`       | Understand why patches are included or excluded    | No                |
-| `build`         | Test logic and generate output                     | Output dir only   |
-| `sync --yes`    | Merge the approved result into the game            | Live files        |
-| `recover --yes` | Restore tracked originals                          | Live files        |
-| `cleanup`       | Remove normal temp artifacts                       | Builder temp only |
-| `init`          | Create a starter source mod scaffold               | Source files      |
+| Command         | Use it for                                         | Writes files?                                |
+| --------------- | -------------------------------------------------- | -------------------------------------------- |
+| `doctor`        | Confirm the builder and live mod paths             | No                                           |
+| `validate`      | Catch config, patch, script, and conflict problems | Caches/source helpers only; never live files |
+| `list`          | See discovered source mods and patches             | No                                           |
+| `explain`       | Understand why patches are included or excluded    | No                                           |
+| `build`         | Test logic and generate output                     | Output dir only                              |
+| `sync --yes`    | Merge the approved result into the game            | Live files                                   |
+| `recover --yes` | Restore tracked originals                          | Live files                                   |
+| `cleanup`       | Remove normal temp artifacts                       | Builder temp only                            |
+| `init`          | Create a starter source mod scaffold               | Source files                                 |
 
-Common options:
+Options vary by command. Common selection and diagnostic options include:
 
 - `--scope <prod|dev>`
 - `--mod <id-or-name>`
@@ -213,7 +216,7 @@ Main working paths:
 ## Safety and Resilience
 
 > [!WARNING]
-> Source mods can ship generation scripts, and **YMB executes those scripts as regular code on your machine** — `build`, `validate`, and even `--dry-run` run them with your user's full file system and network access. Only build source mods you trust, and review the `scripts` entries of anything you download before running YMB on it.
+> Source mods can ship generation scripts, and **YMB executes those scripts as regular code on your machine** — `build`, `validate`, and even `--dry-run` run them with your user's full file system and network access. Only build source mods you trust, review the `scripts` entries of anything you download, and review AI-generated script changes before running YMB.
 
 > [!NOTE]
 > The main value of YMB is making your mods resilient to game updates. However, **resilience requires discipline**. If you use YMB to replace entire files or massive chunks of code, you will face the exact same merge conflicts as before. The magic happens when you use targeted, structural patches.

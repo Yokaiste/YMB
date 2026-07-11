@@ -418,6 +418,16 @@ function applyCopy(
     absolutePath,
     operationIndex,
   );
+  ensure(sourceBlock.name, 'SelectorError', {
+    absolutePath,
+    modId: application.mod.config.id,
+    modName: application.mod.config.name,
+    patchId: application.patch.config.id,
+    operationIndex,
+    reason: '`copy` cannot rename an unnamed top-level block.',
+    suggestion:
+      'Select a named object, or add the new unnamed block explicitly with an `add` operation.',
+  });
   ensure(
     !findTopLevelBlocks(currentText).some((block) => block.name === operation.destination?.name),
     'ConflictError',
@@ -433,7 +443,7 @@ function applyCopy(
   );
 
   const copiedText = sourceBlock.text.replace(
-    new RegExp(`\\b${escapeRegExp(sourceBlock.name ?? '')}\\b`, 'g'),
+    new RegExp(`\\b${escapeRegExp(sourceBlock.name)}\\b`, 'g'),
     operation.destination.name,
   );
   const insertion = `${currentText.endsWith('\n') ? '' : '\n'}${wrapSnippetWithMarkers(
