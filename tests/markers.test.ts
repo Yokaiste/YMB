@@ -5,6 +5,7 @@ import path from 'node:path';
 import {
   createBuilderId,
   decorateTextWithExactMarkers,
+  isMarkedContentIntact,
   loadManifest,
   renderOriginalSnippetComments,
   saveManifest,
@@ -34,6 +35,69 @@ describe('marker parsing', () => {
     expect(wrapped).toContain('"builderId"');
     expect(wrapped).not.toContain('"builderRoot"');
     expect(wrapped).not.toContain('"targetRelativePath"');
+  });
+
+  test.each([
+    ['without a trailing newline', 'FrontArmor = 7'],
+    ['with a trailing LF', 'FrontArmor = 7\n'],
+    ['with a trailing CRLF', 'FrontArmor = 7\r\n'],
+  ])('verifies generated content %s', (_description, content) => {
+    const targetRelativePath = 'GameData/Generated/Gameplay/Units.ndf';
+    const markerHash = new Bun.CryptoHasher('sha256').update(content).digest('hex');
+    const integrityPayload = {
+      ...payload,
+      markerHash,
+      markerId: new Bun.CryptoHasher('sha256')
+        .update(`${targetRelativePath}:${markerHash}`)
+        .digest('hex'),
+    };
+
+    const marked = unwrapMarkedContent(
+      wrapWithMarker(content, integrityPayload, targetRelativePath),
+    );
+
+    expect(isMarkedContentIntact(marked, targetRelativePath)).toBe(true);
+  });
+
+  test('rejects a genuine edit inside a generated CRLF envelope', () => {
+    const targetRelativePath = 'GameData/Generated/Gameplay/Units.ndf';
+    const content = 'FrontArmor = 7\r\n';
+    const markerHash = new Bun.CryptoHasher('sha256').update(content).digest('hex');
+    const integrityPayload = {
+      ...payload,
+      markerHash,
+      markerId: new Bun.CryptoHasher('sha256')
+        .update(`${targetRelativePath}:${markerHash}`)
+        .digest('hex'),
+    };
+    const edited = wrapWithMarker(content, integrityPayload, targetRelativePath).replace(
+      'FrontArmor = 7',
+      'FrontArmor = 8',
+    );
+
+    expect(isMarkedContentIntact(unwrapMarkedContent(edited), targetRelativePath)).toBe(false);
+  });
+
+  test('rejects changing a generated CRLF content terminator to LF', () => {
+    const targetRelativePath = 'GameData/Generated/Gameplay/Units.ndf';
+    const content = 'FrontArmor = 7\r\n';
+    const markerHash = new Bun.CryptoHasher('sha256').update(content).digest('hex');
+    const integrityPayload = {
+      ...payload,
+      markerHash,
+      markerId: new Bun.CryptoHasher('sha256')
+        .update(`${targetRelativePath}:${markerHash}`)
+        .digest('hex'),
+    };
+    const changedTerminator = wrapWithMarker(content, integrityPayload, targetRelativePath).replace(
+      '\r\n// YMB-END',
+      '\n// YMB-END',
+    );
+
+    expect(changedTerminator).not.toContain('\r\n// YMB-END');
+    expect(isMarkedContentIntact(unwrapMarkedContent(changedTerminator), targetRelativePath)).toBe(
+      false,
+    );
   });
 
   test('unwraps html comment marker payloads', () => {

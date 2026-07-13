@@ -577,6 +577,44 @@ describe('build and sync workflow', () => {
     expect(secondRun).toContain('unchanged -> CommonData/Text/sample_pack-generated-by-mod.ndf');
   });
 
+  test('resync accepts an unchanged generated envelope whose content ends in CRLF', async () => {
+    const builderPath = await createTempBuilder();
+    const modRootName = path.basename(path.dirname(builderPath));
+    const replaceSourcePath = path.join(
+      builderPath,
+      'mods',
+      'sample-pack',
+      'config',
+      'replace',
+      'CommonData',
+      'Text',
+      '${modRootName}-replaced.ndf',
+    );
+    const targetPath = path.join(
+      path.dirname(builderPath),
+      'CommonData',
+      'Text',
+      `${modRootName}-replaced.ndf`,
+    );
+    const selection = {
+      scope: 'prod' as const,
+      modFilters: [],
+      patchFilters: [],
+      dryRun: false,
+      verbose: false,
+      yes: false,
+    };
+
+    await Bun.write(replaceSourcePath, 'First replacement line\r\nSecond replacement line\r\n');
+    await runSync(builderPath, selection);
+
+    const trackedContent = await Bun.file(targetPath).text();
+    expect(trackedContent).toContain('Second replacement line\r\n// YMB-');
+
+    const secondRun = await runSync(builderPath, selection);
+    expect(secondRun).toContain(`unchanged -> CommonData/Text/${modRootName}-replaced.ndf`);
+  });
+
   test('build refreshes cached patch outputs when target source files change', async () => {
     const builderPath = await createTempBuilder();
     const modRoot = path.dirname(builderPath);

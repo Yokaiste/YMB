@@ -261,6 +261,7 @@ export async function decorateTextWithExactMarkersCooperative(
 export function unwrapMarkedContent(content: string): {
   payload?: MarkerPayload | undefined;
   innerContent: string;
+  envelopeLineEnding?: '\n' | '\r\n' | undefined;
 } {
   for (const style of markerCommentStyles) {
     const startMatch = content.match(style.startPattern);
@@ -282,7 +283,8 @@ export function unwrapMarkedContent(content: string): {
 
       const payload = startPayload.data as MarkerPayload;
       const innerContent = content.slice(startMatch[0].length, content.length - endMatch[0].length);
-      return { payload, innerContent };
+      const envelopeLineEnding = endMatch[0].startsWith('\r\n') ? '\r\n' : '\n';
+      return { payload, innerContent, envelopeLineEnding };
     } catch {
       return { innerContent: content };
     }
@@ -298,13 +300,16 @@ export function isMarkedContentIntact(
   if (!marked.payload) {
     return false;
   }
-  // The envelope delimiter owns its separating newline, so an original that
-  // already ended in a newline and one that did not unwrap to the same slice.
-  // Accept only the two exact encodings the writer can produce.
-  const possibleHashes = [
-    createHash('sha256').update(marked.innerContent).digest('hex'),
-    createHash('sha256').update(`${marked.innerContent}\n`).digest('hex'),
-  ];
+  // The end delimiter owns its separating newline. LF is ambiguous because
+  // the writer also adds it to content with no terminator; CRLF can only have
+  // come from CRLF-terminated content. Reconstruct only those exact cases.
+  const possibleContents =
+    marked.envelopeLineEnding === '\r\n'
+      ? [`${marked.innerContent}\r\n`]
+      : [marked.innerContent, `${marked.innerContent}\n`];
+  const possibleHashes = possibleContents.map((content) =>
+    createHash('sha256').update(content).digest('hex'),
+  );
   return possibleHashes.some(
     (actualHash) =>
       marked.payload?.markerHash === actualHash &&
