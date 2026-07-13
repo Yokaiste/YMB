@@ -1,8 +1,8 @@
 import { ensure } from '../../errors.ts';
+import { escapeRegExp } from '../../text-utils.ts';
 import type { PatchApplication } from '../../types.ts';
 import {
   advanceStringState,
-  escapeRegExp,
   type StringDelimiter,
   startsLineComment,
   type TopLevelBlock,

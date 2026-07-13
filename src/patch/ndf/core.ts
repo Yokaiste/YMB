@@ -1,5 +1,6 @@
 import type { CooperativeYieldController } from '../../async.ts';
 import { ensure } from '../../errors.ts';
+import { escapeRegExp } from '../../text-utils.ts';
 import type {
   CollectionPosition,
   ErrorContext,
@@ -23,7 +24,6 @@ import {
   advanceStringState,
   createMarkerContext,
   ensureMarkerBlockEndsBeforeFollowingToken,
-  escapeRegExp,
   formatNdfValue,
   isRawNdfValue,
   normalizeSnippetIndentation,

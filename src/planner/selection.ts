@@ -4,6 +4,7 @@ import { BUILDER_TEMP_PREFIXES } from '../builder-config.ts';
 import { isScopeIncluded, listFilesRecursive } from '../config.ts';
 import { ensure } from '../errors.ts';
 import { assertOwnedRelativePath, normalizeRelativePath, toPathKey } from '../path-utils.ts';
+import { matchesAnySelectionFilter } from '../selection-filter.ts';
 import { createTemplateVariables, resolveTemplateValue } from '../templates.ts';
 import type {
   BuilderContext,
@@ -31,21 +32,22 @@ export async function selectPatchesCooperative(
   for (const mod of discoveredMods) {
     await yieldController?.maybeYield();
     const modEnabled = mod.config.enabled;
-    const modMatchesFilter =
-      selection.modFilters.length === 0 ||
-      selection.modFilters.some(
-        (filter) =>
-          filter === mod.config.id ||
-          filter.localeCompare(mod.config.name, undefined, { sensitivity: 'accent' }) === 0,
-      );
+    const modMatchesFilter = matchesAnySelectionFilter(
+      selection.modFilters,
+      mod.config.id,
+      mod.config.name,
+    );
 
     for (const patch of mod.patches) {
       await yieldController?.maybeYield();
       const reasons: string[] = [];
       const patchEnabled = patch.config.enabled;
       const scopeAllowed = isScopeIncluded(selection.scope, patch.config.scope);
-      const explicitlySelectedPatch =
-        selection.patchFilters.length === 0 || selection.patchFilters.includes(patch.config.id);
+      const explicitlySelectedPatch = matchesAnySelectionFilter(
+        selection.patchFilters,
+        patch.config.id,
+        patch.config.name,
+      );
 
       if (!modEnabled) {
         reasons.push(`source mod ${mod.config.id} is disabled`);
@@ -303,11 +305,6 @@ function resolveTargetRelativePath(
 function isModSelectable(mod: DiscoveredMod, selection: SelectionInput): boolean {
   return (
     mod.config.enabled &&
-    (selection.modFilters.length === 0 ||
-      selection.modFilters.some(
-        (filter) =>
-          filter === mod.config.id ||
-          filter.localeCompare(mod.config.name, undefined, { sensitivity: 'accent' }) === 0,
-      ))
+    matchesAnySelectionFilter(selection.modFilters, mod.config.id, mod.config.name)
   );
 }

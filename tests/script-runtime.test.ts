@@ -153,6 +153,118 @@ describe('script runtime output', () => {
       await rm(tempRoot, { recursive: true, force: true });
     }
   });
+
+  test('provides assertions, strict values, and integrity-checked JSON caching', async () => {
+    const tempRoot = await mkdtemp(path.join(tmpdir(), 'ymb-runtime-api-'));
+    const { context, script } = createTempScriptFixture(tempRoot);
+
+    try {
+      await mkdir(path.dirname(script.absolutePath), { recursive: true });
+      await Bun.write(
+        script.absolutePath,
+        [
+          'export default async function generate(context) {',
+          "  context.tools.assert.ok(context.tools.apiVersion === 3, { reason: 'Wrong API version.', suggestion: 'Update the script.' });",
+          "  const value = context.tools.values.positiveInteger('7', 'test.value');",
+          "  const key = await context.tools.cache.createKey({ purpose: 'runtime-test' });",
+          "  const cached = await context.tools.cache.readJson('runtime-test', key, (candidate) => candidate?.value === 7);",
+          "  await context.tools.cache.writeJson('runtime-test', key, { value });",
+          '  return {',
+          "    targetRelativePath: 'CommonData/Text/generated.ndf',",
+          "    content: `${value}:${cached ? 'hit' : 'miss'}` ,",
+          '  };',
+          '}',
+          '',
+        ].join('\n'),
+      );
+
+      const plan = createScriptRuntimePlan(context);
+      const first = await executeScriptInProcess(plan, script, new Map());
+      const second = await executeScriptInProcess(plan, script, new Map());
+
+      expect(first[0]?.content).toBe('7:miss');
+      expect(second[0]?.content).toBe('7:hit');
+    } finally {
+      await rm(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  test('reports builder assertion failures with mod-script guidance', async () => {
+    const tempRoot = await mkdtemp(path.join(tmpdir(), 'ymb-runtime-assert-'));
+    const { context, script } = createTempScriptFixture(tempRoot);
+
+    try {
+      await mkdir(path.dirname(script.absolutePath), { recursive: true });
+      await Bun.write(
+        script.absolutePath,
+        [
+          'export default function generate(context) {',
+          "  context.tools.assert.ok(false, { reason: 'Required input is missing.', suggestion: 'Restore the required input.' });",
+          '}',
+          '',
+        ].join('\n'),
+      );
+
+      await expect(
+        executeScriptInProcess(createScriptRuntimePlan(context), script, new Map()),
+      ).rejects.toThrow('Required input is missing.');
+    } finally {
+      await rm(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  test('aggregates grouped self-check failures', async () => {
+    const tempRoot = await mkdtemp(path.join(tmpdir(), 'ymb-runtime-checks-'));
+    const { context, script } = createTempScriptFixture(tempRoot);
+
+    try {
+      await mkdir(path.dirname(script.absolutePath), { recursive: true });
+      await Bun.write(
+        script.absolutePath,
+        [
+          'export default async function generate(context) {',
+          '  await context.tools.assert.all([',
+          "    { name: 'first', run: () => context.tools.assert.ok(false, { reason: 'First failed.', suggestion: 'Fix first.' }) },",
+          "    { name: 'second', run: () => { throw new Error('Second failed.'); } },",
+          '  ]);',
+          '}',
+          '',
+        ].join('\n'),
+      );
+
+      await expect(
+        executeScriptInProcess(createScriptRuntimePlan(context), script, new Map()),
+      ).rejects.toThrow('2 script self-checks failed.');
+    } finally {
+      await rm(tempRoot, { recursive: true, force: true });
+    }
+  });
+
+  test('rejects non-JSON cache values instead of silently dropping them', async () => {
+    const tempRoot = await mkdtemp(path.join(tmpdir(), 'ymb-runtime-cache-value-'));
+    const { context, script } = createTempScriptFixture(tempRoot);
+
+    try {
+      await mkdir(path.dirname(script.absolutePath), { recursive: true });
+      await Bun.write(
+        script.absolutePath,
+        [
+          'export default async function generate(context) {',
+          '  const value = {};',
+          '  value.self = value;',
+          "  await context.tools.cache.writeJson('runtime-test', 'cyclic', value);",
+          '}',
+          '',
+        ].join('\n'),
+      );
+
+      await expect(
+        executeScriptInProcess(createScriptRuntimePlan(context), script, new Map()),
+      ).rejects.toThrow('Script cache value is not JSON-serializable.');
+    } finally {
+      await rm(tempRoot, { recursive: true, force: true });
+    }
+  });
 });
 
 describe('script runtime subprocess', () => {

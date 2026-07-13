@@ -225,6 +225,7 @@ Main working paths:
 - targeted NDF operations (like `add`, `modify`, `copy`) apply cleanly over new game versions
 - `build` ensures your advanced generation scripts execute correctly
 - `recover` works from saved originals in `YMB/.ymb-state` to roll back changes cleanly
+- interrupted `sync` and `recover` operations restore both live files and recovery state from a durable transaction journal
 - strict conflict checks prevent different parts of your mod from quietly breaking each other
 
 ## Read By Need

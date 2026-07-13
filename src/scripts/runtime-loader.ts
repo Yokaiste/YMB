@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { hashText } from '../engine/shared.ts';
 import { YmbError } from '../errors.ts';
+import { hashText } from '../hash.ts';
 import type { BuildScriptModule, BuildScriptTestModule, ScriptApplication } from '../types.ts';
 
 export async function importScriptModule(

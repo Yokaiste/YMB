@@ -82,6 +82,7 @@ export const COMMAND_GUIDES: CommandGuide[] = [
     nextSteps: [
       'Test the live mod in WARNO.',
       'Run `recover --yes` later if you want to restore tracked originals.',
+      'If YMB reports an interrupted operation was rolled back, review the restored files and rerun the command.',
     ],
     examples: ['bun run ymb sync --yes', 'bun run ymb sync --mod sample_pack --yes'],
   },
@@ -91,7 +92,10 @@ export const COMMAND_GUIDES: CommandGuide[] = [
     purpose: 'Rolls tracked files back to the original state saved during sync.',
     resultLabel: 'Recovery state',
     resultPath: `${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.stateDirectoryName}`,
-    nextSteps: ['Run `build` again if you want to produce a fresh preview after recovery.'],
+    nextSteps: [
+      'Run `build` again if you want to produce a fresh preview after recovery.',
+      'If YMB reports an interrupted operation was rolled back, review the restored files and rerun the command.',
+    ],
     examples: ['bun run ymb recover --yes', 'bun run ymb recover --mod sample_pack --yes'],
   },
   {

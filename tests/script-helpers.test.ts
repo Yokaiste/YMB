@@ -9,7 +9,7 @@ import {
   toContributor,
 } from '../src/scripts/contributors.ts';
 import { resolveScriptBaseText } from '../src/scripts/text-state.ts';
-import { createScriptTools } from '../src/scripts/tools.ts';
+import { createScriptNdfTools } from '../src/scripts/tools.ts';
 import type {
   BuilderContext,
   BuildPlan,
@@ -122,7 +122,7 @@ describe('script helpers', () => {
   });
 
   test('exposes builder-provided NDF tools with structured validation and path reads', () => {
-    const tools = createScriptTools();
+    const ndf = createScriptNdfTools();
     const text = [
       'export Descriptor_Unit_Test is TEntityDescriptor',
       '(',
@@ -140,13 +140,13 @@ describe('script helpers', () => {
       ')',
     ].join('\n');
 
-    const blocks = tools.ndf.findTopLevelBlocks(text);
-    const block = tools.ndf.findNamedBlock(text, 'Descriptor_Unit_Test');
-    const modulesField = tools.ndf.findField(block?.text ?? '', 'ModulesDescriptors');
-    const motherCountryField = tools.ndf.findFieldDeep(block?.text ?? '', 'MotherCountry');
-    const entries = tools.ndf.findCollectionEntries(modulesField?.valueText ?? '');
-    const validResult = tools.ndf.validate(text, 'Descriptor_Unit_Test.ndf');
-    const invalidResult = tools.ndf.validate('export Bad is TEntityDescriptor\n(\n', 'broken.ndf');
+    const blocks = ndf.findTopLevelBlocks(text);
+    const block = ndf.findNamedBlock(text, 'Descriptor_Unit_Test');
+    const modulesField = ndf.findField(block?.text ?? '', 'ModulesDescriptors');
+    const motherCountryField = ndf.findFieldDeep(block?.text ?? '', 'MotherCountry');
+    const entries = ndf.findCollectionEntries(modulesField?.valueText ?? '');
+    const validResult = ndf.validate(text, 'Descriptor_Unit_Test.ndf');
+    const invalidResult = ndf.validate('export Bad is TEntityDescriptor\n(\n', 'broken.ndf');
 
     expect(blocks).toHaveLength(1);
     expect(block?.typeName).toBe('TEntityDescriptor');
@@ -155,11 +155,9 @@ describe('script helpers', () => {
       'TModuleBar',
     ]);
     expect(motherCountryField?.valueText).toBe("'US'");
-    expect(
-      tools.ndf.readPath(block?.text ?? '', ['ModulesDescriptors', '[Value=2]', 'Value']),
-    ).toBe('2');
-    expect(tools.ndf.formatValue({ Foo: 'Bar', Enabled: true })).toContain('Foo = Bar');
-    expect(tools.ndf.stripComments("Value = 1 // inline comment\n'// kept in string'\n")).toContain(
+    expect(ndf.readPath(block?.text ?? '', ['ModulesDescriptors', '[Value=2]', 'Value'])).toBe('2');
+    expect(ndf.formatValue({ Foo: 'Bar', Enabled: true })).toContain('Foo = Bar');
+    expect(ndf.stripComments("Value = 1 // inline comment\n'// kept in string'\n")).toContain(
       "'// kept in string'",
     );
     expect(validResult).toEqual({ ok: true });

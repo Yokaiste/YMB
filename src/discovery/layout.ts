@@ -1,7 +1,8 @@
-import { readdir, stat } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { BUILDER_CONFIG } from '../builder-config.ts';
 import { ensure } from '../errors.ts';
+import { statIfExists } from '../path-utils.ts';
 
 export interface ModLayout {
   modAbsolutePath: string;
@@ -31,40 +32,25 @@ export async function collectModLayouts(modsRoot: string): Promise<ModLayout[]> 
   ensure(modLayouts.length > 0, 'LayoutError', {
     absolutePath: modsRoot,
     reason: `No source mod folders with \`${BUILDER_CONFIG.modConfigFileName}\` were found directly under \`${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.modsDirectoryName}\`.`,
-    suggestion: `Create a folder under \`${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.modsDirectoryName}\` and place \`${BUILDER_CONFIG.modConfigFileName}\` in that folder or in its \`${BUILDER_CONFIG.configDirectoryName}\` subfolder.`,
+    suggestion: `Create \`${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.modsDirectoryName}/<mod>/${BUILDER_CONFIG.configDirectoryName}/${BUILDER_CONFIG.modConfigFileName}\`.`,
   });
 
   return modLayouts;
 }
 
 async function resolveModLayout(modAbsolutePath: string): Promise<ModLayout | undefined> {
-  const directConfigPath = path.join(modAbsolutePath, BUILDER_CONFIG.modConfigFileName);
-  if (await isFile(directConfigPath)) {
+  const configAbsolutePath = path.join(modAbsolutePath, BUILDER_CONFIG.configDirectoryName);
+  const modConfigPath = path.join(configAbsolutePath, BUILDER_CONFIG.modConfigFileName);
+  if (await isFile(modConfigPath)) {
     return {
       modAbsolutePath,
-      configAbsolutePath: modAbsolutePath,
-      modConfigPath: directConfigPath,
+      configAbsolutePath,
+      modConfigPath,
       patchAbsolutePath: await resolveOptionalDirectory(
-        path.join(modAbsolutePath, BUILDER_CONFIG.patchDirectoryName),
+        path.join(configAbsolutePath, BUILDER_CONFIG.patchDirectoryName),
       ),
       replaceAbsolutePath: await resolveOptionalDirectory(
-        path.join(modAbsolutePath, BUILDER_CONFIG.replaceDirectoryName),
-      ),
-    };
-  }
-
-  const nestedConfigRoot = path.join(modAbsolutePath, BUILDER_CONFIG.configDirectoryName);
-  const nestedConfigPath = path.join(nestedConfigRoot, BUILDER_CONFIG.modConfigFileName);
-  if (await isFile(nestedConfigPath)) {
-    return {
-      modAbsolutePath,
-      configAbsolutePath: nestedConfigRoot,
-      modConfigPath: nestedConfigPath,
-      patchAbsolutePath: await resolveOptionalDirectory(
-        path.join(nestedConfigRoot, BUILDER_CONFIG.patchDirectoryName),
-      ),
-      replaceAbsolutePath: await resolveOptionalDirectory(
-        path.join(nestedConfigRoot, BUILDER_CONFIG.replaceDirectoryName),
+        path.join(configAbsolutePath, BUILDER_CONFIG.replaceDirectoryName),
       ),
     };
   }
@@ -85,17 +71,9 @@ async function assertDirectory(directoryPath: string): Promise<void> {
 }
 
 async function isDirectory(directoryPath: string): Promise<boolean> {
-  try {
-    return (await stat(directoryPath)).isDirectory();
-  } catch {
-    return false;
-  }
+  return (await statIfExists(directoryPath))?.isDirectory() ?? false;
 }
 
 async function isFile(filePath: string): Promise<boolean> {
-  try {
-    return (await stat(filePath)).isFile();
-  } catch {
-    return false;
-  }
+  return (await statIfExists(filePath))?.isFile() ?? false;
 }

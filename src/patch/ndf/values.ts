@@ -64,17 +64,6 @@ export function findLineCommentIndex(
   return -1;
 }
 
-export function readTrailingLineComment(text: string, fromIndex: number): string | undefined {
-  const commentIndex = findLineCommentIndex(text, fromIndex);
-  if (commentIndex === -1) {
-    return undefined;
-  }
-  const lineEnd = text.indexOf('\n', commentIndex);
-  const comment =
-    lineEnd === -1 ? text.slice(commentIndex + 2) : text.slice(commentIndex + 2, lineEnd);
-  return comment.trim();
-}
-
 function extractQuotedString(raw: string): string | undefined {
   if (raw.length < 2) {
     return undefined;

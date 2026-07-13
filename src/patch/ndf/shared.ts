@@ -344,7 +344,3 @@ export function selectorError(
     suggestion: 'Use a selector kind and `by` mode supported by this operation.',
   });
 }
-
-export function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}

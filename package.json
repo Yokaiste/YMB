@@ -1,6 +1,6 @@
 {
   "name": "ymb",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "AI-ready WARNO mod builder for conflict-free updates, resilient source mods, YAML/NDF patching, generated outputs, and safe sync",
   "homepage": "https://github.com/Yokaiste/YMB",
   "author": "Yokaiste",

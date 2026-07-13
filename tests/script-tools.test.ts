@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 import { renderGeneratedBlock } from '../src/generated-blocks.ts';
-import { createScriptTools } from '../src/scripts/tools.ts';
+import { createScriptNdfTools } from '../src/scripts/tools.ts';
 
-const ndf = createScriptTools().ndf;
+const ndf = createScriptNdfTools();
 
 describe('script ndf tools: value parsing', () => {
   test('parses every scalar kind', () => {
@@ -78,6 +78,10 @@ describe('script ndf tools: generated blocks', () => {
     expect(stripped).toContain('Head is TThing');
     expect(stripped).not.toContain('GENERATED BLOCK');
     expect(stripped).not.toContain('Descriptor_Deck');
+    expect(ndf.generatedBlockMarkers('ysm | decks')).toEqual({
+      start: '// YMB GENERATED BLOCK START | ysm | decks',
+      end: '// YMB GENERATED BLOCK END | ysm | decks',
+    });
   });
 });
 
@@ -127,11 +131,5 @@ describe('script ndf tools: collection mutation', () => {
     expect(() => ndf.insertIntoCollection(source, 'DivisionRules', { $raw: '(9, "X"),' })).toThrow(
       'top-level block and at least one field',
     );
-  });
-});
-
-describe('script ndf tools: contract', () => {
-  test('advertises its api version for feature detection', () => {
-    expect(ndf.apiVersion).toBe(2);
   });
 });

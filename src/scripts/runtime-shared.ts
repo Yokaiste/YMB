@@ -1,9 +1,41 @@
 import { setTimeout as delay } from 'node:timers/promises';
 import { BUILDER_CONFIG } from '../builder-config.ts';
 import { YmbError } from '../errors.ts';
+import type { ScriptApplication } from '../types.ts';
+import { ScriptToolError } from './tool-error.ts';
 
 export function formatUnknownRuntimeError(error: unknown): string {
   return error instanceof Error ? (error.stack ?? error.message) : String(error);
+}
+
+export function createScriptExecutionError(
+  script: ScriptApplication,
+  error: unknown,
+  defaults: {
+    absolutePath: string;
+    reason: string;
+    suggestion: string;
+    details?: string[] | undefined;
+  },
+): YmbError {
+  if (error instanceof YmbError) {
+    return error;
+  }
+
+  const toolOptions = error instanceof ScriptToolError ? error.options : undefined;
+  return new YmbError('ScriptError', {
+    absolutePath: toolOptions?.absolutePath ?? defaults.absolutePath,
+    modId: script.mod.config.id,
+    modName: script.mod.config.name,
+    patchId: script.patch?.config.id,
+    reason: toolOptions?.reason ?? defaults.reason,
+    suggestion: toolOptions?.suggestion ?? defaults.suggestion,
+    details: [
+      ...(defaults.details ?? []),
+      ...(toolOptions?.details ?? []),
+      ...(toolOptions ? [] : [formatUnknownRuntimeError(error)]),
+    ],
+  });
 }
 
 let scriptTimeoutSecondsOverride: number | undefined;

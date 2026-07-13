@@ -78,4 +78,27 @@ describe('cache store', () => {
   test('prune tolerates a missing cache directory', async () => {
     expect(await pruneCacheDirectory(path.join(tmpdir(), 'ymb-cache-missing-dir'))).toBe(0);
   });
+
+  test('prunes oldest entries to the total byte budget', async () => {
+    const cacheRoot = await createTempCacheRoot();
+    try {
+      for (let index = 0; index < 3; index += 1) {
+        const cachePath = path.join(cacheRoot, `entry-${index}.bin`);
+        await writeFile(cachePath, String(index).repeat(10));
+        const modifiedAt = new Date(Date.now() + index * 1000);
+        await utimes(cachePath, modifiedAt, modifiedAt);
+      }
+
+      const removed = await pruneCacheDirectory(cacheRoot, {
+        maxEntries: 10,
+        maxAgeDays: 14,
+        maxBytes: 20,
+      });
+
+      expect(removed).toBe(1);
+      expect((await readdir(cacheRoot)).sort()).toEqual(['entry-1.bin', 'entry-2.bin']);
+    } finally {
+      await rm(cacheRoot, { recursive: true, force: true });
+    }
+  });
 });

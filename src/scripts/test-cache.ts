@@ -2,7 +2,7 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import type { CooperativeYieldController } from '../async.ts';
 import { BUILDER_CONFIG } from '../builder-config.ts';
-import { hashBytes, hashText } from '../engine/shared.ts';
+import { hashBytes, hashText } from '../hash.ts';
 import { writeFileAtomic } from '../path-utils.ts';
 import type {
   ScriptApplication,

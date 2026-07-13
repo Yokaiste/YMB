@@ -1,8 +1,8 @@
-import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { BUILDER_CONFIG } from '../builder-config.ts';
 import { ensure } from '../errors.ts';
 import { assertRealPathWithinRoot, pathExists, resolveOwnedFilePath } from '../path-utils.ts';
+import { matchesAnySelectionFilter } from '../selection-filter.ts';
 import { resolveTemplateValue } from '../templates.ts';
 import { readTrackedText } from '../tracked-targets.ts';
 import type {
@@ -13,7 +13,6 @@ import type {
   SelectionInput,
 } from '../types.ts';
 
-const textEncoder = new TextEncoder();
 const textTemplateExtensions = new Set([
   '.csv',
   '.ini',
@@ -52,14 +51,6 @@ export async function readTextOrThrow(
   return await readTrackedText(context, absolutePath);
 }
 
-export function hashText(text: string): string {
-  return createHash('sha256').update(text).digest('hex');
-}
-
-export function hashBytes(bytes: Uint8Array): string {
-  return createHash('sha256').update(bytes).digest('hex');
-}
-
 export async function loadOriginalBackupBytes(
   context: BuilderContext,
   targetAbsolutePath: string,
@@ -88,10 +79,6 @@ export async function loadOriginalBackupBytes(
   return new Uint8Array(0);
 }
 
-export function toBytes(content: string | Uint8Array): Uint8Array {
-  return typeof content === 'string' ? textEncoder.encode(content) : content;
-}
-
 export function isTextTemplateFile(filePath: string): boolean {
   return textTemplateExtensions.has(path.extname(filePath).toLowerCase());
 }
@@ -104,23 +91,15 @@ export function matchesSelection(
   contributor: BuildContributor,
   selection: SelectionInput,
 ): boolean {
-  const modMatches =
-    selection.modFilters.length === 0 ||
-    selection.modFilters.some(
-      (filter) =>
-        filter.localeCompare(contributor.modId, undefined, { sensitivity: 'accent' }) === 0 ||
-        (contributor.modName !== undefined &&
-          filter.localeCompare(contributor.modName, undefined, { sensitivity: 'accent' }) === 0),
-    );
+  const modMatches = matchesAnySelectionFilter(
+    selection.modFilters,
+    contributor.modId,
+    contributor.modName,
+  );
   const patchMatches =
     selection.patchFilters.length === 0 ||
     (contributor.patchId !== undefined &&
-      selection.patchFilters.some(
-        (filter) =>
-          filter.localeCompare(contributor.patchId ?? '', undefined, {
-            sensitivity: 'accent',
-          }) === 0,
-      ));
+      matchesAnySelectionFilter(selection.patchFilters, contributor.patchId));
 
   return modMatches && patchMatches;
 }

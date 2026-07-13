@@ -27,6 +27,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .eslintcache
 .cache
 *.tsbuildinfo
+.ymb-build/
+.ymb-state/
+.ymb-operation-lock/
+.ymb-state-transaction/
 **/.ymb*
 **/.ymb*/
 

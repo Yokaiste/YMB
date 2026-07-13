@@ -81,7 +81,7 @@ YMB keeps patch-output and script-test caches under `YMB/.ymb-build/cache`. Thre
 - per-mod previews used for cross-mod merge decisions
 - the final merged result of a multi-mod target, including the remembered priority choice
 
-Cache entries are self-validating (a content hash travels with each entry), written atomically, and keyed on the builder version, so upgrading YMB invalidates everything automatically. Old entries are pruned after each `build` and `sync`: anything untouched for 14 days or beyond the newest 512 entries is deleted.
+Cache entries are self-validating (a content hash travels with each entry), written atomically, and keyed on the builder version, so upgrading YMB invalidates everything automatically. Exact-content NDF validation results are cached too, avoiding repeated parsing of unchanged large generated files without trusting a filename or timestamp. Old entries are pruned after each `validate`, `build`, and `sync`: anything untouched for 14 days, beyond the newest 512 entries, or beyond the 1 GiB total cache budget is deleted.
 
 Use `--no-cache` when:
 
@@ -110,6 +110,11 @@ Important details:
 - files that did not exist before sync can be deleted during recovery
 - malformed marker envelopes are treated as real errors
 - missing backups are treated as real errors
+- orphan cleanup removes only YMB-shaped hash backup names; unrecognized files in the recovery folder are preserved and reported
+
+`sync` and `recover` are protected by a durable state transaction. YMB snapshots each live target before its first write and copies the pre-command `.ymb-state` directory. An ordinary error restores both immediately. A process or machine interruption leaves the transaction journal in `YMB/.ymb-state-transaction`; the next mutating command rolls it back under the exclusive operation lock, reports the recovered command and start time, and stops so you can review before retrying.
+
+Do not manually edit or remove an unfinished transaction journal. If its metadata or snapshots are damaged, YMB fails closed instead of guessing which live or recovery state is authoritative.
 
 ## 📖 Reading Tracked Targets
 
@@ -121,6 +126,14 @@ For scripts and layered source mods, `readTarget()` behaves like this:
 
 - without `allowWriteToModifiedFiles`, a script only sees same-layer generated outputs
 - with `allowWriteToModifiedFiles`, a script may also see earlier selected source-mod output from lower-priority or dependency-ordered layers
+
+## 🔒 Concurrent Commands
+
+`init`, `validate`, `build`, `sync`, `recover`, and `cleanup` take an exclusive lock for the builder. This protects source scaffolds, shared caches, generated source-helper writes, previews, recovery manifests, backups, and live files from overlapping command processes. Interactive `init` questions are completed before it takes the lock.
+
+`init` builds a new source mod in a unique sibling staging directory and publishes the finished scaffold with one rename. If any file write fails, the staging directory is removed and the requested final mod folder remains absent, so retrying does not require repairing a partial scaffold.
+
+If a second mutating command starts while one is active, it stops with the owning command, process ID, and start time. Wait for the first command instead of deleting the lock. When the recorded local process no longer exists, YMB safely reclaims the stale lock itself. `cleanup` deliberately preserves its own active lock.
 
 ## 🔄 Upgrade Strategy
 

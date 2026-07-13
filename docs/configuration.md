@@ -43,12 +43,9 @@ YMB/
 
 YMB discovers source mods only from the immediate child folders under `YMB/mods`.
 
-A folder counts as a source mod when it contains `ymb.mod.yaml`:
+A folder counts as a source mod only when it contains `config/ymb.mod.yaml`.
 
-- at the source-mod root
-- or inside a nested `config/` folder
-
-Once YMB finds the config root, it only scans:
+YMB then only scans:
 
 - the config root itself
 - `patch/`

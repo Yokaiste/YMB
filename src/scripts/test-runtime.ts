@@ -13,7 +13,11 @@ import type {
 } from '../types.ts';
 import { createScriptTestExecutionContext } from './runtime-context.ts';
 import { importScriptTestModule } from './runtime-loader.ts';
-import { awaitIpcChildResult, formatUnknownRuntimeError } from './runtime-shared.ts';
+import {
+  awaitIpcChildResult,
+  createScriptExecutionError,
+  formatUnknownRuntimeError,
+} from './runtime-shared.ts';
 import { assertScriptTestResultsPassed, normalizeScriptTestReport } from './testing.ts';
 
 const scriptTestRuntimeChildPath = fileURLToPath(
@@ -91,14 +95,11 @@ export async function executeScriptTestInProcess(
   try {
     report = await execute(context);
   } catch (error) {
-    throw new YmbError('ScriptError', {
+    throw createScriptExecutionError(script, error, {
       absolutePath: testAbsolutePath,
-      modId: script.mod.config.id,
-      modName: script.mod.config.name,
-      patchId: script.patch?.config.id,
       reason: `Script test \`${describeScriptTestPath(script, testAbsolutePath)}\` threw before returning results.`,
       suggestion: scriptTestRuntimeFailureSuggestion,
-      details: [`Script under test: ${script.config.path}`, formatUnknownRuntimeError(error)],
+      details: [`Script under test: ${script.config.path}`],
     });
   }
 

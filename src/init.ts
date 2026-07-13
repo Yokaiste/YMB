@@ -1,11 +1,13 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, rename, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { createInterface } from 'node:readline/promises';
 import { BUILDER_CONFIG } from './builder-config.ts';
 import { resolveBuilderContext } from './config.ts';
 import { ensure } from './errors.ts';
-import { pathExists } from './path-utils.ts';
+import { withOperationLock } from './operation-lock.ts';
+import { createTemporarySiblingPath, pathExists } from './path-utils.ts';
+import { recoverPendingStateTransactionOrThrow } from './state-transaction.ts';
 
 export interface InitCommandOptions {
   id?: string | undefined;
@@ -25,54 +27,67 @@ export async function runInit(
 ): Promise<string[]> {
   const context = await resolveBuilderContext(builderPath);
   const answers = await collectInitAnswers(options);
-  const modRoot = path.join(context.modsRoot, answers.id);
-  const configRoot = path.join(modRoot, BUILDER_CONFIG.configDirectoryName);
-  const patchRoot = path.join(configRoot, BUILDER_CONFIG.patchDirectoryName);
-  const replaceRoot = path.join(configRoot, BUILDER_CONFIG.replaceDirectoryName);
-  const modConfigPath = path.join(configRoot, BUILDER_CONFIG.modConfigFileName);
-  const readmePath = path.join(modRoot, 'README.md');
-  const demoPatchRoot = path.join(patchRoot, 'ui', 'branding', 'welcome-view');
-  const demoPatchPath = path.join(demoPatchRoot, BUILDER_CONFIG.patchConfigFileName);
-  const demoScriptPath = path.join(configRoot, 'generate-build-info.ts');
-  const demoScriptTestPath = path.join(configRoot, 'generate-build-info.test.ts');
-  const demoLocalisationPath = path.join(
-    replaceRoot,
-    'GameData',
-    'Localisation',
-    '${modRootName}',
-    'INTERFACE_OUTGAME.csv',
-  );
+  return withOperationLock(context.ymbRoot, 'init', async () => {
+    await recoverPendingStateTransactionOrThrow(context);
+    const finalModRoot = path.join(context.modsRoot, answers.id);
+    const stagedModRoot = createTemporarySiblingPath(finalModRoot);
+    const configRoot = path.join(stagedModRoot, BUILDER_CONFIG.configDirectoryName);
+    const patchRoot = path.join(configRoot, BUILDER_CONFIG.patchDirectoryName);
+    const replaceRoot = path.join(configRoot, BUILDER_CONFIG.replaceDirectoryName);
+    const modConfigPath = path.join(configRoot, BUILDER_CONFIG.modConfigFileName);
+    const readmePath = path.join(stagedModRoot, 'README.md');
+    const demoPatchRoot = path.join(patchRoot, 'ui', 'branding', 'welcome-view');
+    const demoPatchPath = path.join(demoPatchRoot, BUILDER_CONFIG.patchConfigFileName);
+    const demoScriptPath = path.join(configRoot, 'generate-build-info.ts');
+    const demoScriptTestPath = path.join(configRoot, 'generate-build-info.test.ts');
+    const demoLocalisationPath = path.join(
+      replaceRoot,
+      'GameData',
+      'Localisation',
+      '${modRootName}',
+      'INTERFACE_OUTGAME.csv',
+    );
 
-  ensure(!(await pathExists(modRoot)), 'CommandError', {
-    absolutePath: modRoot,
-    reason: `The source mod folder \`${answers.id}\` already exists.`,
-    suggestion:
-      'Choose a different mod id or remove the existing folder before running `init` again.',
+    ensure(!(await pathExists(finalModRoot)), 'CommandError', {
+      absolutePath: finalModRoot,
+      reason: `The source mod folder \`${answers.id}\` already exists.`,
+      suggestion:
+        'Choose a different mod id or remove the existing folder before running `init` again.',
+    });
+
+    try {
+      await mkdir(patchRoot, { recursive: true });
+      await mkdir(replaceRoot, { recursive: true });
+      await mkdir(demoPatchRoot, { recursive: true });
+      await mkdir(path.dirname(demoLocalisationPath), { recursive: true });
+      await Bun.write(modConfigPath, renderModConfig(answers));
+      await Bun.write(demoPatchPath, renderDemoPatchConfig(answers));
+      await Bun.write(demoScriptPath, renderDemoScript());
+      await Bun.write(demoScriptTestPath, renderDemoScriptTest(answers));
+      await Bun.write(demoLocalisationPath, renderDemoOutgameLocalisation());
+      await Bun.write(readmePath, renderReadme(answers));
+      await rename(stagedModRoot, finalModRoot);
+    } catch (error) {
+      await rm(stagedModRoot, { recursive: true, force: true }).catch(() => undefined);
+      throw error;
+    }
+
+    const toFinalPath = (stagedPath: string) =>
+      path.join(finalModRoot, path.relative(stagedModRoot, stagedPath));
+
+    return [
+      `Created source mod scaffold: ${answers.name}`,
+      `Source mod id: ${answers.id}`,
+      `Config file: ${normalizeDisplayPath(toFinalPath(modConfigPath))}`,
+      `Patch root: ${normalizeDisplayPath(toFinalPath(patchRoot))}`,
+      `Replace root: ${normalizeDisplayPath(toFinalPath(replaceRoot))}`,
+      `Demo script: ${normalizeDisplayPath(toFinalPath(demoScriptPath))}`,
+      `Demo script test: ${normalizeDisplayPath(toFinalPath(demoScriptTestPath))}`,
+      `Demo patch: ${normalizeDisplayPath(toFinalPath(demoPatchPath))}`,
+      `Demo localisation: ${normalizeDisplayPath(toFinalPath(demoLocalisationPath))}`,
+      'Next step: run `validate` or `build` to preview the patch, replace, and generated starter outputs.',
+    ];
   });
-
-  await mkdir(patchRoot, { recursive: true });
-  await mkdir(replaceRoot, { recursive: true });
-  await mkdir(demoPatchRoot, { recursive: true });
-  await mkdir(path.dirname(demoLocalisationPath), { recursive: true });
-  await Bun.write(modConfigPath, renderModConfig(answers));
-  await Bun.write(demoPatchPath, renderDemoPatchConfig(answers));
-  await Bun.write(demoScriptPath, renderDemoScript());
-  await Bun.write(demoScriptTestPath, renderDemoScriptTest(answers));
-  await Bun.write(demoLocalisationPath, renderDemoOutgameLocalisation());
-  await Bun.write(readmePath, renderReadme(answers));
-
-  return [
-    `Created source mod scaffold: ${answers.name}`,
-    `Source mod id: ${answers.id}`,
-    `Config file: ${normalizeDisplayPath(modConfigPath)}`,
-    `Patch root: ${normalizeDisplayPath(patchRoot)}`,
-    `Replace root: ${normalizeDisplayPath(replaceRoot)}`,
-    `Demo script: ${normalizeDisplayPath(demoScriptPath)}`,
-    `Demo script test: ${normalizeDisplayPath(demoScriptTestPath)}`,
-    `Demo patch: ${normalizeDisplayPath(demoPatchPath)}`,
-    `Demo localisation: ${normalizeDisplayPath(demoLocalisationPath)}`,
-    'Next step: run `validate` or `build` to preview the patch, replace, and generated starter outputs.',
-  ];
 }
 
 async function collectInitAnswers(options: InitCommandOptions): Promise<InitAnswers> {

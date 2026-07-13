@@ -1,5 +1,11 @@
 import { formatErrorMessage, YmbError } from '../errors.ts';
-import { listGeneratedBlocks, stripGeneratedBlocks } from '../generated-blocks.ts';
+import {
+  buildGeneratedBlockMarkers,
+  listGeneratedBlocks,
+  renderGeneratedBlock,
+  stripGeneratedBlocks,
+  upsertGeneratedBlock,
+} from '../generated-blocks.ts';
 import {
   extractFirstCollectionRange,
   extractFirstParenthesizedRange,
@@ -18,6 +24,8 @@ import { insertCollectionEntryByPath, validateNdf } from '../patch/ndf.ts';
 import type {
   BuildScriptCollectionPosition,
   BuildScriptGeneratedBlock,
+  BuildScriptGeneratedBlockMarkers,
+  BuildScriptGeneratedBlockOptions,
   BuildScriptNdfBlock,
   BuildScriptNdfCollectionEntry,
   BuildScriptNdfCommentedFieldRange,
@@ -28,13 +36,29 @@ import type {
   BuildScriptNdfValidationResult,
   BuildScriptTools,
   CollectionPosition,
+  ScriptApplication,
+  ScriptRuntimePlan,
 } from '../types.ts';
+import { createScriptAssertionTools } from './assertion-tools.ts';
+import { createScriptCacheTools } from './cache-tools.ts';
+import { createScriptTextTools } from './text-tools.ts';
+import { createScriptValueTools } from './value-tools.ts';
 
-export function createScriptTools(): BuildScriptTools {
-  return SCRIPT_TOOLS;
+export function createScriptTools(
+  plan: ScriptRuntimePlan,
+  script: ScriptApplication,
+): BuildScriptTools {
+  return Object.freeze({
+    apiVersion: 3,
+    ndf: SCRIPT_NDF_TOOLS,
+    assert: SCRIPT_ASSERTION_TOOLS,
+    values: SCRIPT_VALUE_TOOLS,
+    text: SCRIPT_TEXT_TOOLS,
+    cache: createScriptCacheTools(plan, script),
+  });
 }
 
-function createScriptNdfTools(): BuildScriptNdfTools {
+export function createScriptNdfTools(): BuildScriptNdfTools {
   const validate = (text: string, pathHint = 'inline.ndf'): BuildScriptNdfValidationResult => {
     try {
       validateNdf(text, pathHint);
@@ -61,7 +85,6 @@ function createScriptNdfTools(): BuildScriptNdfTools {
   };
 
   return {
-    apiVersion: 2,
     validate,
     assertValid,
     findTopLevelBlocks(text: string): BuildScriptNdfBlock[] {
@@ -128,11 +151,23 @@ function createScriptNdfTools(): BuildScriptNdfTools {
     parseList(collectionText: string): BuildScriptNdfScalar[] {
       return parseNdfList(collectionText);
     },
+    primaryTypeName(typeName: string): string {
+      return typeName.trim().split(/\s+/)[0] ?? '';
+    },
     listGeneratedBlocks(text: string): BuildScriptGeneratedBlock[] {
       return listGeneratedBlocks(text).map((block): BuildScriptGeneratedBlock => ({ ...block }));
     },
     stripGeneratedBlocks(text: string): string {
       return stripGeneratedBlocks(text);
+    },
+    generatedBlockMarkers(ownerId: string): BuildScriptGeneratedBlockMarkers {
+      return buildGeneratedBlockMarkers(ownerId);
+    },
+    renderGeneratedBlock(options: BuildScriptGeneratedBlockOptions): string {
+      return renderGeneratedBlock(options);
+    },
+    upsertGeneratedBlock(text: string, generatedBlock: string, ownerId: string): string {
+      return upsertGeneratedBlock(text, generatedBlock, ownerId);
     },
     insertIntoCollection(
       text: string,
@@ -184,9 +219,10 @@ function toCollectionPosition(
   return { mode: 'after', anchor: position.after };
 }
 
-const SCRIPT_TOOLS = Object.freeze({
-  ndf: Object.freeze(createScriptNdfTools()),
-}) satisfies BuildScriptTools;
+const SCRIPT_NDF_TOOLS = Object.freeze(createScriptNdfTools());
+const SCRIPT_ASSERTION_TOOLS = createScriptAssertionTools();
+const SCRIPT_VALUE_TOOLS = createScriptValueTools();
+const SCRIPT_TEXT_TOOLS = createScriptTextTools();
 
 function toScriptBlock(block: BuildScriptNdfBlock): BuildScriptNdfBlock {
   return { ...block };

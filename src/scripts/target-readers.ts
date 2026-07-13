@@ -1,5 +1,5 @@
-import { hashBytes, hashText } from '../engine/shared.ts';
 import { ensure } from '../errors.ts';
+import { hashBytes, hashText, toBytes } from '../hash.ts';
 import { normalizeRelativePath, resolveModTargetPath, toPathKey } from '../path-utils.ts';
 import { resolveTemplateValue } from '../templates.ts';
 import { readTrackedText } from '../tracked-targets.ts';
@@ -9,8 +9,6 @@ import type {
   ScriptRuntimePlan,
   WrittenBuildFile,
 } from '../types.ts';
-
-const textEncoder = new TextEncoder();
 
 interface TargetReaderState {
   replaceFilesByTarget: Map<string, ReplaceFile>;
@@ -65,9 +63,7 @@ export async function readTargetBinary(
   const generated = outputMap.get(toPathKey(normalizedPath));
   if (generated) {
     const content =
-      typeof generated.content === 'string'
-        ? textEncoder.encode(generated.content)
-        : generated.content;
+      typeof generated.content === 'string' ? toBytes(generated.content) : generated.content;
     recordObservedRead(state, normalizedPath, 'binary', hashBytes(content));
     return content;
   }

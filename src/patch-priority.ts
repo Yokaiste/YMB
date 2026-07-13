@@ -3,7 +3,7 @@ import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import readline from 'node:readline/promises';
 import { ensure, YmbError } from './errors.ts';
-import { normalizeRelativePath, removePathDirectly } from './path-utils.ts';
+import { normalizeRelativePath, removePathDirectly, writeFileAtomic } from './path-utils.ts';
 import type { BuilderContext, PatchApplication } from './types.ts';
 
 export interface PatchContribution {
@@ -167,7 +167,7 @@ async function writePreviewFile(request: PatchPriorityRequest): Promise<string> 
     );
   }
 
-  await Bun.write(previewPath, sections.join('\n'));
+  await writeFileAtomic(previewPath, sections.join('\n'));
   return previewPath;
 }
 

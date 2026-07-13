@@ -1,10 +1,10 @@
 import type { Dirent } from 'node:fs';
-import { mkdir, readdir, rm, stat, utimes } from 'node:fs/promises';
+import { mkdir, readdir, rm, utimes } from 'node:fs/promises';
 import path from 'node:path';
 import packageDefinition from '../../package.json' with { type: 'json' };
 import { BUILDER_CONFIG } from '../builder-config.ts';
-import { writeFileAtomic } from '../path-utils.ts';
-import { hashText } from './shared.ts';
+import { hashText } from '../hash.ts';
+import { isMissingPathError, statIfExists, writeFileAtomic } from '../path-utils.ts';
 
 export const CACHE_SCHEMA_VERSION = 2;
 export const CACHE_SALT = `${CACHE_SCHEMA_VERSION}:${packageDefinition.version}`;
@@ -72,9 +72,10 @@ export async function writeCacheEntryAtomic(
 
 export async function pruneCacheDirectory(
   cacheRoot: string,
-  options: { maxEntries?: number; maxAgeDays?: number } = {},
+  options: { maxEntries?: number; maxAgeDays?: number; maxBytes?: number } = {},
 ): Promise<number> {
   const maxEntries = options.maxEntries ?? BUILDER_CONFIG.cacheMaxEntries;
+  const maxBytes = options.maxBytes ?? BUILDER_CONFIG.cacheMaxBytes;
   const maxAgeMs = (options.maxAgeDays ?? BUILDER_CONFIG.cacheMaxAgeDays) * 24 * 60 * 60 * 1000;
 
   try {
@@ -91,8 +92,13 @@ export async function pruneCacheDirectory(
     const survivors = entries
       .filter((entry) => !removable.has(entry.absolutePath))
       .sort((left, right) => right.modifiedAtMs - left.modifiedAtMs);
-    for (const entry of survivors.slice(maxEntries)) {
-      removable.add(entry.absolutePath);
+    let retainedBytes = 0;
+    for (const [index, entry] of survivors.entries()) {
+      if (index >= maxEntries || retainedBytes + entry.size > maxBytes) {
+        removable.add(entry.absolutePath);
+        continue;
+      }
+      retainedBytes += entry.size;
     }
 
     for (const absolutePath of removable) {
@@ -107,8 +113,8 @@ export async function pruneCacheDirectory(
 
 async function collectCacheFiles(
   cacheRoot: string,
-): Promise<{ absolutePath: string; name: string; modifiedAtMs: number }[]> {
-  const results: { absolutePath: string; name: string; modifiedAtMs: number }[] = [];
+): Promise<{ absolutePath: string; name: string; modifiedAtMs: number; size: number }[]> {
+  const results: { absolutePath: string; name: string; modifiedAtMs: number; size: number }[] = [];
   const pendingDirectories = [cacheRoot];
 
   while (pendingDirectories.length > 0) {
@@ -116,8 +122,11 @@ async function collectCacheFiles(
     let entries: Dirent[];
     try {
       entries = await readdir(currentDirectory, { withFileTypes: true });
-    } catch {
-      continue;
+    } catch (error) {
+      if (isMissingPathError(error)) {
+        continue;
+      }
+      throw error;
     }
     for (const entry of entries) {
       const absolutePath = path.join(currentDirectory, entry.name);
@@ -125,10 +134,15 @@ async function collectCacheFiles(
         pendingDirectories.push(absolutePath);
         continue;
       }
-      try {
-        const stats = await stat(absolutePath);
-        results.push({ absolutePath, name: entry.name, modifiedAtMs: stats.mtimeMs });
-      } catch {}
+      const stats = await statIfExists(absolutePath);
+      if (stats?.isFile()) {
+        results.push({
+          absolutePath,
+          name: entry.name,
+          modifiedAtMs: stats.mtimeMs,
+          size: stats.size,
+        });
+      }
     }
   }
 

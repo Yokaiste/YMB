@@ -4,6 +4,7 @@ import { type CooperativeYieldController, createCooperativeYieldController } fro
 import { BUILDER_CONFIG } from '../builder-config.ts';
 import { resolveBuilderContext } from '../config.ts';
 import { ensure } from '../errors.ts';
+import { hashBytes, hashText, toBytes } from '../hash.ts';
 import {
   createBuilderId,
   decorateTextWithExactMarkers,
@@ -15,11 +16,13 @@ import {
   unwrapMarkedContent,
   wrapWithMarker,
 } from '../markers.ts';
+import { withBuilderOperationLock } from '../operation-lock.ts';
 import { isNdfPath } from '../patch/ndf.ts';
 import {
   assertGameRelativePath,
   assertRealPathWithinRoot,
   createTemporarySiblingPath,
+  isMissingPathError,
   pathExists,
   removePathDirectly,
   replaceDirectoryAtomic,
@@ -30,6 +33,13 @@ import {
 } from '../path-utils.ts';
 import { materializeScriptOutputs } from '../scripts/materialize.ts';
 import { formatScriptTestLabel } from '../scripts/testing.ts';
+import {
+  beginStateTransaction,
+  commitStateTransaction,
+  recordStateTransactionTarget,
+  rollbackStateTransaction,
+  type StateTransaction,
+} from '../state-transaction.ts';
 import { collectCleanupTargets, removeCleanupTargets } from '../temp-artifacts.ts';
 import { createTemplateVariables } from '../templates.ts';
 import { readTrackedText, readTrackedTextCooperative } from '../tracked-targets.ts';
@@ -60,20 +70,26 @@ import {
 import { preparePlan } from './plan.ts';
 import { abbreviateProgressPath, reportProgress } from './progress.ts';
 import {
-  hashBytes,
-  hashText,
   loadOriginalBackupBytes,
   matchesSelection,
   readTextOrThrow,
   resolveVariablesInTarget,
-  toBytes,
 } from './shared.ts';
-import { validateNdfMemoized, validateNdfMemoizedCooperative } from './validation-memo.ts';
+import { validateNdfPersistentlyMemoized } from './validation-memo.ts';
 
 export { preparePlan } from './plan.ts';
 export { setCommandProgressReporter } from './progress.ts';
 
 export async function runValidate(
+  builderPath: string | undefined,
+  selection: SelectionInput,
+): Promise<CommandOutputLines> {
+  return withBuilderOperationLock(builderPath, 'validate', () =>
+    runValidateUnlocked(builderPath, selection),
+  );
+}
+
+async function runValidateUnlocked(
   builderPath: string | undefined,
   selection: SelectionInput,
 ): Promise<CommandOutputLines> {
@@ -152,15 +168,18 @@ export async function runValidate(
   for (const writtenFile of scriptFiles) {
     assertGameRelativePath(writtenFile.targetRelativePath, plan.context.modRoot);
     if (typeof writtenFile.content === 'string' && isNdfPath(writtenFile.targetRelativePath)) {
-      await validateNdfMemoizedCooperative(
+      await validateNdfPersistentlyMemoized(
         writtenFile.content,
         writtenFile.targetRelativePath,
+        path.join(plan.context.buildRoot, BUILDER_CONFIG.cacheDirectoryName),
         yieldController,
       );
     }
     logs.push(`script output ok -> ${writtenFile.targetRelativePath}`);
     validatedScriptTargets += 1;
   }
+
+  await pruneCacheDirectory(path.join(plan.context.buildRoot, BUILDER_CONFIG.cacheDirectoryName));
 
   const finishedAt = performance.now();
   return withOutputMeta(
@@ -298,6 +317,15 @@ export async function runBuild(
   builderPath: string | undefined,
   selection: SelectionInput,
 ): Promise<CommandOutputLines> {
+  return withBuilderOperationLock(builderPath, 'build', () =>
+    runBuildUnlocked(builderPath, selection),
+  );
+}
+
+async function runBuildUnlocked(
+  builderPath: string | undefined,
+  selection: SelectionInput,
+): Promise<CommandOutputLines> {
   const startedAt = performance.now();
   const yieldController = createCooperativeYieldController();
   reportProgress('Preparing build plan');
@@ -415,6 +443,15 @@ export async function runSync(
   builderPath: string | undefined,
   selection: SelectionInput,
 ): Promise<CommandOutputLines> {
+  return withBuilderOperationLock(builderPath, 'sync', () =>
+    runSyncUnlocked(builderPath, selection),
+  );
+}
+
+async function runSyncUnlocked(
+  builderPath: string | undefined,
+  selection: SelectionInput,
+): Promise<CommandOutputLines> {
   const startedAt = performance.now();
   const yieldController = createCooperativeYieldController();
   reportProgress('Preparing sync plan');
@@ -446,120 +483,137 @@ export async function runSync(
   let skippedCount = 0;
   let syncedCount = 0;
   let obsoleteCount = 0;
-
-  if (!selection.dryRun) {
-    await mkdir(originalsRoot, { recursive: true });
-  }
-
-  reportProgress('Syncing live files', undefined, {
-    current: 0,
-    total: writtenFiles.length,
-  });
+  const transaction = selection.dryRun
+    ? undefined
+    : await beginStateTransaction(plan.context, 'sync');
   const syncStartedAt = performance.now();
-  for (const [writtenIndex, writtenFile] of writtenFiles.entries()) {
-    await yieldController.maybeYield();
-    const targetAbsolutePath = resolveModTargetPath(
-      plan.context.modRoot,
-      writtenFile.targetRelativePath,
-    );
-    reportProgress('Syncing live files', abbreviateProgressPath(writtenFile.targetRelativePath), {
-      current: writtenIndex + 1,
+
+  try {
+    if (!selection.dryRun) {
+      await mkdir(originalsRoot, { recursive: true });
+    }
+
+    reportProgress('Syncing live files', undefined, {
+      current: 0,
       total: writtenFiles.length,
     });
-    const isTextOutput = typeof writtenFile.content === 'string';
-    const preparedOutput = await prepareMarkedOutput(
-      plan.context,
-      writtenFile,
-      builderId,
-      yieldController,
-    );
-    const targetFile = Bun.file(targetAbsolutePath);
-    const targetExists = await targetFile.exists();
-    await yieldController.maybeYield();
-    const existingBytes = targetExists
-      ? new Uint8Array(await targetFile.arrayBuffer())
-      : new Uint8Array(0);
-    const existingHash = targetExists ? hashBytes(existingBytes) : undefined;
-    const existingText =
-      isTextOutput && targetExists ? Buffer.from(existingBytes).toString('utf8') : '';
-    const existing = isTextOutput
-      ? unwrapMarkedContent(existingText)
-      : { payload: undefined, innerContent: '' };
-    const targetKey = toPathKey(writtenFile.targetRelativePath);
-    const existingEntry = manifestEntriesByTarget.get(targetKey);
-
-    if (existing.payload?.builderId === builderId) {
-      ensure(isMarkedContentIntact(existing, writtenFile.targetRelativePath), 'RecoveryError', {
-        absolutePath: targetAbsolutePath,
-        reason: `Tracked output \`${writtenFile.targetRelativePath}\` was changed after ${BUILDER_CONFIG.name} wrote it.`,
-        suggestion:
-          'Preserve your manual edits elsewhere, then recover or restore the file before syncing again.',
-      });
-    }
-    assertSyncedTargetIsUnchanged(existingEntry, targetExists, existingHash, targetAbsolutePath);
-
-    if (preparedOutput.warning) {
-      logs.push(
-        formatUnmarkedTargetWarning('sync', writtenFile.targetRelativePath, preparedOutput.warning),
+    for (const [writtenIndex, writtenFile] of writtenFiles.entries()) {
+      await yieldController.maybeYield();
+      const targetAbsolutePath = resolveModTargetPath(
+        plan.context.modRoot,
+        writtenFile.targetRelativePath,
       );
-      warningCount += 1;
+      reportProgress('Syncing live files', abbreviateProgressPath(writtenFile.targetRelativePath), {
+        current: writtenIndex + 1,
+        total: writtenFiles.length,
+      });
+      const isTextOutput = typeof writtenFile.content === 'string';
+      const preparedOutput = await prepareMarkedOutput(
+        plan.context,
+        writtenFile,
+        builderId,
+        yieldController,
+      );
+      const targetFile = Bun.file(targetAbsolutePath);
+      const targetExists = await targetFile.exists();
+      await yieldController.maybeYield();
+      const existingBytes = targetExists
+        ? new Uint8Array(await targetFile.arrayBuffer())
+        : new Uint8Array(0);
+      const existingHash = targetExists ? hashBytes(existingBytes) : undefined;
+      const existingText =
+        isTextOutput && targetExists ? Buffer.from(existingBytes).toString('utf8') : '';
+      const existing = isTextOutput
+        ? unwrapMarkedContent(existingText)
+        : { payload: undefined, innerContent: '' };
+      const targetKey = toPathKey(writtenFile.targetRelativePath);
+      const existingEntry = manifestEntriesByTarget.get(targetKey);
+
+      if (existing.payload?.builderId === builderId) {
+        ensure(isMarkedContentIntact(existing, writtenFile.targetRelativePath), 'RecoveryError', {
+          absolutePath: targetAbsolutePath,
+          reason: `Tracked output \`${writtenFile.targetRelativePath}\` was changed after ${BUILDER_CONFIG.name} wrote it.`,
+          suggestion:
+            'Preserve your manual edits elsewhere, then recover or restore the file before syncing again.',
+        });
+      }
+      assertSyncedTargetIsUnchanged(existingEntry, targetExists, existingHash, targetAbsolutePath);
+
+      if (preparedOutput.warning) {
+        logs.push(
+          formatUnmarkedTargetWarning(
+            'sync',
+            writtenFile.targetRelativePath,
+            preparedOutput.warning,
+          ),
+        );
+        warningCount += 1;
+      }
+
+      if (
+        (isTextOutput &&
+          ((existing.payload?.builderId === builderId &&
+            existing.payload.markerHash === preparedOutput.markerHash) ||
+            (preparedOutput.warning &&
+              targetExists &&
+              existingHash === preparedOutput.markerHash))) ||
+        (!isTextOutput && targetExists && existingHash === preparedOutput.markerHash)
+      ) {
+        logs.push(`unchanged -> ${writtenFile.targetRelativePath}`);
+        skippedCount += 1;
+        continue;
+      }
+
+      const originalContent = await loadOriginalBackupBytes(
+        plan.context,
+        targetAbsolutePath,
+        existingEntry?.backupFileName,
+      );
+      const backupFileName = `${preparedOutput.markerId}${isTextOutput ? '.ndf' : '.bin'}`;
+      const outputContent = preparedOutput.content;
+
+      logs.push(`${writtenFile.sourceType} -> ${writtenFile.targetRelativePath}`);
+      syncedCount += 1;
+      if (selection.dryRun) {
+        continue;
+      }
+
+      await assertRealPathWithinRoot(targetAbsolutePath, plan.context.modRoot, 'mod root');
+      await recordStateTransactionTarget(
+        transaction as StateTransaction,
+        writtenFile.targetRelativePath,
+      );
+      await mkdir(path.dirname(targetAbsolutePath), { recursive: true });
+      await writeFileAtomic(path.join(originalsRoot, backupFileName), originalContent);
+      manifestEntriesByTarget.set(targetKey, {
+        targetRelativePath: writtenFile.targetRelativePath,
+        backupFileName,
+        originalExists: targetExists,
+        syncedContentHash: hashBytes(toBytes(outputContent)),
+        contributors: writtenFile.contributors,
+      });
+      await saveManifest(plan.context.stateRoot, createSortedManifest(manifestEntriesByTarget));
+      await writeFileAtomic(targetAbsolutePath, outputContent);
     }
 
-    if (
-      (isTextOutput &&
-        ((existing.payload?.builderId === builderId &&
-          existing.payload.markerHash === preparedOutput.markerHash) ||
-          (preparedOutput.warning &&
-            targetExists &&
-            existingHash === preparedOutput.markerHash))) ||
-      (!isTextOutput && targetExists && existingHash === preparedOutput.markerHash)
-    ) {
-      logs.push(`unchanged -> ${writtenFile.targetRelativePath}`);
-      skippedCount += 1;
-      continue;
-    }
-
-    const originalContent = await loadOriginalBackupBytes(
-      plan.context,
-      targetAbsolutePath,
-      existingEntry?.backupFileName,
-    );
-    const backupFileName = `${preparedOutput.markerId}${isTextOutput ? '.ndf' : '.bin'}`;
-    const outputContent = preparedOutput.content;
-
-    logs.push(`${writtenFile.sourceType} -> ${writtenFile.targetRelativePath}`);
-    syncedCount += 1;
-    if (selection.dryRun) {
-      continue;
-    }
-
-    await assertRealPathWithinRoot(targetAbsolutePath, plan.context.modRoot, 'mod root');
-    await mkdir(path.dirname(targetAbsolutePath), { recursive: true });
-    await Bun.write(path.join(originalsRoot, backupFileName), originalContent);
-    manifestEntriesByTarget.set(targetKey, {
-      targetRelativePath: writtenFile.targetRelativePath,
-      backupFileName,
-      originalExists: targetExists,
-      syncedContentHash: hashBytes(toBytes(outputContent)),
-      contributors: writtenFile.contributors,
+    obsoleteCount = await cleanupObsoleteTrackedTargets({
+      context: plan.context,
+      manifestEntriesByTarget,
+      writtenFiles,
+      selection,
+      logs,
+      yieldController,
+      transaction,
     });
-    await saveManifest(plan.context.stateRoot, createSortedManifest(manifestEntriesByTarget));
-    await writeFileAtomic(targetAbsolutePath, outputContent);
-  }
 
-  obsoleteCount = await cleanupObsoleteTrackedTargets({
-    context: plan.context,
-    manifestEntriesByTarget,
-    writtenFiles,
-    selection,
-    logs,
-    yieldController,
-  });
-
-  if (!selection.dryRun) {
-    reportProgress('Saving sync manifest');
-    await saveManifest(plan.context.stateRoot, createSortedManifest(manifestEntriesByTarget));
-    await sweepOrphanedBackups(plan.context, manifestEntriesByTarget, logs);
+    if (!selection.dryRun) {
+      reportProgress('Saving sync manifest');
+      await saveManifest(plan.context.stateRoot, createSortedManifest(manifestEntriesByTarget));
+      await sweepOrphanedBackups(plan.context, manifestEntriesByTarget, logs);
+      await commitStateTransaction(transaction as StateTransaction);
+    }
+  } catch (error) {
+    await rollbackStateTransactionAfterFailure(transaction, error);
   }
 
   await pruneCacheDirectory(path.join(plan.context.buildRoot, BUILDER_CONFIG.cacheDirectoryName));
@@ -666,15 +720,12 @@ async function prepareMarkedOutput(
   const markerHash = hashBytes(toBytes(exactMarkedContent.content));
   const markerId = hashText(`${writtenFile.targetRelativePath}:${markerHash}`);
   if (writtenFile.sourceType !== 'patch' && isNdfPath(writtenFile.targetRelativePath)) {
-    if (yieldController) {
-      await validateNdfMemoizedCooperative(
-        exactMarkedContent.content,
-        writtenFile.targetRelativePath,
-        yieldController,
-      );
-    } else {
-      validateNdfMemoized(exactMarkedContent.content, writtenFile.targetRelativePath);
-    }
+    await validateNdfPersistentlyMemoized(
+      exactMarkedContent.content,
+      writtenFile.targetRelativePath,
+      path.join(context.buildRoot, BUILDER_CONFIG.cacheDirectoryName),
+      yieldController,
+    );
   }
 
   return {
@@ -734,6 +785,7 @@ async function cleanupObsoleteTrackedTargets(args: {
   selection: SelectionInput;
   logs: string[];
   yieldController?: CooperativeYieldController | undefined;
+  transaction?: StateTransaction | undefined;
 }): Promise<number> {
   const liveTargetPaths = new Set(
     args.writtenFiles.map((file) => toPathKey(file.targetRelativePath)),
@@ -771,6 +823,9 @@ async function cleanupObsoleteTrackedTargets(args: {
       continue;
     }
 
+    if (args.transaction) {
+      await recordStateTransactionTarget(args.transaction, entry.targetRelativePath);
+    }
     await restoreOrDeleteTrackedTarget({
       context: args.context,
       entry,
@@ -828,6 +883,15 @@ export async function runRecover(
   builderPath: string | undefined,
   selection: SelectionInput,
 ): Promise<CommandOutputLines> {
+  return withBuilderOperationLock(builderPath, 'recover', () =>
+    runRecoverUnlocked(builderPath, selection),
+  );
+}
+
+async function runRecoverUnlocked(
+  builderPath: string | undefined,
+  selection: SelectionInput,
+): Promise<CommandOutputLines> {
   const startedAt = performance.now();
   const yieldController = createCooperativeYieldController();
   reportProgress('Loading recovery manifest');
@@ -841,42 +905,54 @@ export async function runRecover(
   const logs: string[] = [];
   let restoredCount = 0;
   let deletedGeneratedCount = 0;
-
-  reportProgress('Recovering tracked files', undefined, {
-    current: 0,
-    total: filteredEntries.length,
-  });
-  for (const [entryIndex, entry] of filteredEntries.entries()) {
-    await yieldController.maybeYield();
-    logs.push(
-      `${entry.originalExists ? 'restore' : 'delete generated'} -> ${entry.targetRelativePath}`,
-    );
-    if (entry.originalExists) {
-      restoredCount += 1;
-    } else {
-      deletedGeneratedCount += 1;
-    }
-    if (!selection.dryRun) {
-      await restoreOrDeleteTrackedTarget({
-        context,
-        entry,
-        missingBackupReason: `Missing recovery backup for \`${entry.targetRelativePath}\`.`,
-        missingBackupSuggestion: `Restore the missing file in \`${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.stateDirectoryName}/${BUILDER_CONFIG.recoveryOriginalsDirectoryName}\` before running recover again.`,
-        requireBackup: true,
-      });
-      remainingEntriesByTarget.delete(toPathKey(entry.targetRelativePath));
-    }
-    reportProgress('Recovering tracked files', abbreviateProgressPath(entry.targetRelativePath), {
-      current: entryIndex + 1,
-      total: filteredEntries.length,
-    });
-  }
+  const transaction = selection.dryRun
+    ? undefined
+    : await beginStateTransaction(context, 'recover');
 
   let sweptOrphanCount = 0;
-  if (!selection.dryRun) {
-    reportProgress('Saving recovery manifest');
-    await saveManifest(context.stateRoot, createSortedManifest(remainingEntriesByTarget));
-    sweptOrphanCount = await sweepOrphanedBackups(context, remainingEntriesByTarget, logs);
+  try {
+    reportProgress('Recovering tracked files', undefined, {
+      current: 0,
+      total: filteredEntries.length,
+    });
+    for (const [entryIndex, entry] of filteredEntries.entries()) {
+      await yieldController.maybeYield();
+      logs.push(
+        `${entry.originalExists ? 'restore' : 'delete generated'} -> ${entry.targetRelativePath}`,
+      );
+      if (entry.originalExists) {
+        restoredCount += 1;
+      } else {
+        deletedGeneratedCount += 1;
+      }
+      if (!selection.dryRun) {
+        await recordStateTransactionTarget(
+          transaction as StateTransaction,
+          entry.targetRelativePath,
+        );
+        await restoreOrDeleteTrackedTarget({
+          context,
+          entry,
+          missingBackupReason: `Missing recovery backup for \`${entry.targetRelativePath}\`.`,
+          missingBackupSuggestion: `Restore the missing file in \`${BUILDER_CONFIG.rootDirectoryName}/${BUILDER_CONFIG.stateDirectoryName}/${BUILDER_CONFIG.recoveryOriginalsDirectoryName}\` before running recover again.`,
+          requireBackup: true,
+        });
+        remainingEntriesByTarget.delete(toPathKey(entry.targetRelativePath));
+      }
+      reportProgress('Recovering tracked files', abbreviateProgressPath(entry.targetRelativePath), {
+        current: entryIndex + 1,
+        total: filteredEntries.length,
+      });
+    }
+
+    if (!selection.dryRun) {
+      reportProgress('Saving recovery manifest');
+      await saveManifest(context.stateRoot, createSortedManifest(remainingEntriesByTarget));
+      sweptOrphanCount = await sweepOrphanedBackups(context, remainingEntriesByTarget, logs);
+      await commitStateTransaction(transaction as StateTransaction);
+    }
+  } catch (error) {
+    await rollbackStateTransactionAfterFailure(transaction, error);
   }
 
   const finishedAt = performance.now();
@@ -944,17 +1020,34 @@ async function sweepOrphanedBackups(
   );
 
   let sweptCount = 0;
+  let backupNames: string[];
   try {
-    for (const backupName of await readdir(originalsRoot)) {
-      if (referencedBackups.has(backupName)) {
-        continue;
-      }
-      await removePathDirectly(path.join(originalsRoot, backupName));
+    backupNames = await readdir(originalsRoot);
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      return sweptCount;
+    }
+    logs.push(`warning could not inspect recovery backups -> ${originalsRoot}`);
+    return sweptCount;
+  }
+
+  for (const backupName of backupNames) {
+    if (referencedBackups.has(backupName)) {
+      continue;
+    }
+    if (!/^[a-f0-9]{64}\.(?:ndf|bin)$/.test(backupName)) {
+      logs.push(`unrecognized recovery file preserved -> ${backupName}`);
+      continue;
+    }
+    const backupPath = resolveOwnedFilePath(originalsRoot, backupName, 'recovery backup');
+    try {
+      await assertRealPathWithinRoot(backupPath, originalsRoot, 'recovery originals root');
+      await removePathDirectly(backupPath);
       logs.push(`orphaned backup swept -> ${backupName}`);
       sweptCount += 1;
+    } catch {
+      logs.push(`warning could not sweep orphaned backup -> ${backupName}`);
     }
-  } catch {
-    return sweptCount;
   }
   return sweptCount;
 }
@@ -969,7 +1062,35 @@ function createSortedManifest(
   };
 }
 
+async function rollbackStateTransactionAfterFailure(
+  transaction: StateTransaction | undefined,
+  operationError: unknown,
+): Promise<never> {
+  if (!transaction) {
+    throw operationError;
+  }
+  try {
+    await rollbackStateTransaction(transaction);
+  } catch (rollbackError) {
+    throw new AggregateError(
+      [operationError, rollbackError],
+      'The operation failed and YMB could not completely restore its state transaction.',
+    );
+  }
+  throw operationError;
+}
+
 export async function runCleanup(
+  builderPath: string | undefined,
+  selection: SelectionInput,
+  includeRecovery: boolean,
+): Promise<CommandOutputLines> {
+  return withBuilderOperationLock(builderPath, 'cleanup', () =>
+    runCleanupUnlocked(builderPath, selection, includeRecovery),
+  );
+}
+
+async function runCleanupUnlocked(
   builderPath: string | undefined,
   selection: SelectionInput,
   includeRecovery: boolean,

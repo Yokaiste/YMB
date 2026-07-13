@@ -1,4 +1,5 @@
 import { BUILDER_CONFIG } from './builder-config.ts';
+import { escapeRegExp } from './text-utils.ts';
 
 export interface RenderGeneratedBlockOptions {
   ownerId: string;
@@ -57,9 +58,9 @@ export function buildGeneratedBlockEndMarker(
   return `// ${label} GENERATED BLOCK END | ${ownerId}`;
 }
 
-function buildGeneratedBlockMarkers(
+export function buildGeneratedBlockMarkers(
   ownerId: string,
-  label: string,
+  label: string = BUILDER_CONFIG.generatedBlockLabel,
 ): { start: string; end: string } {
   return {
     start: buildGeneratedBlockStartMarker(ownerId, label),
@@ -131,8 +132,4 @@ function extractGeneratedBlockSourcePath(blockText: string): string | undefined 
 function appendGeneratedBlock(originalContent: string, generatedBlock: string): string {
   const stripped = originalContent.trimEnd();
   return stripped ? `${stripped}\n${generatedBlock}` : generatedBlock;
-}
-
-function escapeRegExp(value: string): string {
-  return value.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

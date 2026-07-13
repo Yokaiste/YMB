@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { BUILDER_CONFIG } from '../builder-config.ts';
+import { hashText } from '../hash.ts';
 import type { BuildPlan } from '../types.ts';
 import { CACHE_SALT, readCacheEntry, writeCacheEntryAtomic } from './cache-store.ts';
-import { hashText } from './shared.ts';
 import type { ResolvedPatchContribution } from './types.ts';
 
 const PATCH_CACHE_KIND = 'patch';

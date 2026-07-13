@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import type { Stats } from 'node:fs';
 import { realpath, rename, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { BUILDER_CONFIG } from './builder-config.ts';
@@ -133,7 +134,7 @@ export async function writeFileAtomic(
 export function createTemporarySiblingPath(absolutePath: string): string {
   return path.join(
     path.dirname(absolutePath),
-    `${BUILDER_CONFIG.tempPrefix}-${path.basename(absolutePath)}.${process.pid}.${randomUUID()}.tmp`,
+    `${BUILDER_CONFIG.tempPrefix}-${process.pid}-${randomUUID()}.tmp`,
   );
 }
 
@@ -169,12 +170,15 @@ export async function replaceDirectoryAtomic(
 }
 
 export async function pathExists(filePath: string): Promise<boolean> {
+  return (await statIfExists(filePath)) !== undefined;
+}
+
+export async function statIfExists(filePath: string): Promise<Stats | undefined> {
   try {
-    await stat(filePath);
-    return true;
+    return await stat(filePath);
   } catch (error) {
     if (isMissingPathError(error)) {
-      return false;
+      return undefined;
     }
     throw error;
   }

@@ -63,7 +63,7 @@ function createScriptScopedContext(
   const ownerRoot = script.patch?.absolutePath ?? script.mod.configAbsolutePath;
   const modRoot = script.mod.configAbsolutePath;
   const templateVariables = createTemplateVariables(plan.context, script.mod, script.patch);
-  const tools = createScriptTools();
+  const tools = createScriptTools(plan, script);
   const resolveOwnedPath = (relativePath: string): string =>
     path.join(
       ownerRoot,

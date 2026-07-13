@@ -12,9 +12,17 @@ Why it exists:
 
 - to give scripts stable reusable utilities without importing internal builder modules directly
 - to keep patch internals private while still exposing safe helpers
-- to provide one place for future tool families beyond NDF helpers
+- to keep validation, caching, text inspection, and NDF handling consistent across mods
 
-Today, the first built-in namespace is `context.tools.ndf`.
+`context.tools.apiVersion` is `3`. The available namespaces are:
+
+| Namespace | Purpose                                                                  |
+| --------- | ------------------------------------------------------------------------ |
+| `ndf`     | Parse, validate, inspect, render, and safely update NDF text             |
+| `assert`  | Produce structured script failures and run grouped self-checks           |
+| `values`  | Strictly validate common configuration values                            |
+| `text`    | Escape dynamic regular-expression text and inspect line-level changes    |
+| `cache`   | Store integrity-checked JSON derived from script inputs and dependencies |
 
 ## Script Context
 
@@ -46,9 +54,7 @@ Companion script tests receive the same fields plus `script` and `testAbsolutePa
 
 ## NDF Tools
 
-`context.tools.ndf` exposes helpers for scanning, reading, validating, and formatting NDF text, plus one deliberately narrow mutation helper for appending collection entries.
-
-`apiVersion` is `2`. Read it to feature-detect the helpers below before calling them.
+`context.tools.ndf` exposes helpers for scanning, reading, validating, formatting, and managing script-owned NDF text.
 
 Available helpers:
 
@@ -67,8 +73,12 @@ Available helpers:
 - `extractCollection(text)`
 - `parseValue(valueText)`
 - `parseList(collectionText)`
+- `primaryTypeName(typeName)`
 - `listGeneratedBlocks(text)`
 - `stripGeneratedBlocks(text)`
+- `generatedBlockMarkers(ownerId)`
+- `renderGeneratedBlock(options)`
+- `upsertGeneratedBlock(text, generatedBlock, ownerId)`
 - `insertIntoCollection(text, collectionPath, entry, options?)`
 - `formatValue(value)`
 - `stripComments(text)`
@@ -175,6 +185,8 @@ context.tools.ndf.parseValue('~/Descriptor_Unit'); // { kind: 'reference', ... }
 
 `parseList(collectionText)` runs `parseValue` over each entry of a collection or tag list and returns the array.
 
+`primaryTypeName(typeName)` returns the first type token from a top-level block type declaration. Use it instead of duplicating whitespace splitting in scripts.
+
 ## Comments
 
 `findFieldWithComment(blockText, fieldName)` is a comment-aware field read. It returns the usual field range with `valueText` holding only the code (the trailing `// comment` removed), plus `trailingComment` when one is present. Slashes inside strings are not treated as comments.
@@ -188,7 +200,9 @@ if (field?.trailingComment === 'ysm-ignore') {
 
 ## Generated Blocks
 
-`listGeneratedBlocks(text)` returns the YMB generated blocks in a file — each with `id`, `innerText`, `fullText`, optional `sourcePath`, and offsets. `stripGeneratedBlocks(text)` returns the file with those blocks removed. Use these instead of hand-rolled marker regexes so your script stays aligned with the builder's marker format.
+`listGeneratedBlocks(text)` returns the YMB generated blocks in a file — each with `id`, `innerText`, `fullText`, optional `sourcePath`, and offsets. `stripGeneratedBlocks(text)` returns the file with those blocks removed.
+
+Use `renderGeneratedBlock({ ownerId, blocks, title?, sourcePath? })` to render a complete owned block, then `upsertGeneratedBlock(text, block, ownerId)` to replace the prior block or append it when absent. `generatedBlockMarkers(ownerId)` returns the canonical start and end markers for specialized embedded sections. These helpers keep scripts aligned with the builder's marker format and make repeated generation idempotent.
 
 ## Collection Mutation
 
@@ -209,13 +223,58 @@ const updated = context.tools.ndf.insertIntoCollection(
 - The insert is idempotent: if the entry already exists the text is returned unchanged.
 - The result is validated before it is returned, so a malformed insert throws instead of writing broken NDF.
 
-This is the only mutation helper. It does not wrap entries in ownership markers and does not touch other contributors' content — it is for a script editing its own generated output, not for patching foreign blocks.
+Collection insertion does not wrap entries in ownership markers and does not touch other contributors' content. It is for a script editing its own generated output, not for patching foreign blocks.
 
 ## Formatting Helpers
 
 `formatValue(value)` renders a JS value as NDF text.
 
 `stripComments(text)` removes line comments while preserving string content.
+
+## Assertions and Self-Checks
+
+`context.tools.assert` turns script failures into YMB errors with a reason, a concrete suggestion, and optional details:
+
+```ts
+context.tools.assert.ok(outputs.length > 0, {
+  reason: 'The generator produced no outputs.',
+  suggestion: 'Check the source filters and generation configuration.',
+});
+```
+
+Use `textPresent`, `textIncludes`, and `textMatches` for common content checks. `all(checks)` runs named synchronous or asynchronous checks, aggregates their failures, and reports one useful error instead of stopping at the first problem.
+
+## Strict Values
+
+`context.tools.values.positiveInteger(value, label)` accepts a positive safe integer or an equivalent integer string. It rejects fractions, zero, negative values, unsafe integers, and ambiguous coercions. Use it for numeric script configuration instead of maintaining per-mod parsers.
+
+## Text Tools
+
+`context.tools.text.escapeRegExp(value)` safely embeds text in a dynamic regular expression.
+
+`context.tools.text.describeChanges(baseText, nextText)` returns either `{ ok: true, edits }`, where each edit contains zero-based `start` and `end` line offsets, or `{ ok: false, reason: 'budget_exceeded' }` for inputs that exceed the builder's protected diff budget. It is useful in companion tests that must enforce insertion-only or tightly bounded output changes.
+
+## Script Cache
+
+`context.tools.cache` provides dependency-aware, integrity-checked JSON caching:
+
+```ts
+const key = await context.tools.cache.createKey({ sourceHash, options });
+const cached = await context.tools.cache.readJson('deck-generation', key, isCachedResult);
+
+if (!cached) {
+  const result = generateResult();
+  await context.tools.cache.writeJson('deck-generation', key, result);
+}
+```
+
+- `enabled` is false when the command uses `--no-cache`.
+- `hash(textOrBytes)` returns the builder's standard content hash.
+- `createKey(input)` includes the input, current mod and patch identity, executing script path, and the complete local script import graph. Editing an imported helper therefore invalidates the cache automatically.
+- `readJson(namespace, key, validate)` returns `undefined` for a miss, invalid schema, corrupted envelope, or disabled cache.
+- `writeJson(namespace, key, value)` writes atomically and does nothing when caching is disabled.
+
+Namespaces and keys are path-safe identifiers. Cached data lives under YMB's build cache and is disposable; persistent mod identity belongs in authored source storage, not in the cache.
 
 ## Example
 
@@ -236,12 +295,11 @@ export default async function generate(context) {
 
 ## Boundaries
 
-The helpers are read-only except for `insertIntoCollection`, which is a single narrow, ownership-safe append.
+The helpers only mutate strings or builder-owned cache files. Generated-block and collection helpers return new text; the caller still decides which script output owns that text.
 
 They do not expose:
 
 - patch application against foreign blocks
-- marker generation or ownership tagging
 - conflict resolution
 - arbitrary field/object mutation, removal, or copying
 

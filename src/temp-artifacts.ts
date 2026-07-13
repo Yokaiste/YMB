@@ -6,6 +6,7 @@ import { BUILDER_CONFIG } from './builder-config.ts';
 import {
   assertOwnedRelativePath,
   assertRealPathWithinRoot,
+  isMissingPathError,
   pathExists,
   removePathDirectly,
 } from './path-utils.ts';
@@ -110,12 +111,21 @@ async function findYmbArtifactsInRoot(ownerRoot: string): Promise<CleanupTarget[
     let entries: Dirent<string>[];
     try {
       entries = await readdir(currentDirectory, { withFileTypes: true, encoding: 'utf8' });
-    } catch {
-      continue;
+    } catch (error) {
+      if (isMissingPathError(error)) {
+        continue;
+      }
+      throw error;
     }
 
     for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name))) {
       const absoluteEntryPath = path.join(currentDirectory, entry.name);
+      if (
+        entry.name === BUILDER_CONFIG.operationLockDirectoryName ||
+        entry.name === BUILDER_CONFIG.stateTransactionDirectoryName
+      ) {
+        continue;
+      }
       if (entry.name.startsWith(BUILDER_CONFIG.tempPrefix)) {
         results.push({
           absolutePath: absoluteEntryPath,

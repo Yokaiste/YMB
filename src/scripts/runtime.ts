@@ -11,7 +11,11 @@ import type {
 import { createScriptContext } from './runtime-context.ts';
 import { importScriptModule } from './runtime-loader.ts';
 import { normalizeScriptOutput } from './runtime-output.ts';
-import { awaitIpcChildResult, formatUnknownRuntimeError } from './runtime-shared.ts';
+import {
+  awaitIpcChildResult,
+  createScriptExecutionError,
+  formatUnknownRuntimeError,
+} from './runtime-shared.ts';
 
 const scriptRuntimeChildPath = fileURLToPath(new URL('./runtime-child.ts', import.meta.url));
 const missingScriptSuggestion = 'Fix the relative script path or add the missing script file.';
@@ -73,14 +77,10 @@ export async function executeScriptInProcess(
   try {
     result = await execute(context);
   } catch (error) {
-    throw new YmbError('ScriptError', {
+    throw createScriptExecutionError(script, error, {
       absolutePath: script.absolutePath,
-      modId: script.mod.config.id,
-      modName: script.mod.config.name,
-      patchId: script.patch?.config.id,
       reason: `Generation script \`${script.config.path}\` threw before returning outputs.`,
       suggestion: runtimeFailureSuggestion,
-      details: [formatUnknownRuntimeError(error)],
     });
   }
 

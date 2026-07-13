@@ -1,9 +1,10 @@
-import { access, readdir, stat } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import YAML from 'yaml';
 import { z } from 'zod';
 import { BUILDER_CONFIG } from './builder-config.ts';
 import { ensure, YmbError } from './errors.ts';
+import { statIfExists } from './path-utils.ts';
 import type {
   BuilderContext,
   CollectionPosition,
@@ -477,7 +478,7 @@ const patchSchema = z
 
 export async function resolveBuilderContext(inputPath?: string): Promise<BuilderContext> {
   const candidate = path.resolve(inputPath ?? process.cwd());
-  const stats = await safeStat(candidate);
+  const stats = await statIfExists(candidate);
   const ymbRoot = stats?.isDirectory() ? candidate : path.dirname(candidate);
 
   ensure(
@@ -614,17 +615,8 @@ async function assertDirectory(
   reason: string,
   suggestion = `Place ${BUILDER_CONFIG.rootDirectoryName} directory inside the mod root, or pass the correct ${BUILDER_CONFIG.rootDirectoryName} path.`,
 ): Promise<void> {
-  const stats = await safeStat(directoryPath);
+  const stats = await statIfExists(directoryPath);
   ensure(stats?.isDirectory(), 'LayoutError', layoutContext(directoryPath, reason, suggestion));
-}
-
-async function safeStat(filePath: string): Promise<Awaited<ReturnType<typeof stat>> | undefined> {
-  try {
-    await access(filePath);
-    return await stat(filePath);
-  } catch {
-    return undefined;
-  }
 }
 
 function layoutContext(absolutePath: string, reason: string, suggestion: string) {

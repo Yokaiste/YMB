@@ -55,6 +55,10 @@ bun run ymb build --dry-run
 | `<ModRoot>/GameData` and `<ModRoot>/CommonData` | Live files used by WARNO              | After `sync`                       |
 | `YMB/.ymb-state`                                | Recovery manifest and saved originals | During rollback or recovery checks |
 
+Commands that can mutate builder, cache, source-helper, preview, recovery, or live state use one builder operation lock. If another mutating command is already running, YMB reports its command, PID, and start time instead of racing it. Locks left by a crashed local process are reclaimed automatically on the next attempt.
+
+Before `sync` or `recover` changes its first live target, YMB snapshots the affected live files and the complete recovery state. Normal failures roll this transaction back immediately. If the process or computer stops mid-command, the next mutating command restores the interrupted transaction, reports what happened, and asks you to rerun after reviewing the restored files.
+
 ## 🚀 Recommended Flow
 
 ### 1. `doctor`

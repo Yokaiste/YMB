@@ -42,7 +42,22 @@ describe('discovery and planning', () => {
     expect(plan.discoveredMods[0]?.configAbsolutePath).toMatch(/sample-pack[\\/]config$/);
   });
 
-  test('discovers both direct and nested mod config layouts', async () => {
+  test('matches mod and patch identifiers case-insensitively', async () => {
+    const builderPath = await createTempBuilder();
+    const plan = await preparePlan(builderPath, {
+      scope: 'prod',
+      modFilters: ['SAMPLE_PACK'],
+      patchFilters: ['BALANCE.ARMOR'],
+      dryRun: true,
+      verbose: false,
+      yes: false,
+    });
+
+    expect(plan.selectedMods.map((mod) => mod.config.id)).toEqual(['sample_pack']);
+    expect(plan.selectedPatches.map((patch) => patch.patch.config.id)).toEqual(['balance.armor']);
+  });
+
+  test('discovers only the canonical config-root layout', async () => {
     const tempRoot = await mkdtemp(path.join(tmpdir(), 'ymb-discovery-layout-'));
     const tempBuilderPath = path.join(tempRoot, 'YMB');
 
@@ -120,14 +135,8 @@ targets:
         yes: false,
       });
 
-      expect(plan.discoveredMods.map((mod) => mod.config.id)).toEqual([
-        'direct_pack',
-        'nested_pack',
-      ]);
-      expect(plan.discoveredMods.map((mod) => mod.patches[0]?.config.id)).toEqual([
-        'direct.patch',
-        'nested.patch',
-      ]);
+      expect(plan.discoveredMods.map((mod) => mod.config.id)).toEqual(['nested_pack']);
+      expect(plan.discoveredMods.map((mod) => mod.patches[0]?.config.id)).toEqual(['nested.patch']);
     } finally {
       await rm(tempRoot, { recursive: true, force: true });
     }

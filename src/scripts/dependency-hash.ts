@@ -1,7 +1,7 @@
-import { stat } from 'node:fs/promises';
 import path from 'node:path';
 import type { CooperativeYieldController } from '../async.ts';
-import { hashText } from '../engine/shared.ts';
+import { hashText } from '../hash.ts';
+import { statIfExists } from '../path-utils.ts';
 
 export interface ScriptDependencySource {
   absolutePath: string;
@@ -102,9 +102,5 @@ function buildDependencyCandidates(resolvedBasePath: string): string[] {
 }
 
 async function isFile(candidatePath: string): Promise<boolean> {
-  try {
-    return (await stat(candidatePath)).isFile();
-  } catch {
-    return false;
-  }
+  return (await statIfExists(candidatePath))?.isFile() ?? false;
 }

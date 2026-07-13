@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { mkdir, mkdtemp, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { assertRealPathWithinRoot } from '../src/path-utils.ts';
+import { assertRealPathWithinRoot, createTemporarySiblingPath } from '../src/path-utils.ts';
 
 async function createTempRoot(): Promise<string> {
   return mkdtemp(path.join(tmpdir(), 'ymb-path-utils-'));
@@ -61,5 +61,16 @@ describe('assertRealPathWithinRoot', () => {
       await rm(tempRoot, { recursive: true, force: true });
       await rm(outsideRoot, { recursive: true, force: true });
     }
+  });
+});
+
+describe('atomic temporary paths', () => {
+  test('stay short even when the destination filename is long', () => {
+    const destination = path.join('C:\\deep', 'a'.repeat(180), `${'b'.repeat(64)}.json`);
+    const temporaryPath = createTemporarySiblingPath(destination);
+
+    expect(path.dirname(temporaryPath)).toBe(path.dirname(destination));
+    expect(path.basename(temporaryPath)).toMatch(/^\.ymb-\d+-[0-9a-f-]+\.tmp$/);
+    expect(temporaryPath.length).toBeLessThan(destination.length);
   });
 });

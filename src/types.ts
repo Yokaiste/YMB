@@ -246,6 +246,18 @@ export interface BuildScriptGeneratedBlock {
   end: number;
 }
 
+export interface BuildScriptGeneratedBlockOptions {
+  ownerId: string;
+  blocks: string[];
+  title?: string;
+  sourcePath?: string;
+}
+
+export interface BuildScriptGeneratedBlockMarkers {
+  start: string;
+  end: string;
+}
+
 export interface BuildScriptNdfCollectionEntry {
   start: number;
   end: number;
@@ -269,7 +281,6 @@ export type BuildScriptNdfValidationResult =
   | { ok: false; error: BuildScriptNdfValidationError };
 
 export interface BuildScriptNdfTools {
-  readonly apiVersion: 2;
   validate(text: string, pathHint?: string): BuildScriptNdfValidationResult;
   assertValid(text: string, pathHint?: string): void;
   findTopLevelBlocks(text: string): BuildScriptNdfBlock[];
@@ -288,8 +299,12 @@ export interface BuildScriptNdfTools {
   extractCollection(text: string): BuildScriptNdfRange | undefined;
   parseValue(valueText: string): BuildScriptNdfScalar;
   parseList(collectionText: string): BuildScriptNdfScalar[];
+  primaryTypeName(typeName: string): string;
   listGeneratedBlocks(text: string): BuildScriptGeneratedBlock[];
   stripGeneratedBlocks(text: string): string;
+  generatedBlockMarkers(ownerId: string): BuildScriptGeneratedBlockMarkers;
+  renderGeneratedBlock(options: BuildScriptGeneratedBlockOptions): string;
+  upsertGeneratedBlock(text: string, generatedBlock: string, ownerId: string): string;
   insertIntoCollection(
     text: string,
     collectionPath: string,
@@ -300,8 +315,64 @@ export interface BuildScriptNdfTools {
   stripComments(text: string): string;
 }
 
+export interface BuildScriptAssertionOptions {
+  reason: string;
+  suggestion: string;
+  details?: string[] | undefined;
+  absolutePath?: string | undefined;
+}
+
+export interface BuildScriptSelfCheck {
+  name: string;
+  run: () => void | Promise<void>;
+  suggestion?: string | undefined;
+}
+
+export interface BuildScriptAssertionTools {
+  ok(condition: unknown, options: BuildScriptAssertionOptions): asserts condition;
+  textPresent(content: string, options: BuildScriptAssertionOptions): void;
+  textIncludes(
+    content: string,
+    expectedFragment: string,
+    options: BuildScriptAssertionOptions,
+  ): void;
+  textMatches(content: string, pattern: RegExp, options: BuildScriptAssertionOptions): void;
+  all(checks: BuildScriptSelfCheck[]): Promise<void>;
+}
+
+export interface BuildScriptValueTools {
+  positiveInteger(value: unknown, label: string): number;
+}
+
+export interface BuildScriptTextTools {
+  escapeRegExp(value: string): string;
+  describeChanges(
+    baseText: string,
+    nextText: string,
+  ):
+    | { ok: true; edits: Array<{ start: number; end: number }> }
+    | { ok: false; reason: 'budget_exceeded' };
+}
+
+export interface BuildScriptCacheTools {
+  readonly enabled: boolean;
+  hash(content: string | Uint8Array): string;
+  createKey(input: unknown): Promise<string>;
+  readJson<T>(
+    namespace: string,
+    key: string,
+    validate: (value: unknown) => value is T,
+  ): Promise<T | undefined>;
+  writeJson(namespace: string, key: string, value: unknown): Promise<void>;
+}
+
 export interface BuildScriptTools {
+  readonly apiVersion: 3;
   ndf: BuildScriptNdfTools;
+  assert: BuildScriptAssertionTools;
+  values: BuildScriptValueTools;
+  text: BuildScriptTextTools;
+  cache: BuildScriptCacheTools;
 }
 
 export interface BuildScriptContext {

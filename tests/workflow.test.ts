@@ -1890,12 +1890,36 @@ scripts:
     const originalsRoot = path.join(builderPath, '.ymb-state', 'originals');
 
     await runSync(builderPath, selection);
-    await Bun.write(path.join(originalsRoot, 'deadbeef.ndf'), 'orphan from interrupted sync');
+    const orphanedBackupName = `${'d'.repeat(64)}.ndf`;
+    await Bun.write(path.join(originalsRoot, orphanedBackupName), 'orphan from interrupted sync');
 
     const recoverLines = await runRecover(builderPath, selection);
 
     expect(await readdir(originalsRoot)).toHaveLength(0);
-    expect(recoverLines.join('\n')).toContain('orphaned backup swept -> deadbeef.ndf');
+    expect(recoverLines.join('\n')).toContain(`orphaned backup swept -> ${orphanedBackupName}`);
+  });
+
+  test('recover preserves unrecognized files in the recovery directory', async () => {
+    const builderPath = await createTempBuilder();
+    const selection = {
+      scope: 'prod' as const,
+      modFilters: [],
+      patchFilters: [],
+      dryRun: false,
+      verbose: false,
+      yes: false,
+    };
+    const originalsRoot = path.join(builderPath, '.ymb-state', 'originals');
+
+    await runSync(builderPath, selection);
+    await Bun.write(path.join(originalsRoot, 'recovery-notes.txt'), 'keep this file');
+
+    const recoverLines = await runRecover(builderPath, selection);
+
+    expect(await readdir(originalsRoot)).toEqual(['recovery-notes.txt']);
+    expect(recoverLines.join('\n')).toContain(
+      'unrecognized recovery file preserved -> recovery-notes.txt',
+    );
   });
 
   test('sync leaves no temp files next to live targets', async () => {
