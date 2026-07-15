@@ -17,7 +17,7 @@ import type {
   TempArtifactConfig,
 } from './types.ts';
 
-export const SUPPORTED_CONFIG_VERSION = 1;
+const SUPPORTED_CONFIG_VERSION = 1;
 
 const nonEmptyId = z
   .string()

@@ -1,7 +1,7 @@
 import { findCollectionEntries } from './scan.ts';
 import { advanceStringState, type StringDelimiter } from './shared.ts';
 
-export type NdfScalarValue =
+type NdfScalarValue =
   | { kind: 'int'; value: number; raw: string }
   | { kind: 'float'; value: number; raw: string }
   | { kind: 'bool'; value: boolean; raw: string }

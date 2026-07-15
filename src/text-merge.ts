@@ -14,19 +14,19 @@ export interface TextLineEdit {
   contributorLabel: string;
 }
 
-export interface TextMergeConflict {
+interface TextMergeConflict {
   existing: TextLineEdit;
   incoming: TextLineEdit;
 }
 
-export interface TextMergeBudgetExceeded {
+interface TextMergeBudgetExceeded {
   contributorLabel: string;
   changedBaseLines: number;
   changedNextLines: number;
   estimatedWork: number;
 }
 
-export type TextMergeResult =
+type TextMergeResult =
   | {
       ok: true;
       content: string;
@@ -43,7 +43,7 @@ export type TextMergeResult =
       budget: TextMergeBudgetExceeded;
     };
 
-export type TextChangeDescriptionResult =
+type TextChangeDescriptionResult =
   | {
       ok: true;
       edits: TextLineEdit[];

@@ -283,7 +283,7 @@ export function isRawNdfValue(value: unknown): value is { $raw: string } {
   );
 }
 
-export function isExplicitStringValue(value: unknown): value is { $string: string } {
+function isExplicitStringValue(value: unknown): value is { $string: string } {
   return (
     typeof value === 'object' &&
     value !== null &&

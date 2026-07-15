@@ -3,7 +3,7 @@ import type { CooperativeYieldController } from '../async.ts';
 import { hashText } from '../hash.ts';
 import { statIfExists } from '../path-utils.ts';
 
-export interface ScriptDependencySource {
+interface ScriptDependencySource {
   absolutePath: string;
   relativePath: string;
   sourceHash: string;

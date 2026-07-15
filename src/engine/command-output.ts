@@ -1,12 +1,12 @@
 import type { WrittenBuildFile } from '../types.ts';
 import type { MaterializationMetrics } from './materialize.ts';
 
-export interface CommandOutputLocation {
+interface CommandOutputLocation {
   label: string;
   path: string;
 }
 
-export interface CommandOutputMeta {
+interface CommandOutputMeta {
   title?: string | undefined;
   detailHeading?: string | undefined;
   locations?: CommandOutputLocation[] | undefined;

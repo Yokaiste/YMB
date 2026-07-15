@@ -12,7 +12,7 @@ export type CliCommandName =
   | 'cleanup'
   | 'init';
 
-export interface CommandGuide {
+interface CommandGuide {
   name: CliCommandName;
   description: string;
   purpose: string;
@@ -24,7 +24,7 @@ export interface CommandGuide {
   examples: string[];
 }
 
-export const COMMAND_GUIDES: CommandGuide[] = [
+const COMMAND_GUIDES: CommandGuide[] = [
   {
     name: 'doctor',
     description: 'Confirm that YMB is targeting the WARNO mod folder you expect.',

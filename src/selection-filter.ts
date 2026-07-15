@@ -1,10 +1,6 @@
 const CASE_INSENSITIVE_COMPARE_OPTIONS = { sensitivity: 'accent' } as const;
 
-export function matchesSelectionFilter(
-  filter: string,
-  identifier: string,
-  displayName?: string,
-): boolean {
+function matchesSelectionFilter(filter: string, identifier: string, displayName?: string): boolean {
   return (
     filter.localeCompare(identifier, undefined, CASE_INSENSITIVE_COMPARE_OPTIONS) === 0 ||
     (displayName !== undefined &&

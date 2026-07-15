@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import type { SelectionInput } from '../../src/types.ts';
 
-export interface AbstractBuilderWorkspace {
+interface AbstractBuilderWorkspace {
   rootPath: string;
   builderPath: string;
   modRootPath: string;
@@ -266,7 +266,7 @@ export async function writeModFixture(
   await mkdir(modRoot, { recursive: true });
 }
 
-export async function writeWorkspaceFiles(
+async function writeWorkspaceFiles(
   rootPath: string,
   files: Record<string, string | Uint8Array>,
 ): Promise<void> {

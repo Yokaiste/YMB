@@ -29,7 +29,7 @@ const missingScriptTestSuggestion =
 const scriptTestRuntimeFailureSuggestion =
   'Fix the thrown error in the test or generation script, then run the command again.';
 
-export interface ExecutedScriptTestRun {
+interface ExecutedScriptTestRun {
   context: BuildScriptTestContext;
   results: ScriptTestResult[];
   observedTargetReads: ReturnType<
@@ -44,7 +44,7 @@ export interface ScriptTestRuntimeRequest {
   outputEntries: Array<readonly [string, WrittenBuildFile]>;
 }
 
-export interface ScriptTestRuntimeErrorPayload {
+interface ScriptTestRuntimeErrorPayload {
   category?: ErrorCategory | undefined;
   context?: ErrorContext | undefined;
   message: string;

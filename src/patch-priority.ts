@@ -6,7 +6,7 @@ import { ensure, YmbError } from './errors.ts';
 import { normalizeRelativePath, removePathDirectly, writeFileAtomic } from './path-utils.ts';
 import type { BuilderContext, PatchApplication } from './types.ts';
 
-export interface PatchContribution {
+interface PatchContribution {
   application: PatchApplication;
   targetRelativePath: string;
   hasScripts: boolean;

@@ -44,7 +44,7 @@ export function setScriptTimeoutSecondsForTesting(seconds?: number): void {
   scriptTimeoutSecondsOverride = seconds;
 }
 
-export async function awaitChildExitWithTimeout(
+async function awaitChildExitWithTimeout(
   child: { exited: Promise<number>; kill(): void },
   errorContext: {
     absolutePath: string;

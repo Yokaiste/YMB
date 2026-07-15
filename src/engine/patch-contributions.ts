@@ -75,7 +75,7 @@ export function comparePatchContributions(
   return left.application.mod.config.id.localeCompare(right.application.mod.config.id);
 }
 
-export async function applyContributionSequence(
+async function applyContributionSequence(
   baseText: string,
   contributions: ResolvedPatchContribution[],
   absolutePath: string,

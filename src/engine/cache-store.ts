@@ -6,10 +6,10 @@ import { BUILDER_CONFIG } from '../builder-config.ts';
 import { hashText } from '../hash.ts';
 import { isMissingPathError, statIfExists, writeFileAtomic } from '../path-utils.ts';
 
-export const CACHE_SCHEMA_VERSION = 2;
+const CACHE_SCHEMA_VERSION = 2;
 export const CACHE_SALT = `${CACHE_SCHEMA_VERSION}:${packageDefinition.version}`;
 
-export interface CacheEnvelopeMeta {
+interface CacheEnvelopeMeta {
   schema: number;
   kind: string;
   contentHash: string;

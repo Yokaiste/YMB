@@ -29,7 +29,7 @@ export interface ScriptRuntimeRequest {
   outputEntries: Array<readonly [string, WrittenBuildFile]>;
 }
 
-export interface ScriptRuntimeErrorPayload {
+interface ScriptRuntimeErrorPayload {
   category?: ErrorCategory | undefined;
   context?: ErrorContext | undefined;
   message: string;

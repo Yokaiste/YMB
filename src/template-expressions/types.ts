@@ -33,7 +33,7 @@ export interface Token {
 
 export type IdentifierResolver = (name: string) => unknown;
 
-export type UnaryOperator = '+' | '-' | '!';
+type UnaryOperator = '+' | '-' | '!';
 
 export type BinaryOperator =
   | '+'

@@ -4,7 +4,7 @@ import { BUILDER_CONFIG } from '../builder-config.ts';
 import { ensure } from '../errors.ts';
 import { statIfExists } from '../path-utils.ts';
 
-export interface ModLayout {
+interface ModLayout {
   modAbsolutePath: string;
   configAbsolutePath: string;
   modConfigPath: string;

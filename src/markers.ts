@@ -163,7 +163,7 @@ export function wrapWithMarker(
   return `${style.startLine(encoded)}\n${content}${content.endsWith('\n') ? '' : '\n'}${style.endLine(encoded)}\n`;
 }
 
-export interface InlineChangeMarkerResult {
+interface InlineChangeMarkerResult {
   content: string;
   warning?: 'exact_change_budget_exceeded' | undefined;
 }

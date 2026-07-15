@@ -1,4 +1,4 @@
-export interface ProgressEvent {
+interface ProgressEvent {
   message: string;
   detail?: string | undefined;
   current?: number | undefined;

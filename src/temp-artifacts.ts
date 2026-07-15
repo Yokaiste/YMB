@@ -19,7 +19,7 @@ import type {
   TempArtifactConfig,
 } from './types.ts';
 
-export interface CleanupTarget {
+interface CleanupTarget {
   absolutePath: string;
   ownerRoot: string;
   ownerLabel: string;

@@ -1,7 +1,7 @@
 import { BUILDER_CONFIG } from './builder-config.ts';
 import { escapeRegExp } from './text-utils.ts';
 
-export interface RenderGeneratedBlockOptions {
+interface RenderGeneratedBlockOptions {
   ownerId: string;
   blocks: string[];
   title?: string;
@@ -79,7 +79,7 @@ function buildGeneratedBlockPattern(ownerId: string, label: string): RegExp {
 const GENERATED_BLOCK_SCAN_PATTERN =
   /^(\s*\/\/ [^\n\r]*GENERATED BLOCK START \| (.+))\r?\n([\s\S]*?)^\s*\/\/ [^\n\r]*GENERATED BLOCK END \| \2\r?\n?/gm;
 
-export interface GeneratedBlockRange {
+interface GeneratedBlockRange {
   id: string;
   fullText: string;
   innerText: string;

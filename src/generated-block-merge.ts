@@ -1,6 +1,6 @@
 import { listGeneratedBlocks } from './generated-blocks.ts';
 
-export type GeneratedBlockMergeResult =
+type GeneratedBlockMergeResult =
   | {
       kind: 'applied';
       content: string;

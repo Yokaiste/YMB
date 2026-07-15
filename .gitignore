@@ -24,7 +24,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # !mods/.gitkeep
 
 # caches
-.eslintcache
 .cache
 *.tsbuildinfo
 .ymb-build/
