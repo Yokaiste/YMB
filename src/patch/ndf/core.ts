@@ -146,7 +146,11 @@ function advanceNdfValidation(
       return;
     }
     if (!/\s/.test(char) && char !== ']') {
-      if (currentCollection.pendingSeparator && isCollectionExpressionContinuationChar(char)) {
+      if (
+        currentCollection.pendingSeparator &&
+        (isCollectionExpressionContinuationChar(char) ||
+          startsCollectionExpressionOperatorWord(text, index))
+      ) {
         currentCollection.pendingSeparator = false;
       }
       ensure(!currentCollection.pendingSeparator, 'ParserError', {
@@ -204,6 +208,24 @@ function markCollectionEntryComplete(state: NdfValidationState): void {
 
 function isCollectionExpressionContinuationChar(char: string): boolean {
   return /[!%&*+\-./:<=>?^|~]/.test(char);
+}
+
+// Word-form infix operators continue an expression like the symbolic ones above; vanilla relies on it
+// (CommonData/Fx/Bank/@Evaluable.ndf: `sat[length[a - b] div maxDistance]`).
+const NDF_OPERATOR_WORDS = ['div', 'mod', 'and', 'or', 'xor', 'in'] as const;
+
+function startsCollectionExpressionOperatorWord(text: string, index: number): boolean {
+  const before = text[index - 1];
+  if (before !== undefined && /\w/.test(before)) {
+    return false;
+  }
+  return NDF_OPERATOR_WORDS.some((word) => {
+    if (!text.startsWith(word, index)) {
+      return false;
+    }
+    const after = text[index + word.length];
+    return after === undefined || !/\w/.test(after);
+  });
 }
 
 export function applyPatchTarget(
