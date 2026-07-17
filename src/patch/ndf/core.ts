@@ -1168,7 +1168,7 @@ function updateCollectionValue(
   const beforeInsertion = collectionValue.slice(0, insertionPoint);
   const afterInsertion = collectionValue.slice(insertionPoint);
   const prefix = beforeInsertion.endsWith('\n') ? '' : '\n';
-  const suffix = resolveCollectionInsertionSuffix(beforeInsertion, afterInsertion, entryIndent);
+  const suffix = resolveCollectionInsertionSuffix(afterInsertion, entryIndent);
   return preserveOuterWhitespace(
     currentValue,
     `${beforeInsertion}${prefix}${renderedEntry}${suffix}${afterInsertion}`,
@@ -1349,16 +1349,13 @@ function normalizeEntryForComparison(entryText: string): string {
   return normalized;
 }
 
-function resolveCollectionInsertionSuffix(
-  beforeInsertion: string,
-  afterInsertion: string,
-  entryIndent: string,
-): string {
+function resolveCollectionInsertionSuffix(afterInsertion: string, entryIndent: string): string {
   if (afterInsertion.length === 0 || afterInsertion.startsWith('\n')) {
     return '';
   }
 
-  if (/(^|\n)[ \t]*$/.test(beforeInsertion) && /^[^\s]/.test(afterInsertion)) {
+  // The trailing entry starts a fresh line here, so it needs the collection's indent.
+  if (/^[^\s]/.test(afterInsertion)) {
     return `\n${entryIndent}`;
   }
 
@@ -1561,6 +1558,21 @@ function findSingleBlock(
   );
 }
 
+// Stops at the line break so the following entry keeps its own indentation.
+function consumeTrailingLineBreak(collectionText: string, index: number): number {
+  let cursor = index;
+  while (cursor < collectionText.length && /[ \t]/.test(collectionText[cursor] ?? '')) {
+    cursor += 1;
+  }
+  if (collectionText[cursor] === '\r') {
+    cursor += 1;
+  }
+  if (collectionText[cursor] === '\n') {
+    cursor += 1;
+  }
+  return cursor;
+}
+
 function removeCollectionEntry(
   collectionText: string,
   entry: CollectionEntryRange,
@@ -1574,10 +1586,7 @@ function removeCollectionEntry(
     nextIndex += 1;
   }
   if (collectionText[nextIndex] === ',') {
-    end = nextIndex + 1;
-    while (end < collectionText.length && /\s/.test(collectionText[end] ?? '')) {
-      end += 1;
-    }
+    end = consumeTrailingLineBreak(collectionText, nextIndex + 1);
     return replaceRemovedCollectionEntry(collectionText, start, end, entry, markerContext);
   }
 
@@ -1664,10 +1673,10 @@ function replaceRemovedCollectionEntry(
     return `${collectionText.slice(0, start)}${collectionText.slice(end)}`;
   }
 
-  const before = collectionText.slice(0, start);
-  const after = collectionText.slice(end);
   const indent = readLineIndent(collectionText, entry.start);
-  const prefix = before.endsWith('\n') ? '' : '\n';
+  const before = collectionText.slice(0, start).replace(/[ \t]+$/, '');
+  const after = collectionText.slice(end);
+  const prefix = before.endsWith('\n') || before.length === 0 ? '' : '\n';
   const suffix = after.startsWith('\n') ? '' : '\n';
   return `${before}${prefix}${wrapRemovedSnippetWithMarkers(entry.text, indent, markerContext)}${suffix}${after}`;
 }
