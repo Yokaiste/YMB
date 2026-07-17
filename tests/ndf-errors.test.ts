@@ -248,6 +248,27 @@ export Descriptor_Unit_T80UM is TEntityDescriptor
     expect(() => validateNdf(source, 'C:/fixture/UISpecificOffMapView.ndf')).not.toThrow();
   });
 
+  test('allows collection expressions to continue after a word-form infix operator', () => {
+    const source = `export maxDistance is 500000
+
+export FxLodLevel is (1 - sat[length[MobilePosition - CameraPosition] div maxDistance]) * FxQuality
+`;
+
+    expect(() => validateNdf(source, 'C:/fixture/@Evaluable.ndf')).not.toThrow();
+  });
+
+  test('still reports a genuinely missing separator before a plain identifier', () => {
+    const source = `export Descriptor_UI_Test is TTestDescriptor
+(
+    Values = [
+        sat[maxDistance] divisor
+    ]
+)
+`;
+
+    expect(() => validateNdf(source, 'C:/fixture/UISpecificOffMapView.ndf')).toThrow();
+  });
+
   test('supports unique object match selectors for patching', () => {
     const source = `export Descriptor_A is TEntityDescriptor
 (
