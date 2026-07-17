@@ -602,8 +602,6 @@ function appendTopLevelRaw(
     createMarkerContext('add', operation.selector, application, absolutePath, operationIndex),
     operation.leadingComment,
   );
-  const topLevelBlocks = findTopLevelBlocks(currentText);
-
   let insertAt = currentText.length;
   if (operation.selector.by === 'index') {
     ensure(typeof operation.selector.value === 'number', 'SchemaError', {
@@ -617,7 +615,7 @@ function appendTopLevelRaw(
     });
 
     if (operation.selector.value >= 0) {
-      const anchorBlock = topLevelBlocks[operation.selector.value];
+      const anchorBlock = findTopLevelBlocks(currentText)[operation.selector.value];
       ensure(anchorBlock, 'SelectorError', {
         absolutePath,
         modId: application.mod.config.id,

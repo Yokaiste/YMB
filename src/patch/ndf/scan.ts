@@ -19,11 +19,125 @@ export interface CollectionEntryRange {
 
 export function findNamedBlockByName(text: string, exportName: string): TopLevelBlock | undefined {
   return (
-    findTopLevelBlocks(text).find((block) => block.name === exportName) ??
+    findNamedBlockPrimary(text, exportName) ??
     findTemplateBlockByName(text, exportName) ??
     findBareNamedCollectionBlock(text, exportName) ??
     findBareNamedScalarBlock(text, exportName)
   );
+}
+
+function findNamedBlockPrimary(text: string, exportName: string): TopLevelBlock | undefined {
+  const cached = topLevelBlockIndex.get(text);
+  if (cached) {
+    return cached.find((block) => block.name === exportName);
+  }
+
+  // A single lookup is cheaper unscanned, but repeat lookups on one text must not rescan forever.
+  if (rememberEarlyExitScan(text)) {
+    return findTopLevelBlocks(text).find((block) => block.name === exportName);
+  }
+  return findTopLevelBlockByName(text, exportName);
+}
+
+const earlyExitScanned = new Set<string>();
+
+function rememberEarlyExitScan(text: string): boolean {
+  if (earlyExitScanned.has(text)) {
+    return true;
+  }
+  if (earlyExitScanned.size >= BLOCK_INDEX_CAPACITY) {
+    const oldest = earlyExitScanned.values().next().value;
+    if (oldest !== undefined) {
+      earlyExitScanned.delete(oldest);
+    }
+  }
+  earlyExitScanned.add(text);
+  return false;
+}
+
+interface TopLevelScanState {
+  cursor: number;
+  depth: number;
+  inString: StringDelimiter | undefined;
+}
+
+function advanceTopLevelScanState(text: string, state: TopLevelScanState, stop: number): void {
+  let depth = state.depth;
+  let inString = state.inString;
+  let inLineComment = false;
+
+  for (let index = state.cursor; index < stop; index += 1) {
+    const char = text[index];
+    if (char === '\n') {
+      inLineComment = false;
+      continue;
+    }
+    if (inLineComment) {
+      continue;
+    }
+    if (!inString && startsLineComment(char ?? '', text[index + 1])) {
+      inLineComment = true;
+      index += 1;
+      continue;
+    }
+
+    const nextStringState = advanceStringState(inString, text, index);
+    if (nextStringState !== inString) {
+      inString = nextStringState;
+      continue;
+    }
+    if (inString) {
+      continue;
+    }
+
+    if (char === '(' || char === '[' || char === '{') {
+      depth += 1;
+    } else if (char === ')' || char === ']' || char === '}') {
+      depth -= 1;
+    }
+  }
+
+  state.cursor = stop;
+  state.depth = depth;
+  state.inString = inString;
+}
+
+function findTopLevelBlockByName(text: string, exportName: string): TopLevelBlock | undefined {
+  const headerPattern = new RegExp(
+    String.raw`^(?:export\s+)?(?:private\s+)?${escapeRegExp(exportName)}\s+is(?:\s+([^\n]+))?$`,
+    'gm',
+  );
+  const state: TopLevelScanState = { cursor: 0, depth: 0, inString: undefined };
+
+  for (const match of text.matchAll(headerPattern)) {
+    const start = match.index ?? 0;
+    advanceTopLevelScanState(text, state, start);
+
+    if (state.depth !== 0 || state.inString) {
+      continue;
+    }
+
+    const opener = findNextTopLevelOpener(text, start + match[0].length);
+    if (!opener) {
+      continue;
+    }
+
+    const end = findMatchingDelimiter(
+      text,
+      opener.index,
+      opener.character,
+      opener.character === '(' ? ')' : ']',
+    );
+    return {
+      name: exportName,
+      typeName: (match[1] ?? '').trim(),
+      start,
+      end: end + 1,
+      text: text.slice(start, end + 1),
+    };
+  }
+
+  return undefined;
 }
 
 const BLOCK_INDEX_CAPACITY = 8;
