@@ -1629,6 +1629,13 @@ function resolveCollectionInsertionPoint(
     return innerEnd;
   }
 
+  const containingEntry = findCollectionEntries(currentValue).find(
+    (entry) => anchorIndex >= entry.start && anchorIndex < entry.end,
+  );
+  if (containingEntry) {
+    return position.mode === 'before' ? containingEntry.start : containingEntry.end;
+  }
+
   if (position.mode === 'before') {
     return anchorIndex;
   }
