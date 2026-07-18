@@ -1132,6 +1132,22 @@ type CollectionIdentityContext = Pick<
   'absolutePath' | 'modId' | 'modName' | 'patchId' | 'operationIndex'
 >;
 
+function endsWithCollectionSeparator(text: string): boolean {
+  const lines = text.split('\n');
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const trimmed = (lines[index] ?? '').trim();
+    if (trimmed.length === 0 || trimmed.startsWith('//')) {
+      continue;
+    }
+    const code = trimmed.replace(/\s*\/\/.*$/, '').trimEnd();
+    if (code.length === 0) {
+      continue;
+    }
+    return code.endsWith(',') || code.endsWith('[');
+  }
+  return true;
+}
+
 function updateCollectionValue(
   currentValue: string,
   rawRenderedEntry: string,
@@ -1167,7 +1183,14 @@ function updateCollectionValue(
   );
   const beforeInsertion = collectionValue.slice(0, insertionPoint);
   const afterInsertion = collectionValue.slice(insertionPoint);
-  const prefix = beforeInsertion.endsWith('\n') ? '' : '\n';
+  // A collection's last entry carries no trailing comma; appending after it (right before `]`) needs the
+  // separator, or the previous entry and the new one fuse into one invalid token. The preceding entry may
+  // already be comma-terminated with a marker comment between it and the insertion point, so the check skips
+  // whole-line comments and whitespace to reach the last real code character.
+  const needsSeparator =
+    afterInsertion.replace(/^\s+/, '').startsWith(']') &&
+    !endsWithCollectionSeparator(beforeInsertion);
+  const prefix = `${needsSeparator ? ',' : ''}${beforeInsertion.endsWith('\n') ? '' : '\n'}`;
   const suffix = resolveCollectionInsertionSuffix(afterInsertion, entryIndent);
   return preserveOuterWhitespace(
     currentValue,
