@@ -1,0 +1,127 @@
+name: Check and Release
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ymb-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check with Bun (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up the pinned Bun version
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies with Bun
+        run: bun install --frozen-lockfile
+
+      - name: Run types, lint, and tests with Bun
+        run: bun run check
+
+  release:
+    name: Build and publish portable release
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    needs: check
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up the pinned Bun version
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies with Bun
+        run: bun install --frozen-lockfile
+
+      - name: Build both production archives with Bun
+        run: bun run build
+
+      - name: Verify the production archives with Bun
+        run: bun run verify:release
+
+      - name: Smoke-test both packaged launchers
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $archives = @(
+            "dist/YMB-v$version-windows-x64.zip",
+            "dist/YMB-v$version-windows-x64-no-bun.zip"
+          )
+          foreach ($archive in $archives) {
+            $archiveName = [IO.Path]::GetFileNameWithoutExtension($archive)
+            $smokeRoot = Join-Path $env:RUNNER_TEMP $archiveName
+            New-Item -ItemType Directory -Force -Path $smokeRoot | Out-Null
+            tar.exe -xf $archive -C $smokeRoot
+            if (-not (Test-Path (Join-Path $smokeRoot 'YMB/YMB.bat'))) {
+              throw "$archive does not contain the top-level YMB folder."
+            }
+            & (Join-Path $smokeRoot 'YMB/YMB.bat') --help
+            if ($LASTEXITCODE -ne 0) {
+              throw "$archive launcher smoke test failed."
+            }
+          }
+
+      - name: Publish the versioned GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $tag = "v$version"
+          $fullArchive = "dist/YMB-v$version-windows-x64.zip"
+          $noBunArchive = "dist/YMB-v$version-windows-x64-no-bun.zip"
+          $notes = 'dist/release-notes.md'
+
+          git tag --force $tag $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) {
+            throw "Could not create the local $tag tag."
+          }
+          git push origin "refs/tags/$tag" --force
+          if ($LASTEXITCODE -ne 0) {
+            throw "Could not publish the $tag tag."
+          }
+
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release edit $tag --latest --title "YMB $tag" --notes-file $notes
+            if ($LASTEXITCODE -ne 0) {
+              throw "Could not update the $tag release description."
+            }
+            gh release upload $tag $fullArchive $noBunArchive --clobber
+            if ($LASTEXITCODE -ne 0) {
+              throw "Could not replace the $tag release archives."
+            }
+          } else {
+            gh release create $tag $fullArchive $noBunArchive `
+              --verify-tag `
+              --latest `
+              --title "YMB $tag" `
+              --notes-file $notes
+            if ($LASTEXITCODE -ne 0) {
+              throw "Could not publish the $tag release archives."
+            }
+          }
