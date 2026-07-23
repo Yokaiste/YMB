@@ -6,6 +6,7 @@ import { setPatchPriorityResolverForTesting } from '../src/patch-priority.ts';
 import {
   cleanupTempRoots,
   createAbstractBuilderWorkspace,
+  createSelection,
   syntheticBuilderPath,
   writeModFixture,
 } from './helpers/abstract-builder.ts';
@@ -172,6 +173,61 @@ describe('build and sync workflow', () => {
         ),
       ).exists(),
     ).toBe(false);
+  });
+
+  test('a full-file script over a markerless lower-layer base replaces instead of blowing the merge budget', async () => {
+    const builderPath = await createTempBuilder();
+    const target = 'GameData/Generated/Gameplay/Decks/BigGenerated.ndf';
+    const baseContent = Array.from(
+      { length: 3000 },
+      (_, index) => `base_line_${index}_padding_padding\n`,
+    ).join('');
+
+    await writeModFixture(builderPath, 'base-layer', {
+      'config/ymb.mod.yaml': `version: 1
+id: base_layer
+name: Base Layer
+priority: 1
+allowWriteToModifiedFiles: true
+enabled: true
+`,
+      [`config/replace/${target}`]: baseContent,
+    });
+
+    await writeModFixture(builderPath, 'regen-layer', {
+      'config/ymb.mod.yaml': `version: 1
+id: regen_layer
+name: Regen Layer
+priority: 2
+allowWriteToModifiedFiles: true
+dependsOn:
+  - base_layer
+enabled: true
+scripts:
+  - path: regenerate.ts
+`,
+      'config/regenerate.ts': `export default async function regenerate(): Promise<{
+  targetRelativePath: string;
+  content: string;
+}> {
+  let content = '';
+  for (let index = 0; index < 3000; index += 1) {
+    content += \`gen_line_\${index}_generated_generated\\n\`;
+  }
+  return { targetRelativePath: '${target}', content };
+}
+`,
+    });
+
+    const selection = createSelection({ modFilters: ['base_layer', 'regen_layer'] });
+    await runBuild(builderPath, selection);
+
+    const built = await Bun.file(
+      path.join(builderPath, '.ymb-build', 'output', ...target.split('/')),
+    ).text();
+    expect(built).toContain('gen_line_0_generated_generated');
+    expect(built).toContain('gen_line_2999_generated_generated');
+    expect(built).not.toContain('base_line_');
   });
 
   test('validate, build, and sync run configured script tests', async () => {

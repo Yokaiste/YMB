@@ -110,6 +110,13 @@ export function listGeneratedBlocks(text: string): GeneratedBlockRange[] {
   return ranges;
 }
 
+export function hasGeneratedBlocks(text: string): boolean {
+  if (!text.includes('GENERATED BLOCK START | ')) {
+    return false;
+  }
+  return listGeneratedBlocks(text).length > 0;
+}
+
 export function stripGeneratedBlocks(text: string): string {
   const ranges = listGeneratedBlocks(text);
   if (ranges.length === 0) {

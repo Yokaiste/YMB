@@ -3,6 +3,7 @@ import { createCooperativeYieldController } from '../async.ts';
 import { abbreviateProgressPath, reportProgress } from '../engine/progress.ts';
 import { ensure } from '../errors.ts';
 import { tryMergeGeneratedBlocks } from '../generated-block-merge.ts';
+import { hasGeneratedBlocks } from '../generated-blocks.ts';
 import { assertGameRelativePath, normalizeRelativePath, toPathKey } from '../path-utils.ts';
 import type { TextMergeContributor } from '../text-merge.ts';
 import { formatLineEditRange, tryMergeTextContributionsCooperative } from '../text-merge.ts';
@@ -267,6 +268,22 @@ export async function materializeScriptOutputs(
           state.writtenFile.content = blockMerge.content;
           state.writtenFile.contributors = dedupeScriptContributors([
             ...state.writtenFile.contributors,
+            scriptContributor,
+            ...delegatedContributors,
+          ]);
+          outputMap.set(targetKey, state.writtenFile);
+          continue;
+        }
+        if (
+          blockMerge.kind === 'unsupported' &&
+          state.contributors.length === 1 &&
+          state.contributors[0]?.id === `existing:${targetRelativePath}` &&
+          !hasGeneratedBlocks(state.baseText)
+        ) {
+          state.baseText = output.content;
+          state.contributors = [contributor];
+          state.writtenFile.content = output.content;
+          state.writtenFile.contributors = dedupeScriptContributors([
             scriptContributor,
             ...delegatedContributors,
           ]);
