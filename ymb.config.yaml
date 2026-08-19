@@ -1,0 +1,47 @@
+version: 1
+
+# YMB builder settings, every value commented out at its default. To override one,
+# uncomment it and the `paths:`/`settings:` line above it. This file's location also
+# pins the builder root.
+#
+# Full reference: docs/configuration.md
+
+# Where things live. Paths may be relative to this folder, or absolute.
+# paths:
+#   # Folder holding GameData and CommonData - normally the WARNO mod folder.
+#   gameRoot: ..
+#   # Where your source mods live.
+#   sourceMods: mods
+#   # Build previews and caches. Safe to delete.
+#   workRoot: .ymb-build
+#   # Undo data for `recover`. Keep this.
+#   recoveryRoot: .ymb-state
+#   # Internal: stops two YMB runs from colliding.
+#   operationLockRoot: .ymb-operation-lock
+#   # Internal: lets an interrupted sync roll back cleanly.
+#   stateTransactionRoot: .ymb-state-transaction
+
+# Limits and timeouts. Raise these only when a real project needs it.
+# settings:
+#   # How many patch results to keep cached.
+#   cacheMaxEntries: 512
+#   # Total cache size in bytes (1 GiB).
+#   cacheMaxBytes: 1073741824
+#   # Drop cached entries older than this.
+#   cacheMaxAgeDays: 14
+#   # Per-namespace limits for caches your generation scripts write.
+#   scriptCacheMaxEntriesPerNamespace: 4
+#   scriptCacheMaxBytesPerNamespace: 268435456
+#   # How many game files a script may read at once.
+#   scriptTargetReadConcurrency: 8
+#   # Give up on a generation script after this long. Raise for slow generators.
+#   scriptTimeoutSeconds: 120
+#   # Over these, two mods' changes to one file go in priority order rather than
+#   # being merged line by line.
+#   mergeMaxEstimatedDiffWork: 50000000
+#   mergeMaxTextBytesPerSide: 4000000
+#   mergeMaxTextBytesCombined: 6000000
+#   # The same ceilings for inline markers; over them, only whole-file ones.
+#   markerMaxEstimatedDiffWork: 2000000
+#   markerMaxTextBytesPerSide: 1000000
+#   markerMaxTextBytesCombined: 1500000

@@ -1,0 +1,43 @@
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.*
+
+# source mods live in their own repositories
+mods/*
+!mods/.gitkeep
+!mods/AGENTS.md
+
+# caches
+.cache
+*.tsbuildinfo
+.ymb-build/
+.ymb-state/
+.ymb-operation-lock/
+.ymb-state-transaction/
+**/.ymb*
+**/.ymb*/
+
+# IntelliJ based IDEs
+.idea
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
