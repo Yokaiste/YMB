@@ -1,0 +1,40 @@
+Yokaiste's Mod Builder (YMB)
+Copyright 2026 Yokaiste
+
+Author: Yokaiste
+Source: https://github.com/Yokaiste/YMB
+Related project: https://github.com/Yokaiste/YSM
+Community and help: https://discord.gg/33Sqn6dTjf
+
+This project uses a custom source-available license. The full terms are in the
+LICENSE file, which controls if anything here reads differently.
+
+This summary is for convenience only and is not itself the license.
+
+You may use YMB normally, including to create mods for commercial projects.
+
+You may modify YMB privately for your own use, and you may modify it to prepare
+a contribution to send back to the project.
+
+YMB itself is not open source and may not be redistributed, repackaged,
+mirrored, sublicensed, commercialized, or publicly shared in original or
+modified form unless Yokaiste gives explicit prior written permission.
+
+If you publicly share a mod built using YMB during development, include clear
+and reasonably visible attribution to YMB together with a working source link.
+No exact wording is required.
+
+The license also includes a limited patent license, a patent-defense
+termination clause, and a cure process for a first written notice of a curable
+violation.
+
+THIRD-PARTY COMPONENTS
+
+YMB is distributed with third-party software that Yokaiste does not own, and in
+some release archives with a bundled Bun runtime. Each of those components stays
+under its own license, and nothing in YMB's license restricts the rights those
+licenses give you.
+
+Every release ships a THIRD-PARTY-NOTICES.md listing each component with a link
+to its own terms. In a source checkout, the license file of each package under
+node_modules holds the same text.

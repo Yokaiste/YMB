@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: pwsh
+
+concurrency:
+  group: ymb-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up the pinned Bun version
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install dependencies with Bun
+        run: bun install --frozen-lockfile
+
+      - name: Run types, lint, and tests with Bun
+        run: bun run check
+
+  release:
+    name: Release portable archives
+    if: github.event_name == 'push'
+    needs: check
+    runs-on: windows-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    # Republishing replaces the release, so runs queue: one cancelled midway would leave the tag with none.
+    concurrency:
+      group: ymb-release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up the pinned Bun version
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install dependencies with Bun
+        run: bun install --frozen-lockfile
+
+      - name: Build both production archives with Bun
+        run: bun run build
+
+      - name: Verify the production archives with Bun
+        run: bun run verify:release
+
+      - name: Publish the versioned GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun run publish:release
