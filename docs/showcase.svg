@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="title desc">
+  <title id="title">YMB — maintainable WARNO mods</title>
+  <desc id="desc">Current WARNO data and your authored source rules combine to rebuild the mod's generated files. Keep the rules as the game changes.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#15263d"/><stop offset="1" stop-color="#080e19"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#344764" stroke-width=".5"/></pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="m0 0 10 5-10 5z" fill="#ffb66e"/></marker>
+  </defs>
+  <rect width="1200" height="440" rx="24" fill="url(#bg)"/>
+  <rect x="590" width="610" height="440" rx="24" fill="url(#grid)"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="58" y="58" font-size="16" font-weight="700" letter-spacing="3" fill="#ffb66e">YOKAISTE’S MOD BUILDER</text>
+    <text x="52" y="170" font-size="110" font-weight="700" fill="#f3f7ff">YMB</text>
+    <text x="58" y="238" font-size="34" font-weight="600" fill="#f3f7ff">WARNO modding</text>
+    <text x="58" y="281" font-size="34" font-weight="600" fill="#f3f7ff">that you can maintain.</text>
+    <text x="59" y="352" font-size="19" fill="#b1c3dc">Structural patches · Shared settings</text>
+    <text x="59" y="383" font-size="19" fill="#b1c3dc">Source packs · Generation · Automation</text>
+    <rect x="622" y="62" width="238" height="125" rx="12" fill="#172b44" stroke="#6c91be"/>
+    <text x="644" y="95" font-size="13" letter-spacing="2" fill="#adcdf4">CURRENT INPUT</text>
+    <text x="644" y="133" font-size="26" font-weight="600" fill="#fff">WARNO data</text>
+    <text x="644" y="161" font-size="16" fill="#b1c3dc">Refreshed after updates</text>
+    <rect x="888" y="62" width="254" height="125" rx="12" fill="#302719" stroke="#c39c68"/>
+    <text x="910" y="95" font-size="13" letter-spacing="2" fill="#ffca91">AUTHORED INPUT</text>
+    <text x="910" y="133" font-size="26" font-weight="600" fill="#fff">Your source rules</text>
+    <text x="910" y="161" font-size="16" fill="#ddc9b0">Kept with your project</text>
+    <path d="M741 187v39h142m132-39v39H883v40" stroke="#ffb66e" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+    <rect x="622" y="276" width="520" height="123" rx="12" fill="#16352c" stroke="#81b49a"/>
+    <text x="645" y="308" font-size="13" letter-spacing="2" fill="#afe2c7">REBUILT OUTPUT</text>
+    <text x="645" y="346" font-size="27" font-weight="600" fill="#fff">Your mod’s generated files</text>
+    <text x="645" y="376" font-size="17" fill="#c3d9cc">Inspect the result. Resolve any reported conflicts.</text>
+  </g>
+</svg>

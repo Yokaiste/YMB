@@ -1,0 +1,26 @@
+version: 1
+
+# Local choices. See docs/configuration.md#customizing-installed-mods.
+# variables:
+#   sharedScale: 1.5
+# mods:
+#   my_pack:
+#     variables:
+#       tuning:
+#         speed: 1.2
+#     patches:
+#       ui.branding:
+#         enabled: false
+
+# Paths are relative to this file unless absolute.
+# paths:
+#   gameRoot: ..
+#   sourceMods: mods
+#   workRoot: .ymb-build
+#   recoveryRoot: .ymb-state  # Undo data: keep this folder.
+
+# Raise a limit only when an error or slow generator calls for it.
+# settings:
+#   scriptTimeoutSeconds: 120
+#   cacheMaxBytes: 1073741824
+#   cacheMaxAgeDays: 14
