@@ -1,0 +1,89 @@
+{
+  "name": "ymb",
+  "version": "1.16.2",
+  "description": "Maintain WARNO mods through game updates with structural patches, modular source packs, shared settings, generation scripts, and AI-ready automation.",
+  "homepage": "https://github.com/Yokaiste/YMB",
+  "author": "Yokaiste",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yokaiste/YMB.git"
+  },
+  "bugs": {
+    "url": "https://discord.gg/33Sqn6dTjf"
+  },
+  "type": "module",
+  "module": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./api": "./src/api.ts"
+  },
+  "bin": {
+    "ymb": "./index.ts"
+  },
+  "packageManager": "bun",
+  "engines": {
+    "runtime": {
+      "name": "bun",
+      "version": ">=1.4.2"
+    }
+  },
+  "scripts": {
+    "build": "bun run ./scripts/build-release.ts",
+    "verify:release": "bun run ./scripts/verify-release.ts",
+    "publish:release": "bun run ./scripts/publish-release.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check": "bun run typecheck && bun run lint && bun run test",
+    "lint": "bun run prettier && bun run biome",
+    "fix": "bun run prettier:fix && bun run biome:fix",
+    "prettier": "prettier --ignore-path .gitignore --check .",
+    "prettier:fix": "prettier --ignore-path .gitignore --write .",
+    "biome": "biome check .",
+    "biome:fix": "biome check --write .",
+    "test": "bun test ./tests",
+    "typecheck:mods": "tsc --noEmit -p tsconfig.mods.json",
+    "check:mods": "bun run typecheck:mods && bun run lint:mods",
+    "lint:mods": "bun run prettier:mods && bun run biome:mods",
+    "fix:mods": "bun run prettier:mods:fix && bun run biome:mods:fix",
+    "prettier:mods": "prettier --ignore-path .prettierignore.mods --no-error-on-unmatched-pattern --check mods",
+    "prettier:mods:fix": "prettier --ignore-path .prettierignore.mods --no-error-on-unmatched-pattern --write mods",
+    "biome:mods": "biome check --vcs-use-ignore-file=false mods",
+    "biome:mods:fix": "biome check --write --vcs-use-ignore-file=false mods",
+    "check:all": "bun run check && bun run check:mods",
+    "fix:all": "bun run fix && bun run fix:mods",
+    "ymb": "bun run ./index.ts"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.13",
+    "@types/bun": "^1.4.2",
+    "prettier": "^3.9.6",
+    "typescript": "^7.0.2"
+  },
+  "keywords": [
+    "warno",
+    "warno-modding",
+    "warno-tools",
+    "mod-builder",
+    "ai-ready",
+    "update-resilient",
+    "modular",
+    "structural-patching",
+    "yaml",
+    "ndf",
+    "ndf-patch",
+    "template-expressions",
+    "script-generation",
+    "patch-planner",
+    "conflict-detection",
+    "safe-sync",
+    "recovery",
+    "bun",
+    "game-modding"
+  ]
+}
