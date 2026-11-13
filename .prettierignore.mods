@@ -1,0 +1,15 @@
+# Ignore file for the source-mod gate only.
+#
+# Prettier defaults `--ignore-path` to `.gitignore`, and `.gitignore` hides `mods/*`
+# so the builder repository does not swallow an unrelated checkout. Left alone that
+# makes `prettier:mods` silently check nothing, so the mod scripts point at this file
+# instead - the same opt-out `biome:mods` gets from `--vcs-use-ignore-file=false`.
+#
+# A source mod is checked in full, so only generated output and version control data
+# belong here.
+
+**/.git/
+**/.ymb*/
+**/dist/
+**/out/
+**/coverage/
