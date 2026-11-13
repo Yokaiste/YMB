@@ -1,0 +1,23 @@
+version: 1
+
+# Your local settings. See docs/configuration.md#customizing-installed-mods.
+# After creating the health patch in the tutorial, try this local override.
+# mods:
+#   first_mod:
+#     patches:
+#       gameplay.health:
+#         variables:
+#           health: 30
+
+# Paths start from this file's folder unless you give an absolute path.
+# paths:
+#   gameRoot: ..
+#   sourceMods: mods  # Editable mod projects.
+#   workRoot: .ymb-build
+#   recoveryRoot: .ymb-state  # Saved originals. Keep these to undo a sync.
+
+# Change limits only when a build needs more time or cache space.
+# settings:
+#   scriptTimeoutSeconds: 120
+#   cacheMaxBytes: 1073741824
+#   cacheMaxAgeDays: 14

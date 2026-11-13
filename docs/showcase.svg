@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">YMB: keep your changes, rebuild for WARNO</title>
+  <desc id="desc">Yokaiste's Mod Builder. A layered blueprint combines current game data and your changes into a build preview. Edit one unit or a whole roster, organize reusable patches and settings, and work by hand, with scripts, or with AI.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1">
+      <stop stop-color="#102330"/>
+      <stop offset="1" stop-color="#070f17"/>
+    </linearGradient>
+    <radialGradient id="light">
+      <stop stop-color="#25728a" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#25728a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="plate" x2=".8" y2="1">
+      <stop stop-color="#214658"/>
+      <stop offset="1" stop-color="#102532"/>
+    </linearGradient>
+    <linearGradient id="patch" x2=".8" y2="1">
+      <stop stop-color="#51402a"/>
+      <stop offset="1" stop-color="#231f1a"/>
+    </linearGradient>
+    <linearGradient id="preview" x2=".8" y2="1">
+      <stop stop-color="#247180"/>
+      <stop offset="1" stop-color="#12363f"/>
+    </linearGradient>
+    <linearGradient id="edge">
+      <stop stop-color="#84e6de" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#84e6de"/>
+      <stop offset="1" stop-color="#84e6de" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#8dbfce" stroke-opacity=".08"/>
+    </pattern>
+    <clipPath id="canvas"><rect width="1280" height="720" rx="24"/></clipPath>
+    <filter id="glow" x="-.3" y="-.6" width="1.6" height="2.2">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+  <g clip-path="url(#canvas)">
+    <rect width="1280" height="720" fill="url(#background)"/>
+    <ellipse cx="980" cy="265" rx="450" ry="360" fill="url(#light)"/>
+    <path d="M640 0H1280V550H640Z" fill="url(#grid)"/>
+    <path d="M660 0V550M860 0V550M1060 0V550M660 150H1280M660 350H1280" fill="none" stroke="#79a5b5" stroke-opacity=".06"/>
+    <path d="M64 31H124M64 31V37M1216 31H1156M1216 31V37" fill="none" stroke="#526b78"/>
+    <g id="intro" transform="translate(0 25)">
+      <rect x="64" y="66" width="5" height="18" rx="2" fill="#f1bb72"/>
+
+      <g font-family="Arial, Helvetica, sans-serif">
+        <text x="84" y="81" fill="#b7cad4" font-size="18" font-weight="700" letter-spacing="2.4">YOKAISTE'S MOD BUILDER</text>
+        <text x="56" y="238" fill="#f2f5f0" font-size="154" font-weight="700" letter-spacing="-8">YMB</text>
+        <text x="64" y="321" fill="#f2f5f0" font-size="46" font-weight="700" letter-spacing="-1.5">Keep your changes.</text>
+        <text x="64" y="380" fill="#86e4dc" font-size="46" font-weight="700" letter-spacing="-1.5">Rebuild for WARNO.</text>
+        <text x="66" y="435" fill="#b4c7d2" font-size="22">From one unit to a whole overhaul.</text>
+      </g>
+    </g>
+
+    <g id="artwork" transform="translate(0 -12)">
+      <ellipse cx="969" cy="506" rx="215" ry="18" fill="#030b12" opacity=".5" filter="url(#glow)"/>
+      <g stroke-linejoin="round" stroke-width="1.5">
+        <path d="m753 394 216 102v26L753 420Z" fill="#172b39" stroke="#567487"/>
+        <path d="m969 496 216-102v26L969 522Z" fill="#0d1d29" stroke="#3e5c70"/>
+        <path d="m753 394 216-102 216 102-216 102Z" fill="url(#plate)" stroke="#708fa1"/>
+        <g fill="none" stroke="#87a7b6" stroke-width="2" stroke-linecap="round" opacity=".7">
+          <path d="m803 391 125 59m-94-74 125 59m-94-74 125 59"/>
+          <path d="m1028 407 24 11 56-26-24-11Z"/>
+        </g>
+        <path d="m772 416 15 7m7 3 15 7m7 3 15 7" fill="none" stroke="#7895a7" stroke-width="2"/>
+
+        <path d="m753 304 216 102v26L753 330Z" fill="#3c3024" stroke="#a98150"/>
+        <path d="m969 406 216-102v26L969 432Z" fill="#251f1a" stroke="#89683f"/>
+        <path d="m753 304 216-102 216 102-216 102Z" fill="url(#patch)" stroke="#d3aa70"/>
+        <g fill="none" stroke="#d0a365" stroke-width="3" stroke-linecap="round">
+          <path d="m810 295 125 59m-94-74 125 59m-94-74 125 59"/>
+          <path d="m850 314 13 6m49-12 13 6m37-18 13 6" stroke="#ffe0ab" stroke-width="8"/>
+        </g>
+        <path d="m772 326 15 7m7 3 15 7m7 3 15 7" fill="none" stroke="#caa269" stroke-width="2"/>
+
+        <path d="m753 214 216 102v26L753 240Z" fill="#1b424b" stroke="#67b8b7"/>
+        <path d="m969 316 216-102v26L969 342Z" fill="#103139" stroke="#44888d"/>
+        <path d="m753 214 216-102 216 102-216 102Z" fill="url(#preview)" stroke="#a0e5da" stroke-width="2"/>
+        <ellipse cx="969" cy="214" rx="79" ry="37" fill="#103c44" stroke="#6ebbb9"/>
+        <path d="m927 214 30 14 53-29" fill="none" stroke="#e1fff2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="#a0e5da" opacity=".6">
+          <ellipse cx="791" cy="214" rx="4" ry="2"/>
+          <ellipse cx="969" cy="131" rx="4" ry="2"/>
+          <ellipse cx="1147" cy="214" rx="4" ry="2"/>
+          <ellipse cx="969" cy="297" rx="4" ry="2"/>
+        </g>
+        <path d="m772 236 15 7m7 3 15 7m7 3 15 7" fill="none" stroke="#94d8ce" stroke-width="2"/>
+      </g>
+
+      <g font-family="Arial, Helvetica, sans-serif" font-size="19">
+        <path d="M969 112V99" stroke="#85d9d2" stroke-width="1.5"/>
+        <rect x="876" y="56" width="186" height="42" rx="21" fill="#11353b" stroke="#629f9f"/>
+        <path d="m895 77 5 5 9-11" fill="none" stroke="#9aebd8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="924" y="84" fill="#d5f7ec" font-weight="700">Build preview</text>
+        <path d="m1185 317 31 16v154" fill="none" stroke="#b79060" stroke-width="1.5"/>
+        <circle cx="1185" cy="317" r="3" fill="#f1bb72"/>
+        <text x="1216" y="514" fill="#edc58e" text-anchor="end">Your changes</text>
+        <path d="M780 433 708 462v25" fill="none" stroke="#7995a7" stroke-width="1.5"/>
+        <circle cx="780" cy="433" r="3" fill="#a9c5d6"/>
+        <text x="662" y="514" fill="#abc3d2">Current game data</text>
+      </g>
+    </g>
+
+    <rect y="555" width="1280" height="165" fill="#0b1721"/>
+    <path d="M0 555H1280" stroke="#263e4d"/>
+    <path d="M64 555H1216" stroke="url(#edge)" stroke-width="2"/>
+    <path d="M448 602V673M832 602V673" stroke="#2a3e4b"/>
+    <g id="features" font-family="Arial, Helvetica, sans-serif">
+      <g>
+        <g transform="translate(134.5 624)" fill="none" stroke="#86dcd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M-13-13h26v26H-13Zm7 7H6V6H-6Zm-13 6h6m26 0h6M0-19v6m0 26v6"/>
+        </g>
+        <text x="165.5" y="632" fill="#edf3ee" font-size="22" font-weight="700">One unit or all of them</text>
+        <text x="256" y="667" text-anchor="middle" fill="#a9becb" font-size="19">Precise edits. Bulk changes.</text>
+      </g>
+      <g>
+        <g transform="translate(515 624)" fill="none" stroke="#86dcd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m-13-9 13-7 13 7-13 7Zm0 9 13 7 13-7m-26 9 13 7 13-7"/>
+        </g>
+        <text x="539" y="629.5" fill="#edf3ee" font-size="22" font-weight="700">Keep features together</text>
+        <text x="640" y="667" text-anchor="middle" fill="#a9becb" font-size="19">Reusable patches and settings.</text>
+      </g>
+      <g>
+        <g transform="translate(931.5 624)" fill="none" stroke="#86dcd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m-11-9-9 9 9 9m22-18 9 9-9 9M2.5-12l-5 24"/>
+        </g>
+        <text x="962.5" y="629.5" fill="#edf3ee" font-size="22" font-weight="700">Make it your way</text>
+        <text x="1024" y="667" text-anchor="middle" fill="#a9becb" font-size="19">By hand, with scripts, or AI.</text>
+      </g>
+    </g>
+  </g>
+</svg>
