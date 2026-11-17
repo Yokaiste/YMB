@@ -1,0 +1,1111 @@
+{
+  "arguments": {
+    "diagnostic": {
+      "invalid_command_arguments": "Invalid command arguments.",
+      "run_arg0_help_for_available_commands_and": "Run @ARG0@ --help for available commands and options."
+    },
+    "split": {
+      "a_quoted_argument_is_not_closed": "A quoted argument is not closed.",
+      "close_the_matching_single_or_double_quote": "Close the matching single or double quote, then try again."
+    },
+    "suggest": {
+      "did_you_mean_arg0": "Did you mean @ARG0@?"
+    }
+  },
+  "commands": {
+    "inspect": {
+      "cleanup": {
+        "a_cleanup_path_contains_project_configuration": "A cleanup path contains project configuration.",
+        "check_temporary_and_protected_paths": "Check temporary and protected paths",
+        "choose_a_disposable_temporary_directory": "Choose a disposable temporary directory.",
+        "remove_disposable_files": "Remove disposable files",
+        "run_recover_before_cleanup_all": "Run recover before cleanup --all.",
+        "saved_originals_are_still_needed_by_synced": "Saved originals are still needed by synced files.",
+        "summary": {
+          "plan": {
+            "one": "Would remove @COUNT@ temporary path.",
+            "other": "Would remove @COUNT@ temporary paths."
+          },
+          "remove": {
+            "one": "Removed @COUNT@ temporary path.",
+            "other": "Removed @COUNT@ temporary paths."
+          }
+        }
+      },
+      "find": {
+        "field_needs_a_nonempty_name_value_pair": "--field needs a nonempty Name=Value pair.",
+        "search_ndf_objects": "Search NDF objects",
+        "searching_file": "Searching @FILE@",
+        "select_files_to_search": "Select files to search",
+        "summary": {
+          "one": "@COUNT@ match; @SHOWN@ shown.",
+          "other": "@COUNT@ matches; @SHOWN@ shown."
+        },
+        "supply_both_the_field_name_and_value": "Supply both the field name and value, separated by =."
+      },
+      "inspect": {
+        "an_interrupted_operation_is_pending": "An interrupted operation is pending.",
+        "arg0_arg1_matched_no_projects_or_patches": "@ARG0@ '@ARG1@' matched no projects or patches.",
+        "check_installation_and_saved_originals": "Check installation and saved originals",
+        "doctor_summary": "@FILES@; @PROBLEMS@.",
+        "read_projects_and_resolve_selection": "Read projects and resolve selection",
+        "recover_saved_originals_or_restore_the_base": "Recover saved originals or restore the base mod files.",
+        "run_build_to_roll_back_the_interrupted": "Run build to roll back the interrupted operation and rebuild, or recover --yes to restore saved originals. Keep the transaction folder.",
+        "selection_summary": "@PROJECTS@ and @PATCHES@ selected.",
+        "the_mod_data_folder_is_missing": "The mod data folder is missing.",
+        "use_list_without_filters_to_see_the": "Use list without filters to see the available project and patch ids."
+      }
+    },
+    "mod": {
+      "build": {
+        "an_optional_patch_could_not_run": "An optional patch could not run.",
+        "apply_files_and_save_originals": "Apply files and save originals",
+        "build_project_arg0": "Build project @ARG0@",
+        "check_references_and_final_output": "Check references and final output",
+        "prepare_build_workspace": "Prepare build workspace",
+        "rollback_also_failed_rollback": "Rollback also failed: @ROLLBACK@",
+        "save_preview_and_finish_the_file_transaction": "Save preview",
+        "stage_preview_and_generator_owned_files": "Prepare preview",
+        "summary": {
+          "build": {
+            "one": "Built @COUNT@ file.",
+            "other": "Built @COUNT@ files."
+          },
+          "plan": {
+            "one": "Planned @COUNT@ file (dry run).",
+            "other": "Planned @COUNT@ files (dry run)."
+          },
+          "sync": {
+            "one": "Synced @COUNT@ file.",
+            "other": "Synced @COUNT@ files."
+          },
+          "validate_dry": {
+            "one": "Validated @COUNT@ file (dry run).",
+            "other": "Validated @COUNT@ files (dry run)."
+          },
+          "validate": {
+            "one": "Validated @COUNT@ file.",
+            "other": "Validated @COUNT@ files."
+          }
+        }
+      },
+      "changed_error": {
+        "keep_a_copy_of_those_changes_then": "Keep a copy of those changes, then use --reset-changed to restore the recorded original before applying this operation.",
+        "tracked_file_target_has_external_changes": "Tracked file '@TARGET@' has external changes."
+      },
+      "check_tracked": {
+        "external_edits_to_a_tracked_file_will": "External edits to a tracked file will be reset.",
+        "include_all_contributors_in_the_sync_selection": "Include all contributors in the sync selection. To replace the combination, recover the shared files first, then sync the desired selection.",
+        "this_sync_would_remove_excluded_contributors_from": "This sync would remove excluded contributors from a shared file."
+      },
+      "commit_owned": {
+        "an_authored_file_changed_during_generation": "An authored file changed during generation.",
+        "an_owned_write_escaped_the_source_project": "An owned write escaped the source project root.",
+        "use_context_owned_file_helpers": "Use context owned-file helpers."
+      },
+      "recover": {
+        "check_saved_originals_and_selected_files": "Check saved originals and selected files",
+        "check_tracked_selection": "Run doctor --verbose to see tracked files and their contributors, then correct --mod or --patch.",
+        "empty_combination": "No tracked files match this combination of --mod and --patch.",
+        "unknown_filter": "No tracked contribution matches @OPTION@ '@VALUE@'.",
+        "recovery_restores_whole_files_including_all_their": "Recovery restores whole files, including all their contributors.",
+        "restore_whole_files": "Restore whole files",
+        "summary": {
+          "plan": {
+            "one": "Would restore @COUNT@ tracked file.",
+            "other": "Would restore @COUNT@ tracked files."
+          },
+          "restore": {
+            "one": "Restored @COUNT@ tracked file.",
+            "other": "Restored @COUNT@ tracked files."
+          }
+        },
+        "update_recovery_records": "Update recovery records"
+      },
+      "sync": {
+        "an_untracked_target_changed_during_the_build": "An untracked target changed during the build.",
+        "existing_original_backup_has_unexpected_contents": "Existing original backup has unexpected contents."
+      }
+    }
+  },
+  "common": {
+    "counts": {
+      "patches": {
+        "one": "@COUNT@ patch",
+        "other": "@COUNT@ patches"
+      },
+      "problems": {
+        "one": "@COUNT@ problem",
+        "other": "@COUNT@ problems"
+      },
+      "projects": {
+        "one": "@COUNT@ project",
+        "other": "@COUNT@ projects"
+      },
+      "tracked_files": {
+        "one": "@COUNT@ tracked file",
+        "other": "@COUNT@ tracked files"
+      }
+    },
+    "shared": {
+      "build_and_play": "Build and play",
+      "builder": "Builder",
+      "cache": "Cache",
+      "configured_roots_differ_from_the_interrupted_operation": "Configured roots differ from the interrupted operation.",
+      "configured_timeout_exceeds_the_supported_clock_range": "Configured timeout exceeds the supported clock range.",
+      "details": "Details",
+      "elapsed": "Elapsed",
+      "input_is_not_a_regular_file": "Input is not a regular file.",
+      "next": "Next",
+      "overrides": "Overrides",
+      "preview": "Preview",
+      "projects": "Projects",
+      "retry_after_the_other_writer_has_finished": "Retry after the other writer has finished.",
+      "rust_is_ready": "Rust is ready.",
+      "rust_is_required_for_some_actions": "Install Rust when you need to compile generators",
+      "selection": "Selection",
+      "settings": "Settings",
+      "systemroot_is_missing": "SystemRoot is missing.",
+      "warno_mod": "WARNO mod"
+    }
+  },
+  "config": {
+    "context": {
+      "resolve_mode": {
+        "configured_roots_must_not_be_empty": "Configured roots must not be empty.",
+        "create_a_mod_with_warno_s_tools": "Create a mod with WARNO's tools, then set paths.gameRoot to its folder.",
+        "field_must_be_a_mapping": "@FIELD@ must be a mapping.",
+        "finish_pending_operations_with_the_previous_builder": "Finish pending operations with the previous builder. Move @LEGACY@ to @DEFAULT@, or set paths.@KEY@ to the existing folder before continuing.",
+        "legacy_storage_still_exists_at_legacy": "Legacy storage still exists at @LEGACY@.",
+        "name_cannot_contain_the_builder_root": "@NAME@ cannot contain the builder root.",
+        "name_contains_the_installation_settings_file": "@NAME@ contains the installation settings file.",
+        "name_must_not_contain_the_warno_mod": "@NAME@ must not contain the WARNO mod folder.",
+        "name_overlaps_live_game_data": "@NAME@ overlaps live game data.",
+        "name_overlaps_other_name": "@NAME@ overlaps @OTHER_NAME@.",
+        "name_overlaps_reserved_compiler_or_rust_engine": "@NAME@ overlaps reserved compiler or Rust engine storage.",
+        "name_overlaps_reserved_distribution_storage": "@NAME@ overlaps reserved distribution storage.",
+        "paths_cacheroot_must_stay_inside_this_builder": "paths.cacheRoot must stay inside this builder's .ymb folder.",
+        "settings_key_must_be_a_positive_integer": "settings.@KEY@ must be a positive integer.",
+        "the_warno_mod_folder_needs_gamedata_and": "The WARNO mod folder needs GameData and CommonData.",
+        "variables_must_be_a_mapping": "variables must be a mapping."
+      }
+    },
+    "mod": {
+      "config_error": {
+        "correct_the_named_project_file_see_docs": "Correct the named project file; see docs/references/configuration.md."
+      }
+    },
+    "project": {
+      "check_common": {
+        "a_generator_needs_executable_project_or_both": "A generator needs executable, project, or both for source fallback.",
+        "generator_ids_must_be_unique_within_their": "Generator ids must be unique within their owning config.",
+        "generator_tests_need_an_id_and_before": "Generator tests need an id and before/after phase.",
+        "name_must_be_nonempty_text_and_variables": "name must be nonempty text and variables must be a mapping."
+      },
+      "check_file": {
+        "invalid_file_operation_or_expected_file_count": "Invalid file operation or expected file count.",
+        "invalid_file_operation_source_root_or_path": "Invalid file operation source root or path."
+      },
+      "check_requirement": {
+        "invalid_allowunsupportedymb_version_e": "Invalid allowUnsupportedYmb version: @E@",
+        "this_project_requires_ymb_requirement_found_version": "This project requires YMB @REQUIREMENT@; found @VERSION@."
+      },
+      "discover": {
+        "a_patch_needs_targets_files_or_generators": "A patch needs targets, files, or generators.",
+        "a_target_needs_a_file_and_operations": "A target needs a file and operations.",
+        "customization_names_unknown_patch_id": "Customization names unknown patch `@ID@`.",
+        "customization_names_unknown_project_id": "Customization names unknown project `@ID@`.",
+        "duplicate_patch_id_arg0": "Duplicate patch id `@ARG0@`.",
+        "optional_requires_ndf_targets": "optional requires NDF targets.",
+        "patch_scope_must_be_prod_or_dev": "Patch scope must be prod or dev.",
+        "project_id_arg0_is_also_used_by": "Project id `@ARG0@` is also used by @ARG1@."
+      },
+      "variables": {
+        "key_is_a_reserved_built_in_variable": "`@KEY@` is a reserved built-in variable."
+      }
+    },
+    "release": {
+      "download_source": {
+        "set_release_url_or_dependencies_url_to": "Set release.url or dependencies[].url to the archive download, such as https://host/mod-config.zip. Repository and release pages are not downloads.",
+        "the_download_url_must_point_directly_to": "The download URL must point directly to a mod release archive over HTTPS."
+      },
+      "validate_release": {
+        "dependency_reason_must_be_one_line_of": "Dependency reason must be one line.",
+        "duplicate_download_dependency": "Duplicate download dependency.",
+        "invalid_release_version_error": "Invalid release.version: @ERROR@"
+      }
+    },
+    "yaml": {
+      "decode": {
+        "config_version_version_is_unsupported_this_ymb": "Config version @VERSION@ is unsupported; this YMB supports @ARG1@.",
+        "register_native_generators_in_config_format_2": "Register native generators in config format 2. Existing mod projects must be migrated separately.",
+        "this_project_registers_typescript_scripts": "This project registers TypeScript scripts.",
+        "version_must_be_an_integer": "version must be an integer."
+      },
+      "yaml_value": {
+        "unresolved_or_cyclic_yaml_alias": "Unresolved or cyclic YAML alias.",
+        "unsupported_yaml_tag_or_scalar_value": "Unsupported YAML tag or scalar value.",
+        "yaml_mapping_keys_must_be_strings": "YAML mapping keys must be strings.",
+        "yaml_nesting_or_expansion_exceeds_the_limit": "YAML nesting or expansion exceeds the limit."
+      },
+      "yaml": {
+        "configuration_must_be_a_mapping": "Configuration must be a mapping.",
+        "configuration_must_contain_exactly_one_yaml_document": "Configuration must contain exactly one YAML document.",
+        "yaml_configuration_exceeds_the_16_mib_limit": "YAML configuration exceeds the 16 MiB limit."
+      }
+    }
+  },
+  "deploy": {
+    "dependencies": {
+      "visit": {
+        "different_download_links_name_the_same_project": "Different download links name the same project id or folder.",
+        "download_dependencies_contain_a_cycle": "Download dependencies contain a cycle."
+      }
+    },
+    "download": {
+      "api_pages": {
+        "ymb_metadata_exceeds_the_10_000_entry": "YMB metadata exceeds the 10,000-entry limit. Visit https://github.com/Yokaiste/YMB for deployment instructions."
+      },
+      "builder_asset": {
+        "no_supported_stable_or_preview_ymb_version": "No supported stable or preview YMB version was found. The latest stable is @VERSION@; it may not work with these mods.",
+        "try_the_latest_stable_ymb_y_n": "Try the latest stable YMB? [Y/N]",
+        "trying_an_unsupported_ymb_version_requires_confirmation": "Trying an unsupported YMB version requires confirmation. Run interactively or use --try-latest-ymb to accept the risk. Visit https://github.com/Yokaiste/YMB for information or help.",
+        "using_supported": "Using supported YMB @VERSION@.",
+        "using_unsupported": "Using unsupported YMB @VERSION@.",
+        "visit_https_github_com_yokaiste_ymb_for": "Visit https://github.com/Yokaiste/YMB for current releases and deployment instructions. The existing installation has not been replaced."
+      },
+      "choose_builder": {
+        "no_downloadable_stable_ymb_release_was_found": "No downloadable stable YMB release was found. Visit https://github.com/Yokaiste/YMB for information or help."
+      },
+      "curl": {
+        "windows_curl_exe_is_missing_restore_the": "Windows curl.exe is missing. Restore the Windows component or use the manual ZIP installation.",
+        "windows_systemroot_is_missing": "Windows SystemRoot is missing."
+      },
+      "download": {
+        "download_url_must_use_https": "Download URL must use HTTPS."
+      },
+      "release_asset": {
+        "repository_has_no_unambiguous_compatible_wanted_asset": "@REPOSITORY@ has no unambiguous compatible @WANTED@ asset.",
+        "the_release_asset_has_no_sha_256": "The release asset has no SHA-256 digest.",
+        "unexpected_release_download_url": "Unexpected release download URL."
+      },
+      "requirement": {
+        "the_mod_s_requires_field_must_be": "The mod's requires field must be a version requirement string."
+      },
+      "requirements": {
+        "mod_configuration_exceeds_the_16_mib_limit": "Mod configuration exceeds the 16 MiB limit."
+      }
+    },
+    "lock": {
+      "acquire": {
+        "another_command_is_using_ymb_close_it": "Another command is using YMB. Close it and retry the installer.",
+        "ymb_operation_lock_is_busy": "YMB operation lock is busy."
+      },
+      "clear_interrupted_lock": {
+        "the_previous_installer_still_owns_its_ymb": "The previous installer still owns its YMB operation lock."
+      }
+    },
+    "mod": {
+      "confirm": {
+        "confirmation_requires_a_terminal_use_yes_to": "Confirmation requires a terminal. Use --yes to accept deployment."
+      },
+      "dependency_choice": {
+        "also_install_arg0_reason_y_n": "Also install @ARG0@?@REASON@ [Y/N]",
+        "optional_dependency_choices_need_a_terminal_use": "Optional dependency choices need a terminal. Use --yes to skip them or --with NAME to include one."
+      },
+      "main": {
+        "deploy_arg0_arg1": "Deploy @ARG0@ @ARG1@",
+        "press_enter_to_close": "Press Enter to close"
+      },
+      "placement": {
+        "a_previous_operation_is_pending_finish_recovery": "A previous operation is pending. Finish recovery with the current builder or installer before updating.",
+        "arg0_is_a_git_checkout_update_it": "@ARG0@ is a Git checkout. Update it with Git or use another WARNO mod folder.",
+        "save_the_installer_in_a_warno_mod": "Save the installer in a WARNO mod folder made with CreateNewMod.bat, beside GameData, CommonData and GenerateMod.bat.",
+        "ymb_contains_builder_source_keep_this_checkout": "YMB contains builder source. Keep this checkout and install the portable release in another WARNO mod folder."
+      },
+      "read_archive": {
+        "a_mod_archive_must_contain_one_project": "A mod archive must contain one project folder.",
+        "the_mod_archive_is_empty": "The mod archive is empty."
+      },
+      "run": {
+        "another_mod_installer_is_running_in_this": "Another mod installer is running in this folder.",
+        "change_ymb_ymb_config_yaml_or_your": "Change YMB/.ymb/config.yaml or your project under YMB/mods, then build a preview and sync with YMB/YMB.exe. Run GenerateMod.bat again after syncing.",
+        "checking_and_staging_the_update": "Checking and staging the update...",
+        "deployment_cancelled_no_work_started": "Deployment cancelled. No work started.",
+        "deployment_cancelled_the_installation_is_unchanged": "Deployment cancelled. The installation is unchanged.",
+        "docs": "Docs",
+        "edit": "Edit",
+        "guide": "Guide",
+        "help": "Help",
+        "install_and_sync_arg0_in_arg1": "Install and sync @ARG0@ in @ARG1@.",
+        "installed_and_synced_arg0": "Installed and synced @ARG0@.",
+        "offline_installation_needs_builder_and_project_zips": "Offline installation needs --builder and --project ZIPs.",
+        "online_docs": "Online docs",
+        "optional": "optional",
+        "preserved_configuration_was_rejected_before_recovery_the": "Preserved configuration was rejected before recovery. The installed and live files are unchanged.",
+        "preserved_settings_or_identities_are_incompatible_the": "Preserved settings or identities are incompatible. The old YMB installation remains available; fix the reported input or choose a clean replacement.",
+        "provide_one_project_zip_for_arg0": "Provide one --project ZIP for @ARG0@.",
+        "provide_project_zips_only_for_selected_projects": "Provide --project ZIPs only for selected projects.",
+        "replace_the_entire_ymb_folder_including_settings": "Replace the entire YMB folder, including settings, identities, source edits, other projects and saved originals. Keep an external backup.",
+        "replace_ymb_preserve_compatible_settings_and_declared": "Replace YMB; preserve compatible settings and declared identities for selected projects. Remove other projects and source edits.",
+        "required": "required",
+        "restore_all_tracked_live_files_including_external": "Restore ALL tracked live files, including external edits, from saved originals.",
+        "restoring_all_live_files_from_ymb_s": "Restoring all live files from YMB's saved originals...",
+        "run_generatemod_bat_in_this_warno_mod": "Run GenerateMod.bat in this WARNO mod folder, then activate the local mod in WARNO's Mod Center.",
+        "save_deploy_arg0_exe_beside_gamedata_commondata": "Save Deploy-@ARG0@.exe beside GameData, CommonData and GenerateMod.bat.\n--game FOLDER  --yes  --with NAME (repeat for optional dependencies)\nRequired dependencies are always installed. --yes skips unselected optional dependencies.\nYMB is downloaded separately: newest supported stable, then a supported preview.\n--try-latest-ymb accepts trying the latest stable only if none is supported; it may not work. --yes alone does not accept this risk.\n--preserve-user-data retains compatible settings and declared identities.\nUpdates restore every tracked live file and replace YMB. Back up your edits first.\nOffline: --builder ZIP and --project ZIP for every selected project, with .zip.sha256 sidecars.\nDeployment ends after YMB sync; run GenerateMod.bat yourself.",
+        "the_download_link_returned_a_different_primary": "The download link returned a different primary project.",
+        "the_projects_are_installed_but_applying_stopped": "The projects are installed, but applying stopped. Read the builder error before retrying.",
+        "unknown_optional_dependency_in_with_use_help": "Unknown optional dependency in --with. Use --help for names.",
+        "ymb_install_exists_without_its_installer_marker": ".ymb-install exists without its installer marker. Keep it and choose a clean mod folder."
+      }
+    },
+    "payload": {
+      "read": {
+        "deploy_configuration_checksum_mismatch": "Deploy configuration checksum mismatch.",
+        "invalid_deploy_configuration_length": "Invalid deploy configuration length."
+      },
+      "write": {
+        "deploy_configuration_exceeds_1_mib": "Deploy configuration exceeds 1 MiB.",
+        "use_an_ordinary_ymb_executable_to_create": "Use an ordinary YMB executable to create a deploy installer."
+      }
+    },
+    "stage": {
+      "allow_builder_version": {
+        "the_builder_manifest_has_no_version": "The builder manifest has no version."
+      },
+      "carry_engine": {
+        "a_rust_installation_is_active_wait_for": "A Rust installation is active. Wait for it to finish before updating YMB."
+      },
+      "check_preserved_layout": {
+        "preserving_user_data_requires_the_default_sourcemods": "Preserving user data requires the default sourceMods, workRoot and cacheRoot. Back up custom layouts and migrate them manually."
+      },
+      "check_update_paths": {
+        "finish_pending_operations_and_use_the_default": "Finish pending operations and use the default operationLockRoot before running the installer.",
+        "the_builder_did_not_report_recoveryroot": "The builder did not report recoveryRoot.",
+        "the_builder_needs_to_report_operationlockroot_download": "The builder needs to report operationLockRoot. Download the current portable YMB release.",
+        "this_installation_has_a_custom_recoveryroot_recover": "This installation has a custom recoveryRoot. Recover it manually before replacing YMB."
+      },
+      "restore_live": {
+        "another_command_synced_files_during_recovery_close": "Another command synced files during recovery. Close YMB commands and retry the update.",
+        "ymb_points_at_another_warno_mod_folder": "YMB points at another WARNO mod folder. Recover it manually before updating."
+      },
+      "stage": {
+        "the_arg0_package_is_missing_config_ymb": "The @ARG0@ package is missing config/ymb.mod.yaml.",
+        "the_builder_package_needs_its_executable_and": "The builder package needs its executable and default configuration together, with no local installation overrides.",
+        "the_staged_builder_rejected_the_projects_the": "The staged builder rejected the projects. The installed files have not changed."
+      }
+    },
+    "transaction": {
+      "install": {
+        "install_failed_e_restore_failed_restore_keep": "Install failed: @E@; restore failed: @RESTORE@. Keep .ymb-install/before."
+      },
+      "recover": {
+        "an_interrupted_update_found_an_unrecognized_ymb": "An interrupted update found an unrecognized YMB folder. Keep YMB and .ymb-install/before for inspection.",
+        "an_unrecognized_ymb_install_next_folder_already": "An unrecognized .ymb-install-next folder already exists. Keep it and choose a clean mod folder."
+      }
+    }
+  },
+  "diagnostics": {
+    "data": {
+      "files_prepared_for_removal": "Files prepared for removal.",
+      "files_prepared_for_writing": "Files prepared for writing.",
+      "rolled_back_an_interrupted_operation_before_starting": "Rolled back an interrupted operation before starting this command."
+    }
+  },
+  "engine": {
+    "files": {
+      "check_file_owner": {
+        "patches_changing_the_same_file_need_an": "Patches changing the same file need an explicit patch dependency."
+      },
+      "check_references": {
+        "no_finished_ndf_file_references_name": "No finished NDF file references '@NAME@'.",
+        "update_the_block_that_should_reference_it": "Update the block that should reference it, or remove expect.referenced for blocks loaded directly by the game."
+      },
+      "file_operations": {
+        "add_requires_an_absent_destination": "add requires an absent destination.",
+        "file_operation_expected_arg0_files_found_arg1": "File operation expected @ARG0@ files; found @ARG1@.",
+        "file_removal_has_no_files_left_to": "File removal has no files left to remove."
+      }
+    },
+    "materialized": {
+      "combine": {
+        "a_deletion_conflicts_with_another_contribution": "A deletion conflicts with another contribution.",
+        "a_file_target_overlaps_another_output_s": "A file target overlaps another output's directory.",
+        "generated_output_changes_text_outside_its_declared": "Generated output changes text outside its declared regions.",
+        "independent_byte_exact_outputs_contain_different_data": "Independent byte-exact outputs contain different data.",
+        "independent_outputs_create_different_versions_of_the": "Independent outputs create different versions of the same new file."
+      },
+      "original": {
+        "a_ymb_marked_file_has_no_saved": "A YMB-marked file has no saved original in this builder."
+      },
+      "read_values": {
+        "numeric_definition_arg0_was_not_found": "Numeric definition '@ARG0@' was not found."
+      },
+      "report_conflict": {
+        "compare_original_current_and_incoming_files_in": "Compare original, current and incoming files in the conflict preview. Adjust the selected patches or their ordering, then run the command again."
+      }
+    },
+    "mod": {
+      "conflict": {
+        "keep_independent_edits_disjoint_or_declare_ordering": "Keep independent edits disjoint, or declare ordering and allowWriteToModifiedFiles for a deliberate transformation."
+      },
+      "missing": {
+        "correct_the_path_or_restore_the_missing": "Correct the path or restore the missing input.",
+        "input_target_does_not_exist": "Input '@TARGET@' does not exist."
+      },
+      "resolve_path_template": {
+        "a_path_template_resolved_to_a_non": "A path template resolved to a non-string value.",
+        "use_a_string_variable_for_paths": "Use a string variable for paths."
+      }
+    },
+    "pipeline": {
+      "materialize_project": {
+        "a_generator_output_collides_with_its_mod": "A generator output collides with its mod-wide replacement.",
+        "a_mod_wide_replacement_collides_with_a": "A mod-wide replacement collides with a patch or file operation.",
+        "file_operations_and_ndf_targets_cannot_own": "File operations and NDF targets cannot own the same file.",
+        "processing_arg0_ndf_targets_with_up_to": "  Processing @ARG0@ NDF targets with up to @ARG1@ workers."
+      },
+      "materialize": {
+        "project_arg0_arg1_selected_patches": "Project @ARG0@: @ARG1@ selected patches."
+      },
+      "run_patch_job": {
+        "processing_target": "Target @TARGET@",
+        "rebuild_the_cache": "Rebuild the cache."
+      }
+    }
+  },
+  "init": {
+    "choose": {
+      "choose_a_listed_example_with_example": "Choose a listed example with --example.",
+      "choose_a_starter_example": "Choose a starter example.",
+      "choose_an_example": "Choose an example",
+      "example_names_must_be_valid_unicode": "Example names must be valid Unicode.",
+      "no_starter_example_matches_requested": "No starter example matches '@REQUESTED@'.",
+      "no_starter_example_was_selected": "No starter example was selected.",
+      "no_starter_examples_are_installed": "No starter examples are installed.",
+      "restore_ymb_s_resources_examples_folder_or": "Restore YMB's resources/examples folder or add an example.",
+      "run_init_again_and_choose_an_example": "Run init again and choose an example.",
+      "starter_examples": "Starter examples",
+      "use_example_with_one_of_arg0": "Use --example with one of: @ARG0@."
+    },
+    "create": {
+      "choose_another_id_or_edit_the_existing": "Choose another --id or edit the existing project.",
+      "created_project_id": "Created project '@ID@'.",
+      "project_name_must_not_be_empty": "Project name must not be empty.",
+      "supply_name": "Supply --name.",
+      "that_project_folder_already_exists": "That project folder already exists.",
+      "that_project_id_is_already_in_use": "That project id is already in use.",
+      "the_example_must_contain_config_ymb_mod": "The example must contain config/ymb.mod.yaml with the requested project id.",
+      "unknown_starter_placeholder_key": "Unknown starter placeholder: @KEY@."
+    }
+  },
+  "main": {
+    "check_cli": {
+      "reset_changed_cannot_be_used_with_dry": "--reset-changed cannot be used with --dry-run."
+    },
+    "confirmation_items": {
+      "also_delete_unused_recovery_data_at_arg0": "Also delete unused recovery data at @ARG0@.",
+      "apply_its_files_and_removals_to_arg0": "Apply its files and removals to @ARG0@. Save originals for recovery.",
+      "build_this_selection_and_replace_the_preview": "Build this selection and replace the preview at @ARG0@.",
+      "delete_build_work_at_arg0": "Delete build work at @ARG0@.",
+      "delete_result_caches_at_arg0": "Delete result caches at @ARG0@.",
+      "delete_unprotected_temporary_paths_configured_by_the": "Delete unprotected temporary paths configured by the selected projects.",
+      "discard_external_edits_to_tracked_files_when": "Discard external edits to tracked files when applying this command.",
+      "finish_rolling_back_the_interrupted_operation_first": "Finish rolling back the interrupted operation first.",
+      "projects_arg0_patches_arg1_scope_arg2": "Projects: @ARG0@. Patches: @ARG1@. Scope: @ARG2@.",
+      "restore_all_contributions_to_each_selected_file": "Restore all contributions to each selected file, then release its saved original.",
+      "restore_selected_whole_files_in_arg0_from": "Restore selected whole files in @ARG0@ from saved originals."
+    },
+    "main": {
+      "command_help_requested": "Command help requested.",
+      "version_requested": "Version requested."
+    },
+    "positive": {
+      "expected_a_positive_integer": "expected a positive integer"
+    },
+    "run_once": {
+      "arg0_cancelled_no_work_started": "@ARG0@ cancelled. No work started.",
+      "arg0_does_not_support_dry_run": "@ARG0@ does not support --dry-run.",
+      "check_project_destination": "Check project destination",
+      "init_needs_id": "init needs --id.",
+      "init_needs_name": "init needs --name.",
+      "permanent_project_id": "Permanent project id",
+      "project_name": "Project name",
+      "review_a_dry_run_first_then_repeat": "Review a --dry-run first, then repeat with --yes.",
+      "run_the_command_again_when_ready": "Run the command again when ready.",
+      "run_the_command_without_dry_run_when": "Run the command without --dry-run when ready.",
+      "supply_id_and_name": "Supply --id and --name.",
+      "this_command_needs_yes_in_a_noninteractive": "This command needs --yes in a noninteractive session.",
+      "write_the_starter_project": "Write the starter project"
+    },
+    "shared": {
+      "action_build": "Save a complete preview without changing WARNO files.",
+      "action_cleanup": "Remove disposable work files and configured temporary paths.",
+      "action_doctor": "Check installation, tracked files, and pending recovery.",
+      "action_explain": "Explain patch selection and dependency inclusion.",
+      "action_find": "Search NDF objects in selected targets or explicit files.",
+      "action_init": "Create a playable starter project.",
+      "action_installrust": "Install portable Rust for YMB from official sources.",
+      "action_list": "List selected projects, patches, and generators.",
+      "action_recover": "Restore the selected files from saved originals.",
+      "action_release": "Compile generators and prepare project archives and deploy installers.",
+      "action_sync": "Rebuild this selection, save originals, and apply it to WARNO.",
+      "action_validate": "Validate templates, patches, generators, and final NDF output.",
+      "build_and_manage_your_warno_mod": "Build and manage your WARNO mod.",
+      "cleanup_all": "Also remove unused recovery records.",
+      "find_field": "Match text in a direct field's value as Name=Text.",
+      "find_files": "Search these game-relative files; repeat for more.",
+      "find_limit": "Maximum results to display.",
+      "find_name": "Match text in object names.",
+      "find_type_name": "Match text in object types.",
+      "init_description": "Project description and welcome hint.",
+      "init_example": "Starter example; chosen automatically when only one is installed.",
+      "init_id": "Permanent project id.",
+      "init_name": "Project name shown in WARNO.",
+      "open_the_menu_ymb_exe_start_a": "Open the menu: .\\YMB.exe\nStart a project: .\\YMB.exe init --id my_mod --name \"My Mod\"\nDocumentation: docs/README.md\nHelp: https://discord.gg/33Sqn6dTjf",
+      "option_dry_run": "Review work without replacing previews, release files or game data.",
+      "option_install_rust": "Install portable Rust automatically if this action needs it.",
+      "option_json": "Write structured JSON output.",
+      "option_mods": "Select a project by id or name; repeat for more.",
+      "option_no_cache": "Rebuild without using the result cache.",
+      "option_patches": "Select id, name or modId:patchId; repeat for more.",
+      "option_require_all": "Fail if an optional patch cannot run.",
+      "option_reset_changed": "Discard external edits during sync or recovery. Save a copy first.",
+      "option_scope": "Use normal patches (prod) or include development patches (dev).",
+      "option_verbose": "Show all files and diagnostic details.",
+      "option_yes": "Accept the command's changes without prompting.",
+      "option_ymb_path": "Use the builder in this folder."
+    }
+  },
+  "menu": {
+    "choose_projects": {
+      "choose_at_least_one_listed_shortcut_or": "Choose at least one listed shortcut or id, or type all.",
+      "choose_one_of_the_listed_shortcuts_or": "Choose one of the listed shortcuts or ids.",
+      "choose_projects": "Choose projects",
+      "disabled_in_configuration": " (disabled in configuration)",
+      "enter_shortcuts_or_ids_separated_by_commas": "  Enter shortcuts or ids separated by commas, or all to select every project.",
+      "i7_no_projects_found_use_init_to": "  [I7] No projects found. Use init to create one.",
+      "leave_empty_to_keep_the_current_selection": "  Leave empty to keep the current selection.",
+      "no_project_was_selected": "No project was selected.",
+      "unknown_project_item": "Unknown project: @ITEM@"
+    },
+    "menu_input": {
+      "name_does_not_accept_command_options": "@NAME@ does not accept command options.",
+      "no_command_was_supplied": "No command was supplied.",
+      "the_command_name_is_empty": "The command name is empty.",
+      "type_a_command_followed_by_its_options": "Type a command followed by its options, or use help.",
+      "use_options_with_an_action_for_example": "Use options with an action, for example build --mod example."
+    },
+    "menu": {
+      "all_projects": "all projects",
+      "an_interrupted_command_needs_rollback_use_doctor": "An interrupted command needs rollback. Use doctor to inspect it.",
+      "an_operation_lock_exists_use_doctor_before": "An operation lock exists. Use doctor before running another command.",
+      "applied": "Applied",
+      "arg0_tracked_files_arg1": "@ARG0@ tracked files / @ARG1@",
+      "build_a_preview_to_review_this_selection": "Build a preview to review this selection before syncing it.",
+      "command": "Command",
+      "command_failed": "Command failed",
+      "completed": "Completed",
+      "development_normal": "development + normal",
+      "field_name_value": "Field Name=Value",
+      "find_game_objects": "Find game objects",
+      "gamedata_or_commondata_file": "GameData or CommonData file",
+      "install_rust": "Install Rust",
+      "last_command": "Last command",
+      "leave_a_filter_empty_to_match_any": "  Leave a filter empty to match any value.",
+      "leave_the_file_empty_to_search_the": "  Leave the file empty to search the selected patch targets.",
+      "name_contains": "Name contains",
+      "preferences": "Preferences",
+      "rebuild_after_changing_settings_or_selection_review": "Rebuild after changing settings or selection. Review the preview, sync, then run GenerateMod.bat.",
+      "selection_counts": "@PROJECTS@ / @PATCHES@",
+      "selection_dry": "@PROJECTS@ / @PATCHES@ / dry run",
+      "tools": "Tools",
+      "type_contains": "Type contains"
+    },
+    "pause": {
+      "press_enter_to_return": "Press Enter to return"
+    },
+    "shared": {
+      "build_and_apply_this_selection_to_warno": "Build and apply this selection to WARNO",
+      "change_the_project_selection": "Change the project selection",
+      "check_installation_and_recovery_records": "Check installation and recovery records",
+      "check_this_selection_without_saving_output": "Check this selection without saving output",
+      "close_ymb": "Close YMB",
+      "create_a_starter_mod_project": "Create a starter mod project",
+      "prepare_project_archives_and_deploy_installers": "Prepare project archives and deploy installers",
+      "read_the_workflow_and_command_guide": "Read the workflow and command guide",
+      "remove_build_work_and_disposable_caches": "Remove build work and disposable caches",
+      "restore_whole_files_from_saved_originals": "Restore whole files from saved originals",
+      "save_a_fresh_preview_for_review": "Save a fresh preview for review",
+      "search_game_objects_by_name_type_or": "Search game objects by name, type or field",
+      "show_selected_projects_and_patches": "Show selected projects and patches",
+      "show_settings_files_and_storage_paths": "Show settings files and storage paths",
+      "show_why_each_patch_is_included_or": "Show why each patch is included or skipped",
+      "switch_between_compact_and_detailed_reports": "Switch between compact and detailed reports",
+      "switch_between_normal_and_development_patches": "Switch between normal and development patches"
+    },
+    "show_help": {
+      "after_sync_run_generatemod_bat_in_the": "After sync, run GenerateMod.bat in the WARNO mod folder and activate the mod.",
+      "choose_projects_with_b_use_c_to": "Choose projects with [B]. Use [C] to include development patches.",
+      "commands": "Commands",
+      "commands_accept_cli_options_for_example_build": "Commands accept CLI options, for example build --mod example --dry-run.",
+      "commands_sync_recover_and_cleanup_ask_once": "Sync, recover and cleanup show their effects and ask for confirmation. Enter Y or yes to continue.",
+      "community_https_discord_gg_33sqn6dtjf": "  Community: https://discord.gg/33Sqn6dTjf",
+      "documentation_docs_readme_md": "\n  Documentation: docs/README.md",
+      "shortcuts_take_priority_ignoring_case_for_example": "Shortcuts take priority, ignoring case. For example, bu runs build.",
+      "type_a_shortcut_command_name_or_unique": "Type a shortcut, command name or unique prefix, then press Enter.",
+      "unique_option_prefixes_work_too_quote_values": "Unique option prefixes work too. Quote values that contain spaces.",
+      "use_build_to_save_a_preview_review": "Use build to save a preview. Review it before sync applies the selection.",
+      "use_d_for_full_diagnostics_message_codes": "Use [D] for full diagnostics. Message codes: docs/references/message-codes.md.",
+      "use_recover_to_restore_whole_files_including": "Use recover to restore whole files, including other projects' contributions."
+    },
+    "show_settings": {
+      "arg0_arg1_entries": "@ARG0@ / @ARG1@ entries",
+      "cache_limit": "Cache limit",
+      "defaults": "Defaults",
+      "edit_overrides_for_this_installation_remove_an": "  Edit overrides for this installation. Remove an override to use its default.",
+      "objects_merge_lists_replace_keep_saved_originals": "  Objects merge; lists replace. Keep saved originals until you recover.",
+      "originals": "Originals"
+    }
+  },
+  "plan": {
+    "dependencies": {
+      "expand_mods": {
+        "project_arg0_has_lower_priority_than_dependency": "Project `@ARG0@` has lower priority than dependency `@REFERENCE@`.",
+        "required_mod_project_reference_is_disabled": "Required mod project `@REFERENCE@` is disabled.",
+        "required_mod_project_reference_is_missing": "Required mod project `@REFERENCE@` is missing."
+      },
+      "order_mods": {
+        "circular_mod_dependencies": "Circular mod dependencies."
+      },
+      "order_patches": {
+        "circular_patch_dependencies": "Circular patch dependencies."
+      },
+      "resolve_patch": {
+        "patch_dependency_reference_is_ambiguous_use_modid": "Patch dependency `@REFERENCE@` is ambiguous; use modId:patchId.",
+        "required_patch_reference_is_missing": "Required patch `@REFERENCE@` is missing."
+      }
+    },
+    "mod": {
+      "new": {
+        "excluded_by_mod": "excluded by --mod",
+        "excluded_by_patch": "excluded by --patch",
+        "excluded_by_scope": "excluded by scope",
+        "included_as_a_required_dependency": "included as a required dependency",
+        "included_by_scope_and_filters": "included by scope and filters",
+        "mod_project_is_disabled": "mod project is disabled",
+        "patch_dependency_reference_belongs_to_a_project": "Patch dependency `@REFERENCE@` belongs to a project with a higher priority.",
+        "patch_is_disabled": "patch is disabled",
+        "required_patch_reference_is_disabled": "Required patch `@REFERENCE@` is disabled."
+      },
+      "require_matches": {
+        "correct_the_filters_use_list_to_see": "Correct the filters. Use list to see available project and patch ids.",
+        "selection_filters_matched_no_projects_or_patches": "Unknown selection filters: @FILTERS@."
+      },
+      "skip_dependent_patches": {
+        "depends_on_skipped": "depends on skipped @DEPENDENCY@"
+      }
+    }
+  },
+  "platform": {
+    "capture_inner": {
+      "check_compiler_diagnostics": "Check compiler diagnostics.",
+      "check_compiler_output": "Check compiler output.",
+      "check_the_compiler_process": "Check the compiler process.",
+      "compiler_diagnostic_reader_panicked": "Compiler diagnostic reader panicked.",
+      "compiler_output_exceeds_the_16_mib_control": "Compiler output exceeds the 16 MiB control limit.",
+      "compiler_output_reader_panicked": "Compiler output reader panicked.",
+      "fix_the_stalled_compiler_or_dependency_download": "Fix the stalled compiler or dependency download.",
+      "generator_compilation_exceeded_its_time_limit": "Generator compilation exceeded its time limit.",
+      "reduce_build_script_output": "Reduce build-script output.",
+      "reduce_generatortimeoutseconds": "Reduce generatorTimeoutSeconds.",
+      "retry_compilation": "Retry compilation."
+    },
+    "process_error": {
+      "cannot_isolate_generator_process_error": "Cannot isolate generator process: @ERROR@",
+      "run_ymb_in_a_windows_session_that": "Run YMB in a Windows session that allows child job objects."
+    }
+  },
+  "plugin": {
+    "calls": {
+      "create": {
+        "generator_created_too_many_staging_files": "Generator created too many staging files."
+      },
+      "handle_call": {
+        "invalid_or_excessive_generator_notices": "Invalid or excessive generator notices.",
+        "skipped_generator_cache_entry_exceeding_its_namespace": "Skipped generator cache entry exceeding its namespace's byte budget.",
+        "token_does_not_belong_to_a_cache": "Token does not belong to a cache entry.",
+        "token_does_not_belong_to_an_owned": "Token does not belong to an owned file.",
+        "too_many_requested_targets": "Too many requested targets.",
+        "unknown_cache_token": "Unknown cache token.",
+        "unknown_owned_file_token": "Unknown owned-file token."
+      },
+      "owned_path": {
+        "owned_file_helpers_cannot_overwrite_project_configuration": "Owned-file helpers cannot overwrite project configuration."
+      },
+      "receive": {
+        "generator_closed_its_protocol_stream": "Generator closed its protocol stream."
+      },
+      "timeout": {
+        "fix_an_unbounded_operation_or_increase_settings": "Fix an unbounded operation or increase settings.generatorTimeoutSeconds for measured workloads.",
+        "generator_exceeded_its_time_limit": "Generator exceeded its time limit."
+      },
+      "validate_payload": {
+        "returned_payload_does_not_match_its_staging": "Returned payload does not match its staging allocation.",
+        "returned_payload_size_checksum_or_file_type": "Returned payload size, checksum, or file type is invalid."
+      }
+    },
+    "compile": {
+      "inspect": {
+        "restore_the_generator_executable_or_register_its": "Restore the generator executable or register its source project for rebuilding.",
+        "the_generator_executable_is_missing": "The generator executable is missing."
+      },
+      "release_executable": {
+        "check_the_compiler_installation_and_permissions": "Check the compiler installation and permissions.",
+        "fix_compiler_errors_in_the_owning_generator": "Fix compiler errors in the owning generator project.",
+        "generator_compilation_failed": "Generator compilation failed.",
+        "generator_has_no_owning_mod_configuration": "Generator has no owning mod configuration.",
+        "keep_generators_inside_their_mod_configuration_folder": "Keep generators inside their mod configuration folder.",
+        "preparing_generator_arg0": "Preparing @ARG0@",
+        "retry_this_command": "Retry this command.",
+        "set_generator_binary_to_select_one_binary": "Set generator.binary to select one binary target.",
+        "the_generator_compiler_could_not_start": "The generator compiler could not start.",
+        "the_generator_project_did_not_produce_exactly": "The generator project did not produce exactly one executable.",
+        "the_generator_was_not_prepared": "The generator was not prepared."
+      }
+    },
+    "mod": {
+      "execute": {
+        "a_generator_returned_duplicate_target_paths": "A generator returned duplicate target paths.",
+        "build_feature": "Building @NAME@",
+        "check_feature": "Checking @NAME@",
+        "companion_test_failed": "Companion test failed.",
+        "companion_tests_cannot_return_game_outputs": "Companion tests cannot return game outputs.",
+        "fix_the_failed_test_before_building": "Fix the failed test before building.",
+        "generated_region_owners_must_name_registered_generators": "Generated region owners must name registered generators in the same mod project.",
+        "generator_did_not_send_a_handshake": "Generator did not send a handshake.",
+        "generator_exited_with_status": "Generator exited with @STATUS@.",
+        "generator_identity_phase_arg2": "  Generator @IDENTITY@: @PHASE@@ARG2@.",
+        "generator_input_closed": "Generator input closed.",
+        "generator_returned_too_many_results": "Generator returned too many results.",
+        "generator_sent_a_second_handshake": "Generator sent a second handshake.",
+        "output_has_no_host_issued_staging_token": "Output has no host-issued staging token.",
+        "output_token_belongs_to_another_target_or": "Output token belongs to another target or helper.",
+        "request_ids_must_increase": "Request ids must increase.",
+        "unknown_test_status": "Unknown test status."
+      }
+    }
+  },
+  "release": {
+    "mod": {
+      "portable_builder": {
+        "cannot_create_the_deploy_installer_ymb_s": "Cannot create the deploy installer: YMB's portable files and builder source are missing.",
+        "extract_the_complete_ymb_archive_and_run": "Extract the complete YMB archive and run its YMB.exe, or run dist/YMB.exe inside the builder source checkout.",
+        "preparing_installer_files": "Preparing installer files"
+      },
+      "progress_steps": {
+        "check_generator_registrations": "Check generator registrations",
+        "create_name_archive": "Create @NAME@ archive",
+        "create_name_deploy_installer": "Create @NAME@ deploy installer",
+        "plan_project_releases": "Plan project releases",
+        "prepare_installer_files": "Prepare installer files",
+        "save_name_files_in_dist": "Save @NAME@ files in dist/",
+        "stage_name_files": "Stage @NAME@ files",
+        "verify_name_release": "Verify @NAME@ release"
+      },
+      "run": {
+        "finish_the_pending_ymb_operation_before_preparing": "Finish the pending YMB operation before preparing a release.",
+        "generator_source_must_stay_inside_its_mod": "Generator source must stay inside its mod configuration folder.",
+        "no_mod_projects_are_available_to_release": "No mod projects are available to release.",
+        "preparing_release_for_name": "Preparing release for @NAME@",
+        "release_include_must_name_extra_files_outside": "release.include must name extra files outside the configuration folder; configuration, caches and dist are handled automatically.",
+        "release_packages_whole_projects": "release packages whole projects.",
+        "rust_is_not_available": "Rust is unavailable. Run install-rust, then release again to create an installer.",
+        "summary": {
+          "plan": {
+            "one": "Planned @COUNT@ release.",
+            "other": "Planned @COUNT@ releases."
+          },
+          "prepare": {
+            "one": "Prepared @COUNT@ release.",
+            "other": "Prepared @COUNT@ releases."
+          }
+        },
+        "use_mod_to_select_projects_and_omit": "Use --mod to select projects and omit --patch."
+      }
+    },
+    "verify": {
+      "verify_installer": {
+        "a_preserved_update_discarded_a_declared_identity": "A preserved update discarded a declared identity.",
+        "a_preserved_update_discarded_local_settings": "A preserved update changed shared or local settings, or retained settings for a removed project.",
+        "a_rejected_update_changed_installed_or_live": "A rejected update changed installed or live files.",
+        "an_unsupported_builder_must_retain_authored_requirements": "An unsupported builder must retain authored requirements and record the accepted version locally.",
+        "an_update_must_recover_every_tracked_file": "An update must recover every tracked file and replace local contents and unselected projects.",
+        "deployment_must_stop_after_sync_explain_the": "Deployment must stop after sync, explain the next steps, and remove its work files.",
+        "fresh_deployment_must_sync_the_project_and": "Fresh deployment must sync the project and required dependencies, and skip optional dependencies.",
+        "installer_verification_returned_arg0": "Installer verification returned @ARG0@.",
+        "nested_required_and_selected_optional_dependencies_must": "Nested required and selected optional dependencies must be installed and synced.",
+        "rejecting_an_unsupported_builder_changed_live_files": "Rejecting an unsupported builder changed live files.",
+        "sync_did_not_save_originals": "Sync did not save originals.",
+        "the_deploy_executable_reports_a_different_project": "The deploy executable reports a different project or version.",
+        "the_explicit_unsupported_version_attempt_failed_verification": "The explicit unsupported-version attempt failed verification.",
+        "the_installer_accepted_a_folder_outside_a": "The installer accepted a folder outside a WARNO mod."
+      }
+    }
+  },
+  "rust": {
+    "activate": {
+      "error_restoring_the_previous_engine_failed_restore": "@ERROR@; restoring the previous engine failed: @RESTORE@"
+    },
+    "cancelled": {
+      "action_cancelled": "Action cancelled.",
+      "choose_another_action_when_ready": "Choose another action when ready."
+    },
+    "checksum": {
+      "the_official_installer_checksum_is_invalid": "The official installer checksum is invalid."
+    },
+    "install_error": {
+      "automatic_rust_installation_failed": "Automatic Rust installation failed.",
+      "manual_installation_is_recommended_run_ymb_exe": "Manual installation is recommended. Run YMB.exe install-rust in a terminal for the installation choices."
+    },
+    "install_portable": {
+      "activate_portable_rust_locally": "Activate portable Rust locally",
+      "automatic_installation_supports_windows_x64_install_rust": "Automatic installation supports Windows x64. Install Rust manually on this platform.",
+      "check_portable_rust": "Check portable Rust",
+      "download_official_installer": "Download official installer",
+      "downloading_the_official_rust_installer": "Downloading the official Rust installer",
+      "install_portable_rust": "Install portable Rust",
+      "rust_is_installed_and_ready": "Rust is installed and ready.",
+      "the_official_installer_checksum_does_not_match": "The official installer checksum does not match.",
+      "verify_compiler_and_linker": "Verify compiler and linker"
+    },
+    "setup": {
+      "automatic": "Automatic",
+      "cancel": "Cancel",
+      "choice": "Choice",
+      "choose_1_2_or_0": "Choose 1, 2, or 0.",
+      "install_portable_rust_for_ymb": "Install portable Rust for YMB",
+      "install_rust_outside_ymb": "Install Rust outside YMB",
+      "manual": "Manual",
+      "manual_installation_is_recommended": "Manual installation is recommended.",
+      "manual_instructions": "Install Rust @MINIMUM@ or newer with Cargo.\nDownload the Windows installer: https://rust-lang.org/tools/install/\nFor MSVC, install the C++ build tools and Windows SDK requested by Rustup.\nWindows guide: https://rust-lang.github.io/rustup/installation/windows-msvc.html\nFinish installation, then press Enter to recheck.",
+      "press_enter_to_recheck_or_0_to": "Press Enter to recheck, or 0 to return",
+      "stop_this_action": "Stop this action",
+      "use_a_listed_choice": "Use a listed choice."
+    },
+    "verify": {
+      "the_compiled_program_cannot_run_without_external": "The compiled program cannot run without external runtime libraries."
+    }
+  },
+  "state": {
+    "lock": {
+      "lock_error": {
+        "wait_for_other_commands_to_finish_then": "Wait for other commands to finish, then retry. If this persists, use --verbose to check the lock path and permissions. Do not remove an active lock.",
+        "ymb_s_operation_lock_is_busy_or": "YMB's operation lock is busy or unavailable."
+      }
+    },
+    "markers": {
+      "unwrap_marked": {
+        "tracked_marked_output_has_changed": "Tracked marked output has changed.",
+        "tracked_marker_footer_is_invalid": "Tracked marker footer is invalid.",
+        "tracked_marker_footer_is_missing": "Tracked marker footer is missing.",
+        "tracked_marker_header_is_incomplete": "Tracked marker header is incomplete.",
+        "tracked_marker_header_is_invalid": "Tracked marker header is invalid.",
+        "tracked_marker_headers_do_not_agree": "Tracked marker headers do not agree."
+      }
+    },
+    "mod": {
+      "checked_metadata": {
+        "recovery_metadata_exceeds_the_64_mib_limit": "Recovery metadata exceeds the 64 MiB limit.",
+        "reduce_the_selected_output_or_split_projects": "Reduce the selected output or split projects between builder folders."
+      },
+      "file_hash": {
+        "a_protected_target_is_not_a_regular": "A protected target is not a regular file."
+      },
+      "load": {
+        "cannot_read_recovery_manifest_e": "Cannot read recovery manifest: @E@",
+        "recovery_files_exist_but_manifest_json_is": "Recovery files exist but manifest.json is missing.",
+        "recovery_manifest_contains_invalid_or_duplicate_target": "Recovery manifest contains invalid or duplicate target records.",
+        "unsupported_recovery_state_format": "Unsupported recovery state format."
+      },
+      "original_backup": {
+        "original_backup_checksum_does_not_match": "Original backup checksum does not match.",
+        "original_backup_is_missing_for_arg0": "Original backup is missing for `@ARG0@`."
+      },
+      "recovery": {
+        "restore_the_named_data_from_a_trusted": "Restore the named data from a trusted backup before continuing; do not delete recovery records to bypass this check."
+      }
+    },
+    "recovery": {
+      "check_swaps": {
+        "an_unrelated_preview_appeared_while_rollback_was": "An unrelated preview appeared while rollback was pending.",
+        "interrupted_preview_metadata_is_invalid": "Interrupted preview metadata is invalid.",
+        "previous_preview_checksum_does_not_match_nothing": "Previous preview checksum does not match; nothing has been restored.",
+        "previous_preview_is_missing_or_damaged_nothing": "Previous preview is missing or damaged; nothing has been restored.",
+        "published_preview_changed_while_rollback_was_pending": "Published preview changed while rollback was pending."
+      },
+      "prepare_pending": {
+        "an_interrupted_operation_needs_recovery_this_preview": "An interrupted operation needs recovery. This preview has not changed any files; review and finish recovery with a non-preview command first."
+      },
+      "recover_legacy": {
+        "legacy_recovery_records_changed_no_files_have": "Legacy recovery records changed; no files have been restored.",
+        "legacy_recovery_state_snapshot_checksum_does_not": "Legacy recovery-state snapshot checksum does not match.",
+        "legacy_rollback_cannot_identify_later_edits_no": "Legacy rollback cannot identify later edits; no files have been restored. Keep a copy and restore the saved preimage before retrying.",
+        "legacy_rollback_snapshot_checksum_does_not_match": "Legacy rollback snapshot checksum does not match.",
+        "legacy_target_snapshot_name_is_invalid": "Legacy target snapshot name is invalid.",
+        "legacy_transaction_repeats_a_target": "Legacy transaction repeats a target."
+      },
+      "recover_pending": {
+        "invalid_interrupted_preview_path": "Invalid interrupted preview path.",
+        "transaction_has_no_format_version": "Transaction has no format version.",
+        "unsupported_transaction_version_version": "Unsupported transaction version @VERSION@."
+      },
+      "rollback": {
+        "configured_roots_differ_from_those_protected_by": "Configured roots differ from those protected by the interrupted operation.",
+        "interrupted_journal_has_an_invalid_snapshot_name": "Interrupted journal has an invalid snapshot name.",
+        "interrupted_journal_repeats_a_target": "Interrupted journal repeats a target.",
+        "invalid_protected_file_hashes": "Invalid protected-file hashes.",
+        "rollback_snapshot_is_missing_or_damaged_no": "Rollback snapshot is missing or damaged; no files have been restored.",
+        "the_file_changed_while_rollback_was_pending": "The file changed while rollback was pending; no files have been restored. Keep these edits and restore the expected file from a trusted backup before retrying."
+      },
+      "tree_hash": {
+        "legacy_snapshot_contains_a_link": "Legacy snapshot contains a link.",
+        "legacy_snapshot_contains_a_special_file": "Legacy snapshot contains a special file."
+      }
+    },
+    "transaction": {
+      "begin": {
+        "an_interrupted_operation_is_still_pending": "An interrupted operation is still pending."
+      },
+      "commit": {
+        "the_operation_committed_successfully_only_journal_cleanup": "The operation committed successfully; only journal cleanup remains."
+      },
+      "journal_path": {
+        "an_authored_state_journal_target_lies_outside": "An authored-state journal target lies outside a project config folder."
+      },
+      "protect": {
+        "a_protected_file_changed_outside_this_operation": "A protected file changed outside this operation.",
+        "a_protected_file_changed_while_its_preimage": "A protected file changed while its preimage was captured."
+      }
+    }
+  },
+  "store": {
+    "capture": {
+      "choose_a_file": "Choose a file.",
+      "input_changed_while_being_read": "Input changed while being read.",
+      "retry_after_its_writer_finishes": "Retry after its writer finishes."
+    },
+    "optional": {
+      "cache_storage_is_unavailable_continuing_without_the": "Cache storage is unavailable; continuing without the cached result."
+    },
+    "read": {
+      "a_staged_input_changed_during_this_operation": "A staged input changed during this operation.",
+      "retry_after_stopping_other_programs_that_edit": "Retry after stopping other programs that edit builder work files."
+    },
+    "text": {
+      "text_input_is_not_valid_utf_8": "Text input is not valid UTF-8.",
+      "use_a_binary_generator_for_binary_assets": "Use a binary generator for binary assets."
+    }
+  },
+  "ui": {
+    "banner": {
+      "yokaiste_s_mod_builder_arg0": "Yokaiste's Mod Builder @ARG0@"
+    },
+    "command": {
+      "input_matches_more_than_one_command": "'@INPUT@' matches more than one command.",
+      "no_command_matches_input": "No command matches '@INPUT@'.",
+      "type_a_listed_shortcut_or_command_name": "Type a listed shortcut or command name, or use help.",
+      "type_more_letters_arg0": "Type more letters: @ARG0@."
+    },
+    "confirm": {
+      "confirm_this_command": "Confirm this command",
+      "continue_y_n": "Continue [Y/N]"
+    },
+    "errors": {
+      "use_d_in_the_menu_or_verbose": "Use [D] in the menu or --verbose."
+    },
+    "findings": {
+      "errors": {
+        "one": "@COUNT@ error",
+        "other": "@COUNT@ errors"
+      },
+      "findings": "Findings",
+      "warnings": {
+        "one": "@COUNT@ warning",
+        "other": "@COUNT@ warnings"
+      }
+    },
+    "generators": {
+      "disabled": "Generator: @ID@ (disabled)",
+      "enabled": "Generator: @ID@"
+    },
+    "lines": {
+      "arg0_arg1_elapsed_arg2": "[@ARG0@/@ARG1@]  Elapsed @ARG2@"
+    },
+    "messages": {
+      "cause": "Cause",
+      "compare": "Compare",
+      "contributors": "Contributors",
+      "fix": "Fix",
+      "intentional": "Intentional",
+      "operation_arg0": "operation @ARG0@",
+      "review": "Review",
+      "text_count_occurrences": "@TEXT@ (@COUNT@ occurrences)"
+    },
+    "prompt": {
+      "run_a_command_with_arguments_or_open": "Run a command with arguments or open a terminal.",
+      "terminal_input_was_closed": "Terminal input was closed."
+    },
+    "report": {
+      "a_command_holds_the_operation_lock": "A command holds the operation lock",
+      "an_interrupted_operation_needs_recovery": "An interrupted operation needs recovery",
+      "archive": "Archive",
+      "arg0_files": "@ARG0@ files",
+      "arg0_files_arg1_tests_checks": "@ARG0@ files  ·  @ARG1@  ·  @TESTS@ checks",
+      "build_metrics": "Build metrics",
+      "build_work": "Build work",
+      "changed_files": {
+        "one": "@COUNT@ file",
+        "other": "@COUNT@ files"
+      },
+      "changes": "Changes",
+      "checks": "Checks",
+      "deploy": "Deploy",
+      "files_and_folders": "Files and folders",
+      "installation": "Installation",
+      "kept": "Kept",
+      "matches": "Matches",
+      "more_paths": {
+        "one": "@COUNT@ more path; use --verbose to see it.",
+        "other": "@COUNT@ more paths; use --verbose to see them all."
+      },
+      "no_pending_operation": "No pending operation",
+      "operation": "Operation",
+      "prepared": "Prepared",
+      "priority": "Priority",
+      "project": "Project",
+      "project_patches": {
+        "one": "@ID@  @NAME@ (@COUNT@ patch)",
+        "other": "@ID@  @NAME@ (@COUNT@ patches)"
+      },
+      "protected_paths": {
+        "one": "@COUNT@ protected path",
+        "other": "@COUNT@ protected paths"
+      },
+      "ready": "Ready",
+      "recovery": "Recovery",
+      "release": "Release",
+      "review_the_preview_then_run_sync_to": "Review the preview, then run sync to apply this selection to WARNO.",
+      "review_the_reported_issues_and_preview_before": "Review the reported issues and preview before running sync.",
+      "review_the_reported_issues_before_building_a": "Review the reported issues before building a preview.",
+      "review_the_reported_issues_before_running_generatemod": "Review the reported issues before running GenerateMod.bat.",
+      "run_build_to_save_a_preview_of": "Run build to save a preview of this selection.",
+      "run_generatemod_bat_then_enable_the_mod": "Run GenerateMod.bat, then enable the mod in WARNO.",
+      "skip": "SKIP",
+      "skipped_reason": "Skipped: @REASON@",
+      "unnamed": "(unnamed)",
+      "use": "USE ",
+      "use_d_in_the_menu_or_verbose": "Use [D] in the menu or --verbose for all affected targets."
+    }
+  }
+}

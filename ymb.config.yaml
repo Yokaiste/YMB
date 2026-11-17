@@ -1,0 +1,44 @@
+# Shared builder defaults. Uncomment only what you change.
+# Optional installation overrides belong in .ymb/config.yaml and merge over this file.
+version: 2
+
+# Paths are relative to the YMB folder; absolute paths also work.
+# paths:
+#   gameRoot: ..                        # WARNO mod folder containing GameData and CommonData.
+#   sourceMods: mods                    # Editable mod projects.
+#   workRoot: .ymb/build                # Previews and temporary execution files.
+#   cacheRoot: .ymb/cache               # Disposable cached inputs and results.
+#   recoveryRoot: .ymb/state            # Saved originals; keep until recovery is complete.
+#   operationLockRoot: .ymb/lock        # Prevents simultaneous commands.
+#   stateTransactionRoot: .ymb/transaction # Restores an interrupted operation.
+
+# Limits must be positive integers; null selects the automatic thread limit.
+# settings:
+#   workerThreads: null                # Available processors, bounded by work and memory.
+#   cacheMaxEntries: 512                # Total cached results.
+#   cacheMaxBytes: 1073741824           # Total cache size in bytes (1 GiB).
+#   generatorCacheMaxEntriesPerNamespace: 4 # Results kept per generator namespace.
+#   generatorCacheMaxBytesPerNamespace: 268435456 # Bytes per namespace (256 MiB).
+#   generatorTimeoutSeconds: 120        # Deadline for each generator or test.
+#   memoryBudgetMib: 512                # Worker budget and generator process limit.
+#   mergeMaxEstimatedDiffWork: 50000000 # Maximum changed-line comparisons.
+#   mergeMaxTextBytesPerSide: 4000000   # Changed text allowed on each merge side.
+#   mergeMaxTextBytesCombined: 6000000  # Total changed text allowed in a merge.
+
+# Shared variable overrides. Objects merge; lists replace.
+# variables: {}
+
+# Per-project overrides, keyed by the id in ymb.mod.yaml.
+# mods: {}
+# Under mods, add a project's id:
+#   my_mod:
+#     priority: null                    # Override project ordering when composing mods.
+#     allowWriteToModifiedFiles: null   # Explicit layering permission.
+#     allowUnsupportedYmb: null         # Exact YMB version accepted after an unsupported deploy choice.
+#     ignoreUnknownPatches: false        # Warn and retain stale patch overrides.
+#     enabled: null                     # null keeps the project's enabled setting.
+#     variables: {}                     # Overrides this project's variables.
+#     patches:                          # Patch overrides, keyed by patch id; empty by default.
+#       my_patch:
+#         enabled: null                 # null keeps the patch's enabled setting.
+#         variables: {}                 # Overrides this patch's variables.

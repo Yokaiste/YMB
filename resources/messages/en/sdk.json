@@ -1,0 +1,250 @@
+{
+  "checks": {
+    "assert_text_matches": {
+      "supply_a_valid_regular_expression": "Supply a valid regular expression."
+    }
+  },
+  "common": {
+    "shared": {
+      "correct_this_configuration_value": "Correct this configuration value.",
+      "expected_output_staging_path": "Expected output staging path."
+    }
+  },
+  "compiler": {
+    "sdk_workspace": {
+      "correct_the_sdk_workspace_manifest": "Correct the SDK workspace manifest."
+    },
+    "toolchain": {
+      "check": {
+        "the_compiler_or_host_standard_library_is": "The compiler or host standard library is missing."
+      },
+      "discover_for": {
+        "found_rust_arg0_need_minimum_or_newer": "Found Rust @ARG0@; need @MINIMUM@ or newer."
+      },
+      "load_manifest": {
+        "correct_the_generator_cargo_toml": "Correct the generator Cargo.toml."
+      },
+      "parse_version": {
+        "invalid_program_version_output": "Invalid @PROGRAM@ version output."
+      },
+      "project_requirement": {
+        "correct_package_rust_version": "Correct package.rust-version.",
+        "set_workspace_package_rust_version": "Set workspace.package.rust-version.",
+        "the_inherited_rust_version_is_missing_from": "The inherited Rust version is missing from workspace.package."
+      },
+      "required": {
+        "install_rust_to_continue_with_this_action": "Install Rust to continue with this action.",
+        "run_ymb_exe_install_rust_or_repeat": "Run YMB.exe install-rust, or repeat the command with --install-rust."
+      }
+    }
+  },
+  "context": {
+    "cache_key": {
+      "use_serializable_cache_key_inputs": "Use serializable cache-key inputs."
+    },
+    "cache_read": {
+      "expected_a_cached_payload": "Expected a cached payload."
+    },
+    "cache_write": {
+      "expected_a_cache_write_result": "Expected a cache-write result.",
+      "expected_cache_staging_path": "Expected cache staging path.",
+      "skipped_cache_write_arg0": "Skipped cache write: @ARG0@"
+    },
+    "notice": {
+      "expected_a_notice_acknowledgement": "Expected a notice acknowledgement."
+    },
+    "read_base_targets": {
+      "expected_base_target_payloads": "Expected base target payloads."
+    },
+    "read_binary_target": {
+      "expected_one_binary_payload": "Expected one binary payload."
+    },
+    "read_owned": {
+      "expected_an_owned_file_payload": "Expected an owned-file payload."
+    },
+    "read_target": {
+      "host_omitted_a_requested_target": "Host omitted a requested target."
+    },
+    "read_targets_with_hashes": {
+      "expected_target_payloads": "Expected target payloads.",
+      "fixture_is_not_utf_8": "Fixture is not UTF-8.",
+      "use_a_text_fixture": "Use a text fixture."
+    },
+    "resolve_owned": {
+      "expected_an_owned_file_path": "Expected an owned-file path."
+    },
+    "target_file": {
+      "expected_one_file_payload": "Expected one file payload.",
+      "input_payload_changed": "Input payload changed."
+    },
+    "value": {
+      "correct_the_value_s_type_in_configuration": "Correct the value's type in configuration.",
+      "define_it_in_the_owning_mod_project": "Define it in the owning mod project or patch.",
+      "missing_variable_name": "Missing variable `@NAME@`.",
+      "variable_name_e": "Variable `@NAME@`: @E@"
+    },
+    "write_cache_json": {
+      "rebuild_without_this_disposable_cache_entry": "Rebuild without this disposable cache entry."
+    },
+    "write_owned": {
+      "expected_owned_file_write_result": "Expected owned-file write result."
+    },
+    "write": {
+      "cache_entry_exceeds_its_byte_budget": "Cache entry exceeds its byte budget."
+    }
+  },
+  "distribution": {
+    "archive": {
+      "extract_builder": {
+        "the_builder_archive_contains_files_outside_ymb": "The builder archive contains files outside YMB.",
+        "the_builder_archive_must_contain_a_ymb": "The builder archive must contain a YMB folder."
+      },
+      "extract": {
+        "archive_contains_too_many_entries": "Archive contains too many entries.",
+        "archive_exceeds_the_extraction_limit": "Archive exceeds the extraction limit.",
+        "archive_file_directory_collision_relative": "Archive file/directory collision: @RELATIVE@.",
+        "archive_length_mismatch_relative": "Archive length mismatch: @RELATIVE@.",
+        "archive_size_overflow": "Archive size overflow.",
+        "extract_archives_into_an_empty_staging_folder": "Extract archives into an empty staging folder.",
+        "unsafe_or_duplicated_archive_entry_raw": "Unsafe or duplicated archive entry: @RAW@."
+      },
+      "zip_directory": {
+        "the_archive_must_be_outside_its_source": "The archive must be outside its source folder."
+      }
+    },
+    "builder": {
+      "build": {
+        "cargo_did_not_return_the_builder_executable": "Cargo did not return the builder executable."
+      },
+      "imports": {
+        "executable_has_no_dos_header": "Executable has no DOS header.",
+        "executable_has_no_pe_header": "Executable has no PE header.",
+        "invalid_pe_import_address": "Invalid PE import address.",
+        "invalid_pe_library_name": "Invalid PE library name.",
+        "release_is_not_a_64_bit_pe": "Release is not a 64-bit PE executable.",
+        "too_many_pe_imports": "Too many PE imports.",
+        "truncated_pe_header": "Truncated PE header.",
+        "truncated_pe_import": "Truncated PE import."
+      },
+      "stage": {
+        "unexpected_runtime_import_library": "Unexpected runtime import: @LIBRARY@"
+      }
+    },
+    "files": {
+      "execute": {
+        "command_failed_arg0": "Command failed: @ARG0@."
+      },
+      "with_work": {
+        "work_cleanup_also_failed_cleanup": "Work cleanup also failed: @CLEANUP@"
+      }
+    },
+    "manifest": {
+      "manifest": {
+        "package_metadata_exceeds_the_16_mib_read": "Package metadata exceeds the 16 MiB read limit."
+      },
+      "verify_archive": {
+        "download_checksum_failed_arg0": "Download checksum failed: @ARG0@."
+      },
+      "verify_manifest": {
+        "invalid_or_aliased_manifest_path_name": "Invalid or aliased manifest path: @NAME@.",
+        "package_checksum_failed_name": "Package checksum failed: @NAME@.",
+        "package_manifest_has_no_files": "Package manifest has no files."
+      },
+      "verify_package": {
+        "the_package_contains_files_outside_its_checksum": "The package contains files outside its checksum manifest."
+      }
+    },
+    "mod": {
+      "error": {
+        "keep_your_existing_installation_and_recovery_files": "Keep your existing installation and recovery files. Correct the reported problem and retry."
+      }
+    },
+    "notices": {
+      "notices_with_compiler": {
+        "arg0_has_no_bundled_license_text": "@ARG0@ has no bundled license text.",
+        "cargo_metadata_has_no_packages": "Cargo metadata has no packages.",
+        "qrcodegen_license_header_is_missing": "qrcodegen license header is missing.",
+        "qrcodegen_license_text_changed": "qrcodegen license text changed.",
+        "see_license_text": "See license text"
+      },
+      "templates": {
+        "file": "\n### @PATH@\n\n~~~text\n@TEXT@\n~~~\n",
+        "header": "# Third-party notices\n\nThis package includes the following dependencies and their license texts.\n",
+        "package": "\n## @NAME@ @VERSION@\n\nLicense: @LICENSE@\n\nSource: @SOURCE@\n",
+        "rust": "\n## Rust standard libraries\n\nBuilt with @VERSION@. See licenses/rust-standard-library.html for standard-library and bundled component notices.\n",
+        "source_license": "\n### src/lib.rs license header\n\n~~~text\n@HEADER@*/\n~~~\n"
+      }
+    },
+    "output": {
+      "with_dist": {
+        "another_build_or_release_is_preparing_this": "Another build or release is preparing this dist folder."
+      }
+    }
+  },
+  "lib": {
+    "call": {
+      "unexpected_host_reply_or_request_id": "Unexpected host reply or request id."
+    },
+    "read_payload": {
+      "input_payload_has_changed_or_is_incomplete": "Input payload has changed or is incomplete."
+    },
+    "read_text": {
+      "input_is_not_valid_utf_8": "Input is not valid UTF-8.",
+      "use_the_binary_reader_for_binary_assets": "Use the binary reader for binary assets."
+    },
+    "write_created": {
+      "expected_a_staging_path": "Expected a staging path."
+    }
+  },
+  "protocol": {
+    "check_protocol": {
+      "plugin_protocol_version_is_unsupported_expected_arg1": "Plugin protocol @VERSION@ is unsupported; expected @ARG1@."
+    },
+    "protocol_error": {
+      "use_a_compatible_generator_executable_and_keep": "Use a compatible generator executable and keep stdout reserved for the YMB protocol."
+    },
+    "read_frame": {
+      "invalid_protocol_frame_length": "Invalid protocol frame length."
+    },
+    "write_frame": {
+      "protocol_frame_exceeds_its_limit": "Protocol frame exceeds its limit."
+    }
+  },
+  "runtime": {
+    "run": {
+      "expected_a_host_handshake": "Expected a host handshake.",
+      "expected_an_execution_request": "Expected an execution request.",
+      "generator_panicked": "Generator panicked.",
+      "generator_returned_too_many_outputs": "Generator returned too many outputs.",
+      "read_stderr_and_fix_the_failed_generator": "Read stderr and fix the failed generator assumption.",
+      "register_the_companion_test_in_the_generator": "Register the companion test in the generator executable.",
+      "register_the_entry_in_the_generator_executable": "Register the entry in the generator executable.",
+      "test_execution_has_no_test_id": "Test execution has no test id.",
+      "unknown_generator_entry_entry": "Unknown generator entry `@ENTRY@`.",
+      "unknown_test_entry_name": "Unknown test entry `@NAME@`."
+    }
+  },
+  "values": {
+    "boolean": {
+      "label_must_be_true_or_false": "@LABEL@ must be true or false."
+    },
+    "one_of": {
+      "choose_a_supported_value": "Choose a supported value.",
+      "label_must_be_one_of_arg1": "@LABEL@ must be one of @ARG1@."
+    },
+    "positive_integer": {
+      "label_must_be_a_positive_integer_within": "@LABEL@ must be a positive integer within the supported numeric range.",
+      "supply_a_whole_number_between_1_and": "Supply a whole number between 1 and 18446744073709551615."
+    },
+    "record": {
+      "label_must_be_an_object": "@LABEL@ must be an object."
+    },
+    "string_array": {
+      "label_must_be_a_list": "@LABEL@ must be a list.",
+      "supply_a_list_of_strings": "Supply a list of strings."
+    },
+    "string": {
+      "label_must_be_text": "@LABEL@ must be text."
+    }
+  }
+}

@@ -1,0 +1,284 @@
+Yokaiste's Mod Builder (YMB)
+Custom Source-Available License
+Version 1.3
+
+Copyright 2026 Yokaiste
+
+1. Acceptance
+
+By downloading, installing, running, or otherwise Using YMB, you accept this
+license. If you do not accept it, you have no rights under it and must not Use
+YMB.
+
+2. Scope
+
+This license applies to the YMB project located in this directory, including
+its source code, scripts, configuration files, documentation, build logic, and
+bundled original assets, unless a different license file is included in a
+subdirectory.
+
+This license does not apply to third-party components distributed with YMB.
+Those are covered by Section 8.
+
+This license does not grant rights in third-party property that may be
+referenced by YMB, including WARNO, Eugen Systems content, store pages,
+platform services, or other third-party intellectual property. Those materials
+remain governed by their own terms.
+
+3. Definitions
+
+"YMB" means the project covered by this license.
+
+"Licensor" means Yokaiste, the copyright holder of YMB.
+
+"You" means the person or entity exercising rights under this license.
+
+"Use" means running, studying, testing, validating, previewing, internally
+copying, and otherwise using YMB only as reasonably necessary for its normal
+intended purpose.
+
+"Distribute" means to publish, share, upload, host, transmit, sublicense, sell,
+bundle, mirror, or otherwise make YMB available to any other person or entity,
+whether in source form, compiled form, modified form, or as part of another
+package, repository, installer, toolkit, image, template, or service.
+
+"Modify" means to edit, adapt, translate, extend, or otherwise change YMB, and
+"Modified Version" means the result.
+
+"Commercialize YMB" means to sell, resell, license for a fee, monetize access
+to, gate behind paid membership, include in paid support or service offerings,
+or otherwise derive commercial advantage from YMB itself.
+
+"Working source link" means a functioning URL or other public source location
+that reasonably identifies the canonical source for YMB and allows the source
+to be found without unusual effort.
+
+4. Limited Permission To Use
+
+You may Use YMB for its normal intended purpose without asking for permission.
+Permitted Use includes creating, building, validating, previewing, syncing, and
+recovering mods, including mods used in commercial projects.
+
+This license is source-available, not open source. Except as expressly stated
+in this license or required by applicable law, no right is granted to
+Distribute YMB or to Distribute a Modified Version.
+
+5. Private Modification
+
+You may Modify YMB for your own permitted Use, and you may Use the Modified
+Version on machines you control. You may also Modify YMB in order to prepare a
+submission under Section 10 and send that submission to the Licensor through
+the project's public channels.
+
+You may not Distribute a Modified Version, and you may not share it with any
+other person or entity, except as permitted by this section or by explicit
+prior written permission from the Licensor.
+
+6. Attribution For Mods Built Using YMB
+
+If you publish, Distribute, or otherwise make available a mod that was built
+using YMB during development, you must provide clear and reasonably visible
+attribution to YMB together with a Working source link to YMB.
+
+The attribution must appear in a place normally seen by users, downloaders, or
+reviewers of that mod, such as a workshop page, repository page, release page,
+installer page, project page, README, credits section, or similar
+public-facing location.
+
+No exact wording is required. Any truthful attribution that visibly identifies
+YMB and includes a Working source link is sufficient.
+
+This attribution requirement applies only to public or shared releases of the
+built mod and does not apply to purely private or internal use.
+
+7. Prohibited Without Explicit Written Permission
+
+Unless the Licensor gives explicit prior written permission, you may not:
+
+- Distribute YMB or a Modified Version
+- redistribute YMB as part of another package, installer, repository, mod, toolkit, template, container, or hosted service
+- publish, mirror, fork for public access, or repost YMB source code or a Modified Version
+- decompile, reverse engineer, or disassemble YMB, except to the extent that this restriction is unenforceable under applicable law, and then only to the extent that law allows
+- remove, obscure, or falsify copyright, notice, attribution, branding, or license information attached to YMB in any copy you Distribute or present to others
+- Commercialize YMB
+- sublicense, transfer, or assign any rights under this license
+- represent YMB or any Modified Version as official, endorsed, certified, or maintained by the Licensor
+
+8. Third-Party Components
+
+YMB is distributed together with third-party software that the Licensor does
+not own, including bundled libraries and, in some release archives, a bundled
+runtime.
+
+Each such component remains licensed under its own terms. The THIRD-PARTY-NOTICES
+file distributed with each release identifies those components and links to
+their terms. In a source checkout, the same terms are in the license files of
+the corresponding packages.
+
+Nothing in this license limits, alters, or purports to restrict any right that
+a third-party license grants you in a third-party component. Where this license
+and a third-party license conflict as to that component, the third-party
+license controls for that component. Your rights in YMB itself remain governed
+by this license.
+
+9. Ownership And Reservation Of Rights
+
+YMB is licensed, not sold. All rights not expressly granted by this license are
+reserved by the Licensor.
+
+10. Contributor Submissions
+
+Unless the Licensor agrees otherwise in writing, any contribution, patch, pull
+request, issue attachment, documentation update, test, asset, or other
+submission intentionally provided for inclusion in YMB is submitted on the
+basis that:
+
+- you represent that you have sufficient rights to submit it
+- you grant the Licensor a perpetual, worldwide, irrevocable, royalty-free, sublicensable right to use, reproduce, modify, adapt, distribute, and relicense that submission as part of YMB and related project maintenance
+- you grant the Licensor and recipients of YMB a perpetual, worldwide, irrevocable, royalty-free patent license for patent claims you own or control that are necessarily infringed by that submission as incorporated into YMB
+- you intend the submission to be governed for users and downstream recipients under the same license and project terms that apply to the version of YMB into which it is accepted
+
+The Licensor is not required to accept, publish, credit, or continue
+maintaining any submission.
+
+11. No Trademark Or Branding License
+
+This license does not grant any right to use the Licensor's name, project name,
+branding, logos, or community identity except for truthful factual attribution
+required or permitted by this license. You may not imply endorsement,
+sponsorship, or affiliation without explicit prior written permission.
+
+12. Patent License
+
+To the extent the Licensor can grant it, you receive a limited, worldwide,
+royalty-free, non-exclusive patent license for patent claims owned or
+controlled by the Licensor that are necessarily infringed by your permitted Use
+of YMB, including permitted private Modification under Section 5.
+
+No patent license is granted for Modified Versions you are not permitted to
+make, for combinations with other software or assets, or for any use beyond the
+permissions expressly granted by this license.
+
+13. Patent Defense
+
+If you make or direct a written patent claim alleging that YMB infringes or
+contributes to infringement of a patent, any patent license granted to you
+under this license ends immediately as of the date of that claim.
+
+14. Compliance With Other Terms
+
+You are responsible for complying with applicable law and with the terms that
+govern any game, modding platform, storefront, repository, hosting provider, or
+third-party material used with YMB.
+
+15. No Obligation To Support
+
+The Licensor has no obligation to provide support, updates, fixes, security
+patches, or continued availability of YMB, and may change or discontinue YMB at
+any time. Changes to YMB do not affect copies you already lawfully hold, which
+remain governed by the license version distributed with them.
+
+16. Termination, Cure, And Survival
+
+Any Use of YMB that violates this license automatically and immediately
+terminates the rights granted under it.
+
+If the violation is your first violation of this license, is capable of cure,
+and you receive written notice describing it, your rights are reinstated
+retroactively if you come into full compliance within 30 days after receiving
+that notice and take practical steps to correct past non-compliance.
+
+Otherwise, and in the case of repeated, uncured, intentional, or commercially
+exploitative violations, rights may be restored only by explicit written
+permission from the Licensor.
+
+Upon termination, you must stop Using YMB and destroy or remove all
+unauthorized copies in your possession or control unless continued retention is
+required by law.
+
+Sections 6, 8, 9, 10, 11, 13, 16, 17, 18, 19, 20, 21, and 24 survive
+termination.
+
+17. Enforcement
+
+You acknowledge that breach of this license may cause irreparable harm for
+which monetary damages may be inadequate, and that the Licensor may seek
+injunctive or other equitable relief to the maximum extent permitted by law.
+
+18. Disclaimer Of Warranty
+
+YMB is provided "as is" and "as available", without warranties or conditions of
+any kind, express, implied, or statutory, including merchantability, fitness
+for a particular purpose, title, non-infringement, accuracy, and quiet
+enjoyment. The Licensor does not warrant that YMB will be uninterrupted,
+error-free, or free of data loss.
+
+You are responsible for maintaining your own backups of any game files, mod
+sources, or other data you use with YMB.
+
+19. Limitation Of Liability
+
+To the maximum extent permitted by law, the Licensor is not liable for any
+claim, damages, losses, or other liability, whether in contract, tort,
+negligence, or otherwise, arising from or related to YMB or its use, including
+lost profits, lost data, corrupted or deleted game files, business
+interruption, or any indirect, incidental, special, consequential, exemplary,
+or punitive damages, even if advised of the possibility.
+
+To the maximum extent permitted by law, the Licensor's total aggregate
+liability arising from or related to YMB will not exceed the greater of the
+amount you paid the Licensor for YMB or fifty euros (EUR 50).
+
+20. Mandatory Rights Not Affected
+
+Nothing in this license excludes or limits any liability or right that cannot
+lawfully be excluded or limited, including liability for death or personal
+injury caused by negligence, for fraud or fraudulent misrepresentation, and any
+non-waivable rights you may have as a consumer. Sections 18 and 19 apply only
+to the extent permitted by the law that applies to you.
+
+21. Governing Law And Venue
+
+This license is governed by the laws of the jurisdiction in which the Licensor
+maintains their principal residence, without regard to its conflict-of-law
+rules, and excluding the United Nations Convention on Contracts for the
+International Sale of Goods.
+
+The courts of that jurisdiction have non-exclusive venue for disputes arising
+under this license. The Licensor may also seek relief, including injunctive
+relief, in any jurisdiction where a violation occurs or where infringing copies
+are made available.
+
+This section does not deprive you of the protection of mandatory provisions of
+the law of your country of residence, and does not override any mandatory
+consumer forum rights you may have.
+
+22. License Versions
+
+The Licensor may publish new versions of this license for new releases of YMB.
+Each copy of YMB is governed by the license version distributed with that copy.
+A later version does not retroactively change the terms of a copy you already
+lawfully hold.
+
+23. Notices
+
+Requests for explicit written permission, and notices under Section 16, should
+be sent to the Licensor through the project's public channels:
+
+  Source:    https://github.com/Yokaiste/YMB
+  Community: https://discord.gg/33Sqn6dTjf
+
+Permission is granted only when the Licensor states it in writing. Silence, a
+lack of response, or non-enforcement is not permission.
+
+24. Entire Agreement, Severability, And No Waiver
+
+This license, together with the notices it references, is the entire agreement
+between you and the Licensor about YMB, and replaces any earlier understanding
+about it. It may be varied only by explicit written permission from the
+Licensor.
+
+If any provision of this license is held unenforceable, it is modified to the
+minimum extent necessary to make it enforceable, or severed if it cannot be,
+and the remaining provisions remain in full effect. Failure to enforce any
+provision is not a waiver of future enforcement.

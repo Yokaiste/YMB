@@ -1,0 +1,90 @@
+# Project settings. Keep ids and localisation tokens stable after sharing the mod.
+# Full reference: YMB/docs/references/configuration.md
+
+# Configuration format, not your mod's release version.
+version: @FORMAT@
+# Permanent id used by --mod, ownership markers, and dependencies.
+id: @ID@
+# Display name and welcome-screen title; safe to rename.
+name: @NAME@
+# Display description and welcome-screen tooltip.
+description: @DESCRIPTION@
+# Compatible YMB versions. Quote semantic version ranges.
+requires: @REQUIRES@
+# Include this project in ordinary builds. Release still packages all its features.
+enabled: true
+# Required installed project ids, applied before this project. These do not download mods.
+dependsOn: []
+# Higher priorities run later among otherwise independent projects.
+priority: 0
+# Allow this project to edit files already changed by another selected project.
+allowWriteToModifiedFiles: false
+
+# Packaging settings. These do not change gameplay.
+release:
+  # Your mod's semantic version, independent of the configuration format.
+  version: @RELEASE_VERSION@
+  # Direct HTTPS link to your latest config archive, on any file host.
+  # A deploy EXE is included only when a compatible Rust toolchain is available.
+  # url: https://host.example/mod-config.zip
+  # Extra files or folders, relative to the enclosing mod project folder.
+  # The config directory and its .ymb storage are always included; dist is omitted.
+  include: []
+  # include: [LICENSE, NOTICE]
+  # GitHub publishing defaults live in ../.github/release.json. Override any here.
+  # title: "{{version}}"
+  # description: "{{modName}}\n\n{{modDescription}}\n\n{{instructions}}\n\n{{checksums}}"
+  # assets: ['*-config.zip', 'Deploy-*.exe', THIRD_PARTY_NOTICES.md, rust-standard-library.html]
+  # draft: false
+  # generateNotes: false
+  # discussionCategory: ''
+  # managedTags: '^(?:stable|preview)$'
+  # branches:
+  #   - { name: master, tag: stable, prerelease: false, latest: true }
+  #   - { name: dev, tag: preview, prerelease: true, latest: false }
+
+# Download dependencies for the deploy installer. Missing/false required prompts;
+# --yes skips optional dependencies unless selected with --with NAME.
+dependencies: []
+# dependencies:
+#   - url: https://host.example/another-mod-config.zip
+#     required: false
+#     reason: Adds optional content for this mod.
+
+# Shared project variables; objects merge, arrays replace. Refer to ${variableName}.
+# Installation overrides belong in YMB/.ymb/config.yaml, not this shared file.
+variables:
+  titleToken: @TITLE@
+  detailToken: @DETAIL@
+
+# Read baseline NDF scalars into named variables before applying this project.
+readValues: {}
+# readValues:
+#   originalHealth:
+#     file: GameData/Generated/Gameplay/TacticalUnits.ndf
+#     path: Descriptor_Unit_M1A1_Abrams_US.ModulesDescriptors.[TBaseDamageModuleDescriptor].MaxPhysicalDamages
+
+# Optional generators shared by the project. Empty keeps this example Rust-free.
+generators: []
+# generators:
+#   - id: example                 # Stable generator id.
+#     enabled: true               # Run during normal builds when enabled.
+#     root: owner                 # owner = this config's folder; mod = config/.
+#     project: generator/Cargo.toml # Source manifest, rebuilt when needed.
+#     binary: example             # Cargo binary target; needed for multiple bins.
+#     executable: tools/example.exe # Optional authored executable. Source builds use .ymb/g automatically.
+#     entry: example              # Registered entry; defaults to id.
+#     tests:
+#       - smoke                   # Short form runs before generation.
+#       - id: output_checks       # Registered companion test id.
+#         when: after             # before or after generation.
+
+# Reserved variables modPersistentRoot and modSessionRoot expose YMB's storage paths.
+# Prefer the SDK persistent helpers for generated identities and cache helpers for temporary data.
+
+# Additional disposable project paths removed by cleanup. Mod .ymb storage is retained.
+tempPaths: []
+# tempPaths:
+#   - scratch
+#   - path: retained-download
+#     unsafeToRemove: true        # Report this path but protect it from cleanup.

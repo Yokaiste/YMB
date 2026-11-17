@@ -1,0 +1,13 @@
+{
+  "title": "{{version}}",
+  "description": "Extract the ZIP into a WARNO mod folder beside GameData and CommonData. Open YMB/YMB.exe, select or create a project, then build and sync. Run GenerateMod.bat and enable the mod in WARNO.\n\nSee the [documentation](https://github.com/Yokaiste/YMB/blob/master/docs/README.md) for setup and customization. Read the included LICENSE, NOTICE, and third-party licenses before sharing. Ask the [YSM Community](https://discord.gg/33Sqn6dTjf) for help.\n\n{{checksums}}",
+  "assets": ["YMB-*-windows-x64.zip"],
+  "draft": false,
+  "generateNotes": false,
+  "discussionCategory": "",
+  "managedTags": "^[0-9]+\\.[0-9]+\\.X(?:-pre)?$",
+  "branches": [
+    { "name": "master", "tag": "{{major}}.{{minor}}.X", "prerelease": false, "latest": true },
+    { "pattern": "^(?<version>(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*))(?<preview>-pre.*)?$", "tag": "{{major}}.{{minor}}.X{{previewSuffix}}", "prerelease": "auto", "latest": "auto" }
+  ]
+}

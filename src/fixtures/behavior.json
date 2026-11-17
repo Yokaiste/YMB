@@ -1,0 +1,1291 @@
+[
+  {
+    "name": "field-0",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 0
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 0\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-1",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 1
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 1\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-2",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 2
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 2\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-3",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 3
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 3\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-4",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 4
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 4\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-5",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 5
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 5\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-6",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 6
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 6\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-7",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 7
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 7\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-8",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 8
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 8\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-9",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 9
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 9\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-10",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 10
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-11",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 11
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 11\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-12",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 12
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 12\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-13",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 13
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 13\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-14",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 14
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 14\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-15",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 15
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 15\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-16",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 16
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 16\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-17",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 17
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 17\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-18",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 18
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 18\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-19",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 19
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 19\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-null",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": null
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = Nil\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-true",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": true
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = True\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-false",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": false
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = False\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-1.25",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": 1.25
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 1.25\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-\"Word\"",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": "Word"
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = Word\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-\"two words\"",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": "two words"
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 'two words'\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-{\"$string\":\"Word\"}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": {
+          "$string": "Word"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = 'Word'\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "typed-{\"$raw\":\"~/Thing\"}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        },
+        "value": {
+          "$raw": "~/Thing"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-MODIFY-START {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    HP = ~/Thing\n    // YMB-MODIFY-END {\"id\":\"5f9b5bd21529\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "object-{\"HP\":11}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        },
+        "changes": {
+          "HP": 11
+        }
+      }
+    ],
+    "expected": "// YMB-MODIFY-START {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// export A is T\n// (\n//     HP = 10\n//     Ratio = 2.0\n//     Label = 'Alpha'\n//     DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Other = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Items = [~/One, ~/Two]\n//     Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n//     Child = C\n//     (\n//         HP = 3\n//     )\n// )\nexport A is T\n(\n    HP = 11\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-MODIFY-END {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "object-{\"Added\":17}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        },
+        "changes": {
+          "Added": 17
+        }
+      }
+    ],
+    "expected": "// YMB-MODIFY-START {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// export A is T\n// (\n//     HP = 10\n//     Ratio = 2.0\n//     Label = 'Alpha'\n//     DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Other = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Items = [~/One, ~/Two]\n//     Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n//     Child = C\n//     (\n//         HP = 3\n//     )\n// )\nexport A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n    Added = 17\n)\n// YMB-MODIFY-END {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "object-{\"Label\":{\"$string\":\"Beta\"}}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        },
+        "changes": {
+          "Label": {
+            "$string": "Beta"
+          }
+        }
+      }
+    ],
+    "expected": "// YMB-MODIFY-START {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// export A is T\n// (\n//     HP = 10\n//     Ratio = 2.0\n//     Label = 'Alpha'\n//     DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Other = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Items = [~/One, ~/Two]\n//     Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n//     Child = C\n//     (\n//         HP = 3\n//     )\n// )\nexport A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Beta'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-MODIFY-END {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "object-{\"HP\":10,\"Added\":3}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        },
+        "changes": {
+          "HP": 10,
+          "Added": 3
+        }
+      }
+    ],
+    "expected": "// YMB-MODIFY-START {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// export A is T\n// (\n//     HP = 10\n//     Ratio = 2.0\n//     Label = 'Alpha'\n//     DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Other = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Items = [~/One, ~/Two]\n//     Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n//     Child = C\n//     (\n//         HP = 3\n//     )\n// )\nexport A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n    Added = 3\n)\n// YMB-MODIFY-END {\"id\":\"a68c01162dd9\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "nested-field",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.Child.HP"
+        },
+        "value": 9
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        // YMB-MODIFY-START {\"id\":\"7f7c4b792954\",\"patchId\":\"main\"}\n        // YMB-ORIGINAL\n        //         HP = 3\n        HP = 9\n        // YMB-MODIFY-END {\"id\":\"7f7c4b792954\",\"patchId\":\"main\"}\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "matching-object",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "object",
+          "by": "match",
+          "where": {
+            "HP": 10
+          }
+        },
+        "changes": {
+          "HP": 12
+        }
+      }
+    ],
+    "expected": "// YMB-MODIFY-START {\"id\":\"f20c8750ac26\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// export A is T\n// (\n//     HP = 10\n//     Ratio = 2.0\n//     Label = 'Alpha'\n//     DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Other = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Items = [~/One, ~/Two]\n//     Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n//     Child = C\n//     (\n//         HP = 3\n//     )\n// )\nexport A is T\n(\n    HP = 12\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-MODIFY-END {\"id\":\"f20c8750ac26\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "collection-start",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "selector": {
+          "kind": "collection",
+          "by": "path",
+          "value": "A.Items"
+        },
+        "value": {
+          "$raw": "~/Three"
+        },
+        "position": {
+          "mode": "start"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [\n    // YMB-ADD-START {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ~/Three,\n    // YMB-ADD-END {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "collection-end",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "selector": {
+          "kind": "collection",
+          "by": "path",
+          "value": "A.Items"
+        },
+        "value": {
+          "$raw": "~/Three"
+        },
+        "position": {
+          "mode": "end"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two,\n    // YMB-ADD-START {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ~/Three,\n    // YMB-ADD-END {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "collection-before",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "selector": {
+          "kind": "collection",
+          "by": "path",
+          "value": "A.Items"
+        },
+        "value": {
+          "$raw": "~/Three"
+        },
+        "position": {
+          "mode": "before",
+          "anchor": "~/One"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [\n    // YMB-ADD-START {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ~/Three,\n    // YMB-ADD-END {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "collection-after",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "selector": {
+          "kind": "collection",
+          "by": "path",
+          "value": "A.Items"
+        },
+        "value": {
+          "$raw": "~/Three"
+        },
+        "position": {
+          "mode": "after",
+          "anchor": "~/One"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One,\n    // YMB-ADD-START {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n    ~/Three,\n    // YMB-ADD-END {\"id\":\"42a18a635aa4\",\"patchId\":\"main\"}\n ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "field-add",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.NewField"
+        },
+        "value": 42
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n    // YMB-ADD-START {\"id\":\"bc8908aead94\",\"patchId\":\"main\"}\n    NewField = 42\n    // YMB-ADD-END {\"id\":\"bc8908aead94\",\"patchId\":\"main\"}\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "top-add-C is T(HP = 8)",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "value": {
+          "$raw": "C is T(HP = 8)"
+        },
+        "position": {
+          "mode": "before",
+          "anchor": "B"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-ADD-START {\"id\":\"f4b8c65e5524\",\"patchId\":\"main\"}\nC is T(HP = 8)\n// YMB-ADD-END {\"id\":\"f4b8c65e5524\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "top-add-C is T(HP = 8)\nD is T(HP = 9)",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "value": {
+          "$raw": "C is T(HP = 8)\nD is T(HP = 9)"
+        },
+        "position": {
+          "mode": "before",
+          "anchor": "B"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-ADD-START {\"id\":\"f4b8c65e5524\",\"patchId\":\"main\"}\nC is T(HP = 8)\nD is T(HP = 9)\n// YMB-ADD-END {\"id\":\"f4b8c65e5524\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "copy-true",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "copy",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        },
+        "destination": {
+          "name": "Copy"
+        },
+        "reidentify": true
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n// YMB-COPY-START {\"id\":\"72d8b1ef83d4\",\"patchId\":\"main\"}\nexport Copy is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{1ab9f04b-cece-84a0-953e-e71f60100766}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-COPY-END {\"id\":\"72d8b1ef83d4\",\"patchId\":\"main\"}\n"
+  },
+  {
+    "name": "copy-false",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "copy",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        },
+        "destination": {
+          "name": "Copy"
+        },
+        "reidentify": false
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n// YMB-COPY-START {\"id\":\"72d8b1ef83d4\",\"patchId\":\"main\"}\nexport Copy is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-COPY-END {\"id\":\"72d8b1ef83d4\",\"patchId\":\"main\"}\n"
+  },
+  {
+    "name": "remove-A",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "remove",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "A"
+        }
+      }
+    ],
+    "expected": "// YMB-REMOVE-START {\"id\":\"1f98e0296d47\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// export A is T\n// (\n//     HP = 10\n//     Ratio = 2.0\n//     Label = 'Alpha'\n//     DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Other = GUID:{12345678-1234-1234-1234-123456789abc}\n//     Items = [~/One, ~/Two]\n//     Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n//     Child = C\n//     (\n//         HP = 3\n//     )\n// )\n// YMB-REMOVE-END {\"id\":\"1f98e0296d47\",\"patchId\":\"main\"}\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "remove-B",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "remove",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "B"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\n// YMB-REMOVE-START {\"id\":\"4e2309e162fb\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// B is T\n// (\n//     HP = 5\n// )\n// YMB-REMOVE-END {\"id\":\"4e2309e162fb\",\"patchId\":\"main\"}\n"
+  },
+  {
+    "name": "remove-Missing",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "remove",
+        "selector": {
+          "kind": "object",
+          "by": "name",
+          "value": "Missing"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "remove-field-A.HP",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "remove",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.HP"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    // YMB-REMOVE-START {\"id\":\"10a3688d6a1e\",\"patchId\":\"main\"}\n    // YMB-ORIGINAL\n    //     HP = 10\n    // YMB-REMOVE-END {\"id\":\"10a3688d6a1e\",\"patchId\":\"main\"}\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "remove-field-A.Child.HP",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "remove",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.Child.HP"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        // YMB-REMOVE-START {\"id\":\"8d226f31108b\",\"patchId\":\"main\"}\n        // YMB-ORIGINAL\n        //         HP = 3\n        // YMB-REMOVE-END {\"id\":\"8d226f31108b\",\"patchId\":\"main\"}\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "remove-field-A.Items.[value=~/One]",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "remove",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.Items.[value=~/One]"
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [\n// YMB-REMOVE-START {\"id\":\"bd3880bd29a8\",\"patchId\":\"main\"}\n// YMB-ORIGINAL\n// ~/One\n// YMB-REMOVE-END {\"id\":\"bd3880bd29a8\",\"patchId\":\"main\"}\n~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "condition-equals",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "equals",
+              "value": "T"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 1.5
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 5\n    )\n)\nB is T\n(\n    HP = 8\n)\n"
+  },
+  {
+    "name": "condition-notEquals",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "notEquals",
+              "value": "C"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 1.5
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 5\n    )\n)\nB is T\n(\n    HP = 8\n)\n"
+  },
+  {
+    "name": "condition-startsWith",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "startsWith",
+              "value": "T"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 1.5
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 5\n    )\n)\nB is T\n(\n    HP = 8\n)\n"
+  },
+  {
+    "name": "condition-endsWith",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "endsWith",
+              "value": "T"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 1.5
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 5\n    )\n)\nB is T\n(\n    HP = 8\n)\n"
+  },
+  {
+    "name": "condition-contains",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "contains",
+              "value": "T"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 1.5
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 5\n    )\n)\nB is T\n(\n    HP = 8\n)\n"
+  },
+  {
+    "name": "condition-notContains",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "notContains",
+              "value": "C"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 1.5
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 5\n    )\n)\nB is T\n(\n    HP = 8\n)\n"
+  },
+  {
+    "name": "field-equality",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "field",
+              "field": "Label",
+              "is": "equals",
+              "value": "Alpha"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "set": 15
+          }
+        ]
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 15\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "missing-notContains",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "field",
+              "field": "Absent",
+              "is": "notContains",
+              "value": "x"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "set": 15
+          }
+        ],
+        "expect": {
+          "minBlocks": 2
+        }
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 15\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 15\n    )\n)\nB is T\n(\n    HP = 15\n)\n"
+  },
+  {
+    "name": "map",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "name",
+              "is": "equals",
+              "value": "A"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "mapEntry": "Vision/Standard",
+            "multiply": 2
+          }
+        ]
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 10), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "list-{\"list\":\"Items\",\"insert\":{\"value\":{\"$raw\":\"~/Three\"},\"position\":\"start\"}}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "name",
+              "is": "equals",
+              "value": "A"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "list": "Items",
+            "insert": {
+              "value": {
+                "$raw": "~/Three"
+              },
+              "position": "start"
+            }
+          }
+        ]
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/Three,\n    ~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "list-{\"list\":\"Items\",\"insert\":{\"value\":{\"$raw\":\"~/Three\"},\"position\":\"end\"}}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "name",
+              "is": "equals",
+              "value": "A"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "list": "Items",
+            "insert": {
+              "value": {
+                "$raw": "~/Three"
+              },
+              "position": "end"
+            }
+          }
+        ]
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two,\n    ~/Three,]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "list-{\"list\":\"Items\",\"removeEntry\":\"~/One\"}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "name",
+              "is": "equals",
+              "value": "A"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "list": "Items",
+            "removeEntry": "~/One"
+          }
+        ]
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [ ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "list-{\"list\":\"Items\",\"setEntry\":{\"index\":-1,\"value\":{\"$raw\":\"~/Three\"}}}",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "name",
+              "is": "equals",
+              "value": "A"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "list": "Items",
+            "setEntry": {
+              "index": -1,
+              "value": {
+                "$raw": "~/Three"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Three]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "recursive",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "type",
+              "is": "equals",
+              "value": "C"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "multiply": 2
+          }
+        ],
+        "recursive": true
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 6\n    )\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "overlap",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "bulk",
+        "match": {
+          "mode": "all",
+          "conditions": [
+            {
+              "on": "name",
+              "is": "equals",
+              "value": "A"
+            }
+          ]
+        },
+        "edits": [
+          {
+            "field": "HP",
+            "set": 11
+          },
+          {
+            "field": "HP",
+            "set": 12
+          }
+        ]
+      }
+    ],
+    "error": "Two edits in this bulk operation write over the same text in one matched block."
+  },
+  {
+    "name": "missing-field",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "modify",
+        "selector": {
+          "kind": "field",
+          "by": "path",
+          "value": "A.Missing"
+        },
+        "value": 7
+      }
+    ],
+    "expected": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n    // YMB-MODIFY-START {\"id\":\"0a62a8469f8d\",\"patchId\":\"main\"}\n    Missing = 7\n    // YMB-MODIFY-END {\"id\":\"0a62a8469f8d\",\"patchId\":\"main\"}\n)\nB is T\n(\n    HP = 5\n)\n"
+  },
+  {
+    "name": "duplicate-name",
+    "source": "export A is T\n(\n    HP = 10\n    Ratio = 2.0\n    Label = 'Alpha'\n    DescriptorId = GUID:{12345678-1234-1234-1234-123456789abc}\n    Other = GUID:{12345678-1234-1234-1234-123456789abc}\n    Items = [~/One, ~/Two]\n    Values = MAP[(Vision/Standard, 5), (Vision/Other, 7)]\n    Child = C\n    (\n        HP = 3\n    )\n)\nB is T\n(\n    HP = 5\n)\n",
+    "operations": [
+      {
+        "op": "add",
+        "value": {
+          "$raw": "A is T(HP = 8)"
+        }
+      }
+    ],
+    "error": "Top-level block `A` already exists in this file."
+  }
+]

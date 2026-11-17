@@ -1,0 +1,148 @@
+{
+  "bootstrap": {
+    "no_executable": "Cargo did not return the development executable.",
+    "cannot_start": "Cannot start YMB development: @ERROR@"
+  },
+  "common": {
+    "shared": {
+      "output": "Output"
+    }
+  },
+  "dev": {
+    "child_error": {
+      "label_failed_with_exit_code_code": "@LABEL@ failed with exit code @CODE@."
+    },
+    "execute": {
+      "arg0_could_not_run_arg1": "@ARG0@ could not run: @ARG1@"
+    },
+    "finish": {
+      "elapsed": "Elapsed"
+    },
+    "help": {
+      "build_saves_only_dist_ymb_exe_release": "Build saves only dist/YMB.exe. Release replaces dist with a verified portable archive.",
+      "clean_requires_confirmation_use_yes_in_scripts": "Clean requires confirmation. Enter Y or yes at the prompt, or use -Yes in scripts.",
+      "development_commands": "Development commands",
+      "development_commands_operate_on_ymb_itself_manage": "Development commands operate on YMB itself. Manage mod projects with YMB.",
+      "message_codes_docs_references_message_codes_md": "Message codes: docs/references/message-codes.md.",
+      "shortcuts_take_priority_ignoring_case_use_bu": "Shortcuts take priority, ignoring case. Use bu for build.",
+      "update_runs_engine_deps_check_use_pull": "Update runs engine > deps > check. Use pull for Git. Nothing is published."
+    },
+    "invoke": {
+      "clean_cancelled_no_work_started": "clean cancelled. No work started.",
+      "clean_needs_yes_in_a_noninteractive_session": "clean needs -Yes in a noninteractive session.",
+      "keep_settings_authored_projects_and_saved_originals": "Keep settings, authored projects and saved originals.",
+      "name_completed": "@NAME@ completed.",
+      "remove_builder_compiler_caches": "Remove builder compiler caches.",
+      "remove_generated_work_previews_executables_and_release": "Remove generated work, previews, executables and release packages.",
+      "review_the_cleanup_command_then_repeat_with": "Review the cleanup command, then repeat with -Yes.",
+      "run_clean_again_when_ready": "Run clean again when ready."
+    },
+    "menu": {
+      "build": "Build",
+      "check": "Check",
+      "folder": "Folder",
+      "maintain": "Maintain",
+      "release": "Release",
+      "ymb_development": "YMB development"
+    },
+    "parse": {
+      "development_commands_must_be_unicode": "Development commands must be Unicode.",
+      "use_a_listed_development_command": "Use a listed development command."
+    },
+    "plan": {
+      "apply_clippy_fixes": "Apply Clippy fixes",
+      "build_ymb_exe": "Build YMB.exe",
+      "check_development_frontend": "Check development frontend",
+      "check_types": "Check types",
+      "format_source": "Format source",
+      "open_ymb": "Open YMB",
+      "prepare_ymb_release_archive": "Prepare YMB release archive",
+      "pull_checkout": "Pull checkout",
+      "remove_compiler_caches": "Remove compiler caches",
+      "remove_generated_files": "Remove generated files",
+      "run_clippy": "Run Clippy",
+      "run_tests": "Run tests",
+      "update_dependencies": "Update dependencies",
+      "update_rust": "Update Rust",
+      "verify_ymb_release": "Verify YMB release"
+    },
+    "run": {
+      "command": "Command",
+      "development_name": "Development / @NAME@",
+      "press_enter_to_return": "Press Enter to return"
+    },
+    "shared": {
+      "build_only_the_optimized_dist_ymb_exe": "Build only the optimized dist/YMB.exe",
+      "cargo_xtask_clean_cargo_clean": "cargo xtask clean > cargo clean",
+      "check_rust_types_in_the_builder": "Check Rust types in the builder",
+      "close_this_menu": "Close this menu",
+      "engine_deps_check": "engine > deps > check",
+      "format_cargo_clippy_fix": "format > cargo clippy --fix",
+      "format_rust_source": "Format Rust source",
+      "open_the_ymb_menu_from_source": "Open the YMB menu from source",
+      "prepare_and_verify_the_full_ymb_archive": "Prepare and verify the full YMB archive in dist",
+      "pull_this_checkout_with_git_pull_ff": "Pull this checkout with git pull --ff-only",
+      "read_the_development_command_guide": "Read the development command guide",
+      "run_builder_tests": "Run builder tests",
+      "run_clippy_with_warnings_treated_as_errors": "Run Clippy with warnings treated as errors",
+      "update_cargo_dependencies_within_their_constraints": "Update Cargo dependencies within their constraints",
+      "update_the_stable_rust_compiler_and_tools": "Update the stable Rust compiler and tools",
+      "verify_the_portable_builder_archive": "Verify the portable builder archive"
+    }
+  },
+  "inspect": {
+    "scan": {
+      "missing_data_folder": "Scan needs a WARNO mod folder containing both GameData and CommonData. Pass that folder to cargo xtask scan.",
+      "real_folder_ndf_scan_failed": "Real-folder NDF scan failed."
+    }
+  },
+  "main": {
+    "clean": {
+      "a_builder_operation_is_active_or_interrupted": "A builder operation is active or interrupted. Finish it with YMB before cleaning development output.",
+      "development_cleanup_would_remove_protected_data_at": "Development cleanup would remove protected data at @ARG0@."
+    },
+    "error": {
+      "fix_the_failed_check_and_retry": "Fix the failed check and retry."
+    },
+    "run": {
+      "bench_needs_an_ndf_file": "bench needs an NDF file.",
+      "built_dist_arg0": "Built dist/@ARG0@",
+      "cargo_xtask_build_release_verify_release_clean": "cargo xtask build | release | verify-release | clean | scan <mod-folder> | bench <ndf-file>\nRun Dev.bat for the development menu.",
+      "removed_work_caches_packages_and_copied_executables": "Removed work, caches, packages and copied executables. Settings and recovery data are retained; Dev.bat also removes compiler output.",
+      "scan_needs_a_warno_mod_folder": "scan needs a WARNO mod folder.",
+      "unexpected_arguments": "Unexpected arguments. Run cargo xtask help for supported commands.",
+      "unknown_command_command_run_cargo_xtask_help": "Unknown command '@COMMAND@'. Run cargo xtask help."
+    },
+    "with_distribution": {
+      "distribution_output_would_overwrite_configured_data_at": "Distribution output would overwrite configured data at @ARG0@."
+    }
+  },
+  "package": {
+    "package": {
+      "packaged_arg0_arg1_bytes": "Packaged @ARG0@ (@ARG1@ bytes)"
+    }
+  },
+  "verify": {
+    "verify_release": {
+      "verbose_json_progress": "Verbose JSON builds must keep stdout structured and report plain stages and targets on stderr.",
+      "an_external_caller_s_working_directory_must": "An external caller's working directory must not change the executable's installation root.",
+      "archive_checksum_does_not_match": "Archive checksum does not match.",
+      "missing_resources": "The release archive omitted or changed a resource file.",
+      "missing_rust_must_return_e38_without_prompts": "Missing Rust must return E38 without prompts, stderr, or preview changes.",
+      "missing_starter_workflow": "Portable init must include the starter's GitHub release workflow and scripts.",
+      "portable_command_failed": "Portable command failed.",
+      "portable_json_command_failed_or_wrote_unexpected": "Portable JSON command failed or wrote unexpected stderr.",
+      "portable_recovery_did_not_restore_exact_bytes": "Portable recovery did not restore exact bytes.",
+      "portable_version_differs_from_the_root_manifest": "Portable version differs from the root manifest.",
+      "release_contains_obsolete_runtime_files": "Release contains obsolete runtime files.",
+      "release_must_keep_the_executable_sdk_and": "Release must keep the executable, SDK, and commented defaults outside disposable installation data.",
+      "release_tree_file_was_changed_or_omitted": "Release tree file was changed or omitted: @ARG0@",
+      "removing_ymb_must_leave_the_installed_executable": "Removing .ymb must leave the installed executable and SDK usable.",
+      "template_edit_ignored": "Portable init must copy the current example files.",
+      "the_executable_lost_its_json_output_or": "The executable lost its JSON output or exit code.",
+      "the_release_archive_must_contain_its_ymb": "The release archive must contain its YMB folder.",
+      "unknown_filters_must_fail_and_preserve_the": "Unknown filters must fail and preserve the previous preview.",
+      "verified_executable_cli_json_checksums_static_imports": "Verified executable CLI/JSON, checksums, static imports, Unicode paths, sync/recovery, unknown filters, missing Rust, preserved previews, and a complete installation-data reset."
+    }
+  }
+}
