@@ -1,0 +1,425 @@
+{
+  "common": {
+    "shared": {
+      "removal_target_is_already_absent": "Removal target is already absent."
+    }
+  },
+  "diagnostic": {
+    "group": {
+      "arg0_independent_errors": "@ARG0@ independent errors.",
+      "fix_the_listed_inputs_and_retry": "Fix the listed inputs and retry."
+    },
+    "io": {
+      "check_the_path_permissions_and_available_disk": "Check the path, permissions, and available disk space."
+    }
+  },
+  "generated": {
+    "error": {
+      "keep_stable_generated_block_owners_and_preserve": "Keep stable generated block owners and preserve other contributors' regions."
+    },
+    "markers": {
+      "a_generated_block_needs_a_nonempty_single": "A generated block needs a nonempty single-line owner id."
+    },
+    "merge": {
+      "a_generated_region_insertion_overlaps_another_contributor": "A generated-region insertion overlaps another contributor's text change.",
+      "contributors_change_the_same_generated_block_id": "Contributors change the same generated block '@ID@'.",
+      "generated_region_edits_overlap": "Generated region edits overlap.",
+      "output_changes_generated_block_id_owned_by": "Output changes generated block '@ID@' owned by another contributor."
+    },
+    "regions": {
+      "generated_block_end_has_no_matching_start": "Generated block end has no matching start.",
+      "generated_block_ids_must_be_unique_and": "Generated block ids must be unique and regions must not nest.",
+      "generated_block_markers_name_different_owners": "Generated block markers name different owners.",
+      "generated_block_start_has_no_matching_end": "Generated block start has no matching end."
+    },
+    "render": {
+      "a_generated_block_source_path_must_be": "A generated block source path must be one line."
+    },
+    "upsert": {
+      "the_supplied_block_must_declare_exactly_its": "The supplied block must declare exactly its requested owner."
+    }
+  },
+  "ndf": {
+    "document": {
+      "insert": {
+        "a_top_level_addition_must_contain_a": "A top-level addition must contain a declaration."
+      },
+      "named": {
+        "block_name_was_not_found": "Block `@NAME@` was not found.",
+        "several_blocks_use_the_name_name": "Several blocks use the name `@NAME@`."
+      },
+      "reference": {
+        "block_index_index_was_not_found": "Block index @INDEX@ was not found.",
+        "type_type_name_matches_several_blocks": "Type `@TYPE_NAME@` matches several blocks.",
+        "type_type_name_was_not_found": "Type `@TYPE_NAME@` was not found."
+      },
+      "replace": {
+        "a_block_edit_produced_several_top_level": "A block edit produced several top-level declarations."
+      },
+      "select": {
+        "block_index_is_out_of_range": "Block index is out of range.",
+        "block_index_was_not_found": "Block index was not found.",
+        "no_object_matches_the_selector": "No object matches the selector.",
+        "several_objects_match_the_selector": "Several objects match the selector.",
+        "unsupported_object_selector": "Unsupported object selector."
+      }
+    },
+    "lexer": {
+      "next_token": {
+        "close_the_comment_with": "Close the comment with */.",
+        "close_the_string_with_the_same_quote": "Close the string with the same quote character.",
+        "invalid_source_offset": "Invalid source offset.",
+        "unclosed_block_comment": "Unclosed block comment.",
+        "unclosed_string": "Unclosed string.",
+        "use_a_utf_8_byte_boundary_within": "Use a UTF-8 byte boundary within the source."
+      }
+    },
+    "operation": {
+      "expand": {
+        "expand_one": {
+          "foreach_binding_is_not_an_expression_identifier": "forEach binding is not an expression identifier.",
+          "foreach_must_resolve_to_a_list": "forEach must resolve to a list.",
+          "foreach_nesting_exceeds_the_limit": "forEach nesting exceeds the limit.",
+          "foreach_requires_a_nonempty_do_list": "forEach requires a nonempty do list.",
+          "foreach_requires_as": "forEach requires as.",
+          "unknown_foreach_property": "Unknown forEach property.",
+          "variables_must_be_an_object": "Variables must be an object."
+        },
+        "new": {
+          "check_whether_this_operation_is_still_needed": "Check whether this operation is still needed for the current game data."
+        }
+      },
+      "mod": {
+        "check_position": {
+          "before_after_positions_require_a_nonempty_anchor": "before/after positions require a nonempty anchor."
+        },
+        "check_selector": {
+          "unsupported_selector_shape": "Unsupported selector shape."
+        },
+        "from_value": {
+          "allownochange_needs_a_nonempty_reason_up_to": "allowNoChange needs a nonempty reason up to 1024 bytes.",
+          "bulk_edits_require_exactly_one_compatible_target": "Bulk edits require exactly one compatible target and action.",
+          "bulk_list_insertion_position_must_be_start": "Bulk list insertion position must be start or end.",
+          "bulk_requires_conditions_edits_and_an_all": "Bulk requires conditions, edits, and an all/any match mode.",
+          "bulk_target_names_and_removed_entries_must": "Bulk target names and removed entries must be nonempty.",
+          "copy_requires_an_object_selector_and_destination": "copy requires an object selector and destination.name.",
+          "field_add_does_not_support_position_or": "Field add does not support position or leadingComment.",
+          "field_modify_requires_value_object_modify_requires": "Field modify requires value; object modify requires changes.",
+          "invalid_bulk_condition_subject_action_field_or": "Invalid bulk condition subject, action, field, or alternatives.",
+          "remove_requires_an_object_or_field_selector": "remove requires an object or field selector; field removal has no leadingComment.",
+          "top_level_add_takes_no_selector": "Top-level add takes no selector."
+        },
+        "invalid": {
+          "use_a_supported_operation_shape_from_docs": "Use a supported operation shape from docs/references/ndf-patches.md."
+        }
+      }
+    },
+    "parser": {
+      "atom": {
+        "expected_an_ndf_value": "Expected an NDF value.",
+        "supply_a_number_string_reference_object_or": "Supply a number, string, reference, object, or collection. Check the preceding assignment or comma."
+      },
+      "document": {
+        "expected_a_named_ndf_declaration": "Expected a named NDF declaration.",
+        "write_name_is_value_for_each_top": "Write Name is Value for each top-level definition. A standalone value must be the entire snippet."
+      },
+      "enter": {
+        "ndf_expressions_are_nested_too_deeply": "NDF expressions are nested too deeply.",
+        "split_deeply_nested_expressions_into_named_definitions": "Split deeply nested expressions into named definitions."
+      },
+      "expect": {
+        "expected_text": "Expected `@TEXT@`."
+      },
+      "identifier": {
+        "expected_an_ndf_name": "Expected an NDF name.",
+        "supply_a_member_declaration_or_parameter_name": "Supply a member, declaration, or parameter name."
+      },
+      "member": {
+        "expected_for_a_member_or_is_for": "Expected = for a member or is for a declaration.",
+        "write_member_value_or_name_is_type": "Write Member = Value or Name is Type(...)."
+      }
+    },
+    "patch": {
+      "bulk": {
+        "bulk": {
+          "bulk_condition_alternative_value_matched_nothing": "Bulk condition alternative `@VALUE@` matched nothing.",
+          "bulk_edit_arg0_already_holds_the_requested": "Bulk edit #@ARG0@ already holds the requested value.",
+          "bulk_edit_arg0_found_no_values_in": "Bulk edit #@ARG0@ found no values in matched blocks.",
+          "bulk_edit_arg0_reached_count_values_but": "Bulk edit #@ARG0@ reached @COUNT@ values but requires at least @ARG2@.",
+          "bulk_matched_matched_blocks_blocks_but_requires": "Bulk matched @MATCHED_BLOCKS@ blocks but requires at least @MIN_BLOCKS@.",
+          "recursive_bulk_conditions_matched_overlapping_parent_and": "Recursive bulk conditions matched overlapping parent and child objects."
+        }
+      },
+      "editing": {
+        "conflict": {
+          "keep_one_owner_or_explicitly_order_compatible": "Keep one owner or explicitly order compatible changes."
+        },
+        "insert_collection": {
+          "addition_needs_an_entry": "A collection addition needs at least one entry.",
+          "anchor_matches_several_entries": "Collection anchor '@ANCHOR@' matches several entries. Use text that identifies one entry.",
+          "anchor_was_not_found": "Collection anchor '@ANCHOR@' was not found. Check the selected list and anchor text.",
+          "some_entries_already_exist": "Some entries in this addition already exist. Add only the missing entries.",
+          "the_target_is_not_a_collection": "The target is not a collection.",
+          "the_target_must_be_a_collection_rather": "The target must be a collection, rather than an object containing one."
+        },
+        "insert_field": {
+          "the_selected_value_has_no_object_body": "The selected value has no object body."
+        },
+        "replace_field_with_marker": {
+          "field_ownership_comments_need_their_own_line": "Field ownership comments need their own line; use an object modify for a field sharing its header line."
+        },
+        "selection": {
+          "a_field_selector_needs_a_field_or": "A field selector needs a field or collection entry.",
+          "field_last_matches_several_members": "Field `@LAST@` matches several members.",
+          "field_last_was_not_found": "Field `@LAST@` was not found."
+        },
+        "splice": {
+          "edits_overlap_or_split_an_invalid_source": "Edits overlap or split an invalid source range; separate dependent edits into different operations."
+        }
+      },
+      "mod": {
+        "apply_operation_inner": {
+          "a_new_block_cannot_be_its_own": "A new block cannot be its own anchor.",
+          "addition_repeats_block_name": "Addition repeats block '@NAME@'.",
+          "all_added_blocks_already_exist_unchanged": "All added blocks already exist unchanged.",
+          "block_name_already_contains_different_content": "Block '@NAME@' already contains different content.",
+          "copy_destination_arg0_already_contains_different_data": "Copy destination `@ARG0@` already contains different data.",
+          "copy_destination_arg0_already_exists_unchanged": "Copy destination `@ARG0@` already exists unchanged.",
+          "copy_needs_a_named_object": "copy needs a named object.",
+          "field_add_needs_a_field_path_after": "Field add needs a field path after its object.",
+          "field_name_already_holds_the_requested_value": "Field `@NAME@` already holds the requested value.",
+          "field_path_already_exists_unchanged": "Field `@PATH@` already exists unchanged.",
+          "field_path_already_exists_with_different_content": "Field `@PATH@` already exists with different content.",
+          "modify_a_field_inside_the_collection_entry": "Modify a field inside the collection entry, or use a bulk setEntry action.",
+          "path_already_holds_the_requested_value": "`@PATH@` already holds the requested value.",
+          "some_declarations_in_this_addition_already_exist": "Some declarations in this addition already exist; split the addition into independent operations.",
+          "the_collection_at_path_already_contains_this": "The collection at @PATH@ already contains this entry.",
+          "the_missing_field_needs_an_object_parent": "The missing field needs an object parent.",
+          "top_level_add_requires_a_declaration": "Top-level add requires a declaration."
+        },
+        "apply_operation": {
+          "intentional_compatibility_operation_retain_its_condition": "Intentional compatibility operation; retain its condition."
+        },
+        "apply": {
+          "the_target_applied_successfully_and_changed_no": "The target applied successfully and changed no bytes."
+        }
+      }
+    },
+    "read": {
+      "mod": {
+        "entries": {
+          "list_entries_need_commas": "List entries need commas."
+        },
+        "matching_end": {
+          "expected_an_opening_delimiter": "Expected an opening delimiter.",
+          "mismatched_ndf_delimiter": "Mismatched NDF delimiter.",
+          "unclosed_ndf_delimiter": "Unclosed NDF delimiter."
+        },
+        "path_segments": {
+          "field_part_matches_several_members": "Field `@PART@` matches several members.",
+          "field_part_was_not_found": "Field `@PART@` was not found."
+        },
+        "select_block": {
+          "top_level_block_index_index_was_not": "Top-level block index @INDEX@ was not found.",
+          "top_level_block_reference_was_not_found": "Top-level block `@REFERENCE@` was not found.",
+          "top_level_selector_reference_matches_several_blocks": "Top-level selector `@REFERENCE@` matches several blocks."
+        },
+        "select_entry": {
+          "invalid_type_occurrence_index": "Invalid type occurrence index.",
+          "list_entry_index_was_not_found": "List entry @INDEX@ was not found.",
+          "list_selector_must_be_enclosed_in_brackets": "List selector must be enclosed in brackets.",
+          "list_selector_segment_matched_nothing": "List selector `@SEGMENT@` matched nothing.",
+          "list_selector_segment_matches_several_entries_use": "List selector `@SEGMENT@` matches several entries; use #N or a field.",
+          "list_type_occurrence_index_was_not_found": "List type occurrence @INDEX@ was not found.",
+          "unbalanced_entry_selector": "Unbalanced entry selector."
+        },
+        "selector": {
+          "use_find_to_check_the_object_field": "Use find to check the object, field, type, and target file."
+        },
+        "split_path": {
+          "empty_selector_path_segment": "Empty selector path segment.",
+          "selector_path_is_empty": "Selector path is empty.",
+          "unbalanced_selector_brackets": "Unbalanced selector brackets.",
+          "unclosed_selector_brackets_or_string": "Unclosed selector brackets or string."
+        }
+      }
+    },
+    "values": {
+      "format_value": {
+        "join_structured_parts_into_an_ndf_string": "Join structured parts into an NDF string before using $raw.",
+        "raw_requires_text_a_number_or_a": "$raw requires text, a number, or a boolean.",
+        "string_requires_text": "$string requires text.",
+        "supply_a_string_value": "Supply a string value."
+      }
+    }
+  },
+  "paths": {
+    "mod": {
+      "assert_no_links": {
+        "path_escapes_its_owning_folder": "Path escapes its owning folder.",
+        "symlinks_and_junctions_are_not_allowed_here": "Symlinks and junctions are not allowed here.",
+        "unsafe_path_component": "Unsafe path component."
+      },
+      "canonical_missing": {
+        "a_folder_moved_while_its_path_was": "A folder moved while its path was being resolved.",
+        "no_accessible_parent_folder": "No accessible parent folder.",
+        "retry_after_other_commands_finish_using_this": "Retry after other commands finish using this folder."
+      },
+      "game_relative": {
+        "targets_must_be_files_below_gamedata_or": "Targets must be files below GameData/ or CommonData/."
+      },
+      "identifier": {
+        "invalid_id_value": "Invalid id `@VALUE@`.",
+        "use_letters_digits_dots_underscores_or_hyphens": "Use letters, digits, dots, underscores, or hyphens; avoid Windows device names."
+      },
+      "path_error": {
+        "keep_a_regular_file_or_folder_inside": "Keep a regular file or folder inside the configured root."
+      },
+      "read_limited": {
+        "choose_a_file": "Choose a file.",
+        "file_exceeds_the_limit_byte_input_limit": "File exceeds the @LIMIT@-byte input limit.",
+        "input_is_not_a_regular_file": "Input is not a regular file.",
+        "reduce_concurrent_work_or_the_input_file": "Reduce concurrent work or the input file size.",
+        "reduce_the_input_size_or_restore_the": "Reduce the input size or restore the named metadata file."
+      },
+      "relative": {
+        "choose_a_file_or_subfolder_not_the": "Choose a file or subfolder, not the entire owning folder.",
+        "this_path_contains_a_name_windows_cannot": "This path contains a name Windows cannot use.",
+        "this_path_escapes_its_owning_folder": "This path escapes its owning folder.",
+        "use_a_relative_path_without_a_drive": "Use a relative path without a drive or network prefix."
+      },
+      "remove_tree": {
+        "refusing_to_remove_the_owning_folder_or": "Refusing to remove the owning folder or a directory outside it."
+      }
+    },
+    "tree": {
+      "collect": {
+        "copy_sources_must_contain_regular_files_and": "Copy sources must contain regular files and directories.",
+        "this_authored_tree_contains_a_symlink_or": "This authored tree contains a symlink or junction."
+      },
+      "copy_tree_filtered": {
+        "copy_source_and_destination_must_not_overlap": "Copy source and destination must not overlap outside excluded folders.",
+        "filenames_must_be_valid_unicode": "Filenames must be valid Unicode."
+      }
+    }
+  },
+  "resources": {
+    "directory": {
+      "restore_the_resources_folder_from_the_ymb": "Restore the resources folder from the YMB archive.",
+      "ymb_s_resources_folder_is_missing": "YMB's resources folder is missing."
+    }
+  },
+  "storage": {
+    "generator": {
+      "generator_source_lies_outside_the_mod_configuration": "Generator source lies outside the mod configuration folder.",
+      "keep_generator_sources_inside_the_folder_containing": "Keep generator sources inside the folder containing ymb.mod.yaml."
+    }
+  },
+  "templates": {
+    "budget": {
+      "limit": {
+        "template_values_exceed_the_256_mib_resolution": "Template values exceed the 256 MiB resolution budget.",
+        "use_smaller_variable_values_or_a_generator": "Use smaller variable values or a generator with streamed output."
+      },
+      "value_bytes": {
+        "template_value_nesting_exceeds_the_limit": "Template value nesting exceeds the limit."
+      }
+    },
+    "expression": {
+      "expect": {
+        "expected_text_found_arg1": "Expected `@TEXT@`; found `@ARG1@`."
+      },
+      "expr": {
+        "an_expression_list_cannot_end_with_a": "An expression list cannot end with a comma.",
+        "expected_a_member_name_after": "Expected a member name after .",
+        "expected_an_expression_found_arg0": "Expected an expression; found `@ARG0@`.",
+        "expression_nesting_exceeds_the_limit": "Expression nesting exceeds the limit.",
+        "unknown_expression_helper_name": "Unknown expression helper `@NAME@()`."
+      },
+      "new": {
+        "a_decimal_point_must_be_followed_by": "A decimal point must be followed by a digit.",
+        "expression_exceeds_the_size_limit": "Expression exceeds the size limit.",
+        "invalid_expression_number": "Invalid expression number.",
+        "invalid_unicode_escape": "Invalid Unicode escape.",
+        "unclosed_expression_string": "Unclosed expression string.",
+        "unclosed_string_escape": "Unclosed string escape.",
+        "unsupported_expression_token_text": "Unsupported expression token `@TEXT@`."
+      }
+    },
+    "helpers": {
+      "helper": {
+        "len_expects_a_string_array_or_object": "len() expects a string, array, or object.",
+        "missing_argument_arg0_to_name": "Missing argument @ARG0@ to @NAME@().",
+        "pluck_entry_has_no_key_field": "pluck() entry has no `@KEY@` field.",
+        "pluck_requires_a_field_name": "pluck() requires a field name.",
+        "range_expects_one_two_or_three_arguments": "range() expects one, two, or three arguments.",
+        "range_step_cannot_be_zero": "range() step cannot be zero.",
+        "unknown_helper_name": "Unknown helper `@NAME@`."
+      }
+    },
+    "mod": {
+      "array": {
+        "expected_an_array": "Expected an array."
+      },
+      "compare": {
+        "comparison_requires_strings_or_numbers": "Comparison requires strings or numbers."
+      },
+      "error": {
+        "check_the_variable_names_value_types_and": "Check the variable names, value types, and expression syntax."
+      },
+      "integer": {
+        "expected_an_integer_within_the_supported_range": "Expected an integer within the supported range."
+      },
+      "member_key": {
+        "a_member_key_must_be_a_string": "A member key must be a string or integer."
+      },
+      "number": {
+        "arithmetic_produced_a_non_finite_number": "Arithmetic produced a non-finite number."
+      },
+      "numeric": {
+        "expected_a_finite_number": "Expected a finite number."
+      },
+      "read_member": {
+        "array_index_is_out_of_range": "Array index is out of range.",
+        "member_access_requires_an_object_array_or": "Member access requires an object, array, or string.",
+        "object_has_no_requested_member": "Object has no requested member.",
+        "string_index_is_out_of_range": "String index is out of range.",
+        "string_index_splits_a_unicode_surrogate_pair": "String index splits a Unicode surrogate pair."
+      }
+    },
+    "resolver": {
+      "evaluate_inner": {
+        "division_or_remainder_by_zero": "Division or remainder by zero."
+      },
+      "evaluate": {
+        "expression_evaluation_exceeds_the_nesting_limit": "Expression evaluation exceeds the nesting limit."
+      },
+      "interpolate": {
+        "unterminated_template_expression": "Unterminated template expression."
+      },
+      "resolve_path": {
+        "circular_template_variable_reference_involving_arg0": "Circular template variable reference involving `@ARG0@`.",
+        "template_reference_chain_exceeds_the_nesting_limit": "Template reference chain exceeds the nesting limit.",
+        "unknown_template_variable_or_member_arg0": "Unknown template variable or member `@ARG0@`."
+      },
+      "resolve": {
+        "template_resolution_exceeds_the_nesting_limit": "Template resolution exceeds the nesting limit."
+      }
+    }
+  },
+  "text": {
+    "apply": {
+      "text_changes_overlap_or_use_an_invalid": "Text changes overlap or use an invalid range."
+    },
+    "budget_error": {
+      "text_comparison_exceeds_its_configured_work_or": "Text comparison exceeds its configured work or size budget.",
+      "use_explicit_layering_or_adjust_the_named": "Use explicit layering or adjust the named finite comparison limit."
+    },
+    "conflict": {
+      "keep_independent_edits_disjoint_or_explicitly_order": "Keep independent edits disjoint or explicitly order the contributing projects."
+    },
+    "merge": {
+      "contributors_change_overlapping_lines_near_arg0": "Contributors change overlapping lines near @ARG0@."
+    }
+  }
+}

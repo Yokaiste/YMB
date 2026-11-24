@@ -1,0 +1,118 @@
+name: Check and package
+on:
+  push:
+    branches: ['**']
+  delete:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Reconcile releases with current branches
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: ymb-releases-${{ github.repository }}
+  queue: max
+  cancel-in-progress: false
+jobs:
+  plan:
+    if: github.event_name != 'delete' || github.event.ref_type == 'branch'
+    runs-on: windows-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      publish: ${{ steps.plan.outputs.publish }}
+      build: ${{ steps.plan.outputs.build }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      YMB_MANUAL_PUBLISH: ${{ inputs.publish }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Plan branch releases
+        id: plan
+        shell: pwsh
+        run: |
+          . .github/scripts/releases.ps1
+          $config = Get-YmbReleaseConfig
+          $publish = $env:GITHUB_EVENT_NAME -eq 'delete' -or
+            ($env:GITHUB_EVENT_NAME -eq 'push' -and [bool](Get-ReleaseBranch $env:GITHUB_REF_NAME $config)) -or
+            ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch' -and $env:YMB_MANUAL_PUBLISH -eq 'true')
+          if ($publish) {
+            $plan = @(Get-RepositoryYmbReleasePlan $env:GITHUB_REPOSITORY $config)
+          } else {
+            $plan = @([pscustomobject]@{ branch = $env:GITHUB_REF_NAME; sha = $env:GITHUB_SHA; version = ''; tag = 'check'; artifact = 'YMB-check'; prerelease = $false; latest = $false })
+          }
+          ConvertTo-Json -InputObject $plan -Depth 10 | Set-Content -LiteralPath release-plan.json -Encoding utf8
+          "matrix=$(@{ include = $plan } | ConvertTo-Json -Depth 10 -Compress)" >> $env:GITHUB_OUTPUT
+          "publish=$($publish.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          "build=$(($plan.Count -gt 0).ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: release-plan
+          path: release-plan.json
+
+  windows:
+    if: needs.plan.outputs.build == 'true'
+    needs: plan
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ matrix.sha }}
+          persist-credentials: false
+      - name: Update stable toolchain
+        run: rustup update stable --no-self-update
+      - name: Check formatting
+        run: cargo fmt --all --check
+      - name: Check code
+        run: cargo clippy --workspace --all-features --all-targets --locked -- -D warnings
+      - name: Test
+        run: .\Dev.bat test
+      - name: Check documentation
+        shell: pwsh
+        run: .github/scripts/test-docs.ps1
+      - name: Prepare and verify the YMB release
+        run: .\Dev.bat release
+      - name: Check YMB release policy
+        shell: pwsh
+        run: |
+          if (Test-Path -LiteralPath .github/scripts/test-releases.ps1) { & .github/scripts/test-releases.ps1 }
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            dist/*.zip
+            dist/*.sha256
+          if-no-files-found: error
+
+  publish:
+    if: always() && needs.plan.result == 'success' && needs.plan.outputs.publish == 'true' && (needs.windows.result == 'success' || needs.windows.result == 'skipped')
+    needs: [plan, windows]
+    runs-on: windows-latest
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Download the verified artifacts
+        shell: pwsh
+        run: |
+          . .github/scripts/releases.ps1
+          if ('${{ needs.plan.outputs.build }}' -eq 'true') { Invoke-Gh run download $env:GITHUB_RUN_ID --repo $env:GITHUB_REPOSITORY --pattern 'YMB-*' --dir dist }
+          Invoke-Gh run download $env:GITHUB_RUN_ID --repo $env:GITHUB_REPOSITORY --name release-plan --dir .ymb/release-plan
+      - name: Replace releases and remove obsolete tags and drafts
+        shell: pwsh
+        run: |
+          . .github/scripts/releases.ps1
+          $plan = @(Get-Content -LiteralPath .ymb/release-plan/release-plan.json -Raw | ConvertFrom-Json)
+          Publish-YmbReleases $plan (Join-Path $pwd 'dist') $env:GITHUB_REPOSITORY

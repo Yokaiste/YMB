@@ -1,0 +1,36 @@
+[package]
+name = "ymb"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+repository.workspace = true
+build = "../core/build.rs"
+
+[dependencies]
+ymb-core = { path = "../core" }
+ymb-sdk = { path = "../sdk", features = ["deploy"] }
+serde.workspace = true
+serde_json.workspace = true
+saphyr.workspace = true
+clap.workspace = true
+semver.workspace = true
+strsim.workspace = true
+sha2.workspace = true
+uuid.workspace = true
+serde_path_to_error.workspace = true
+zip.workspace = true
+toml.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows-sys.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[build-dependencies]
+toml.workspace = true
+sha2.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,3 @@
+"TOKEN";"REFTEXT"
+${csv(titleToken)};${csv(modName)}
+${csv(detailToken)};${csv(modDescription || 'Built with YMB.')}

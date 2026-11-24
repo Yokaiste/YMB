@@ -1,0 +1,8 @@
+[build]
+target-dir = ".ymb/target"
+
+[alias]
+xtask = "run --package xtask --"
+
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]

@@ -1,0 +1,4 @@
+/config/dist/
+/config/.ymb/g/
+/config/.ymb/dist.lock
+/config/generator/target/

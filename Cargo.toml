@@ -1,0 +1,42 @@
+[workspace]
+members = ["src/core", "src/ymb", "src/sdk", "src/xtask", "src/fixture-generator"]
+resolver = "3"
+
+[workspace.package]
+version = "2.0.1"
+edition = "2024"
+rust-version = "1.100.0"
+license-file = "LICENSE"
+repository = "https://github.com/Yokaiste/YMB"
+
+[workspace.metadata.ymb]
+config-version = 2
+json-version = 4
+plugin-version = 2
+cache-version = 1
+journal-version = 3
+state-version = 1
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+sha2 = "0.11.1"
+saphyr = "0.3.4"
+clap = { version = "4.6.7", features = ["derive", "string"] }
+semver = "1"
+strsim = "0.11"
+serde_path_to_error = "0.1.20"
+toml = "1.2.1"
+regex = "1"
+uuid = { version = "1", features = ["v4"] }
+tempfile = "3"
+zip = { version = "9.5.1", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_System_Threading", "Win32_System_JobObjects", "Win32_System_Console", "Win32_System_ProcessStatus", "Win32_Security"] }
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"

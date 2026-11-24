@@ -1,0 +1,54 @@
+# Add your title and tooltip to WARNO's welcome screen.
+version: @FORMAT@
+id: welcome_title
+name: Welcome title
+description: Add this mod's title and tooltip to the welcome screen.
+enabled: true
+scope: prod
+dependsOn: []
+optional: false
+variables: {}
+readValues: {}
+targets:
+  - file: GameData/UserInterface/Use/OutGame/UISpecificOutGameWelcomeView.ndf
+    operations:
+      - op: add
+        selector:
+          kind: collection
+          by: path
+          value: UISpecificOutGameWelcomeDescriptor.Components
+        value:
+          $raw: |
+            BUCKTextDescriptor
+            (
+                ElementName = "YmbTitle@SAFE_ID@"
+                ComponentFrame = TUIFramePropertyRTTI
+                (
+                    MagnifiableWidthHeight = [1500.0, 90.0]
+                    AlignementToAnchor = [0.5, 0.15]
+                    AlignementToFather = [0.5, 0.15]
+                )
+                ParagraphStyle = TParagraphStyle
+                (
+                    VerticalAlignment = ~/UIText_VerticalCenter
+                    Alignment = ~/UIText_Center
+                )
+                TextColor = "ListeExcel/Cartouche"
+                TextSize = "50"
+                TextStyle = "Default"
+                TypefaceToken = "UIMainFont"
+                TextDico = ~/LocalisationConstantes/dico_interface_outgame
+                TextToken = "${titleToken}"
+                Components =
+                [
+                    BUCKSpecificHintableArea
+                    (
+                        HintTitleToken = "${titleToken}"
+                        HintBodyToken = "${detailToken}"
+                        DicoToken = ~/LocalisationConstantes/dico_interface_outgame
+                    ),
+                ]
+            )
+files: []
+generators: []
+tempPaths: []

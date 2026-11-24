@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">From your first edit to a playable WARNO mod</title>
+  <desc id="desc">Edit a YMB project, build and inspect its preview, sync it into the WARNO mod folder, compile with GenerateMod.bat, then enable and test the mod. The project is the editable source; the preview is replaced on each build.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#122b3b"/><stop offset="1" stop-color="#09131d"/></linearGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L7 4 L0 8" fill="none" stroke="#86b8cb" stroke-width="1.5"/></marker>
+  </defs>
+  <rect width="1200" height="360" rx="20" fill="url(#bg)"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="40" y="52" fill="#a0cddd" font-size="15" letter-spacing="2">YOUR FIRST MOD</text>
+    <text x="40" y="94" fill="#f5f8fa" font-size="31" font-weight="600">One project. A change you can actually play.</text>
+    <g stroke="#86b8cb" stroke-width="2" marker-end="url(#arrow)"><path d="M244 191 H272"/><path d="M474 191 H502"/><path d="M704 191 H732"/><path d="M934 191 H962"/></g>
+    <g fill="#193748" stroke="#48748a"><rect x="40" y="135" width="204" height="122" rx="10"/><rect x="270" y="135" width="204" height="122" rx="10"/></g>
+    <rect x="500" y="135" width="204" height="122" rx="10" fill="#3b3020" stroke="#b8985a"/>
+    <g fill="#173b31" stroke="#619e85"><rect x="730" y="135" width="204" height="122" rx="10"/><rect x="960" y="135" width="200" height="122" rx="10"/></g>
+    <g fill="#f5f8fa" font-size="22" font-weight="600"><text x="59" y="174">1  Edit</text><text x="289" y="174">2  Build</text><text x="519" y="174">3  Sync</text><text x="749" y="174">4  Compile</text><text x="979" y="174">5  Play</text></g>
+    <g fill="#d1dfe5" font-size="16"><text x="59" y="209">Your rules and assets</text><text x="59" y="234">mods/first_mod/</text><text x="289" y="209">Inspect the preview</text><text x="289" y="234">Check the active HP</text><text x="519" y="209">Apply to mod data</text><text x="519" y="234">Originals are saved</text><text x="749" y="209">GenerateMod.bat</text><text x="749" y="234">Wait for success</text><text x="979" y="209">Enable MyFirstMod</text><text x="979" y="234">Test a fresh match</text></g>
+    <text x="40" y="310" fill="#abc3cf" font-size="18">Edit the project again to tune it. A preview cannot drive a tank on its own.</text>
+  </g>
+</svg>

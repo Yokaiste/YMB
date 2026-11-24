@@ -1,0 +1,14 @@
+[package]
+name = "ymb-fixture"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+publish = false
+
+[dependencies]
+ymb-sdk = { path = "../sdk" }
+serde_json.workspace = true
+
+[lints]
+workspace = true
